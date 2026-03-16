@@ -1,14 +1,19 @@
-VIGNETTE_TITLE = "Workplace feedback scenario"
+VIGNETTE_TITLE = "Giving Feedback About Workload and Team Coordination"
 
 VIGNETTE_TEXT = """
-Imagine that you are a working student or early-career employee in a team where workload is unevenly distributed.
-Over the last few weeks, you have repeatedly had to take over urgent tasks because responsibilities were unclear.
-At the same time, internal communication has been inconsistent, and your manager often changes priorities at short notice.
-This has led to stress, frustration, and the feeling that problems are not addressed openly.
+Imagine you are a working student, intern, or early-career employee in a team. Over the past several weeks, tasks have often been assigned at short notice, priorities have changed without explanation, and responsibilities have not always been clearly defined. As a result, work is sometimes duplicated, deadlines are harder to meet, and you often end up taking on extra tasks to make sure things are completed.
 
-You are now asked to provide honest written feedback through an AI-based feedback assistant.
-Please describe the issue as candidly and specifically as you can, including what is happening, why it is problematic,
-and what could be improved.
+Communication in the team is also inconsistent. Important information is sometimes shared too late, different people give conflicting instructions, and it is often unclear who is responsible for final decisions. You feel that these issues are affecting both team performance and your own work experience, but because you are in a relatively junior position, you are unsure how directly to raise these concerns.
+
+Please provide feedback as if this input could be reviewed by people responsible for improving team processes.
+
+In the chat, please:
+
+- describe what you think is going wrong,
+
+- give examples if relevant,
+
+- suggest what should change.
 """.strip()
 
 # These follow-up prompts must stay substantively identical across conditions.
