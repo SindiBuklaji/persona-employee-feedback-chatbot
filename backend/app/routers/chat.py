@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.config import settings
@@ -11,6 +12,15 @@ from app.services.chat_service import ChatService
 
 router = APIRouter(prefix="/chat", tags=["chat"])
 chat_service = ChatService()
+
+
+class FinishChatRequest(BaseModel):
+    participant_id: str
+
+
+class FinishChatResponse(BaseModel):
+    participant_id: str
+    chat_completed: bool
 
 
 @router.post("", response_model=ChatResponse)
@@ -24,11 +34,6 @@ def chat(payload: ChatRequest, db: Session = Depends(get_db)) -> ChatResponse:
     assistant_message = chat_service.process_user_message(db, participant, payload.message)
 
     turns_used = participant.total_turns
-    turns_remaining = max(settings.max_turns - turns_used, 0)
-
-    if participant.chat_completed and participant.finished_chat_at is None:
-        participant.finished_chat_at = datetime.utcnow()
-        db.commit()
 
     return ChatResponse(
         participant_id=participant.id,
@@ -40,6 +45,24 @@ def chat(payload: ChatRequest, db: Session = Depends(get_db)) -> ChatResponse:
             follow_up_key=assistant_message.follow_up_key,
         ),
         turns_used=turns_used,
-        turns_remaining=turns_remaining,
         chat_completed=participant.chat_completed,
+    )
+
+
+@router.post("/finish", response_model=FinishChatResponse)
+def finish_chat(payload: FinishChatRequest, db: Session = Depends(get_db)) -> FinishChatResponse:
+    """Allow user to finish chat at any point and proceed to questionnaire."""
+    participant = db.get(Participant, payload.participant_id)
+    if not participant:
+        raise HTTPException(status_code=404, detail="Participant not found.")
+    if participant.chat_completed:
+        raise HTTPException(status_code=400, detail="Chat already completed.")
+
+    participant.chat_completed = True
+    participant.finished_chat_at = datetime.utcnow()
+    db.commit()
+
+    return FinishChatResponse(
+        participant_id=participant.id,
+        chat_completed=True,
     )

@@ -37,7 +37,6 @@ class ChatResponse(BaseModel):
     condition: str
     assistant_message: ChatMessageOut
     turns_used: int
-    turns_remaining: int
     chat_completed: bool
 
 

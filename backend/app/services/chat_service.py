@@ -106,9 +106,6 @@ The reply should briefly respond to the participant's content and then include t
         )
         db.add(assistant_message)
 
-        if participant.total_turns >= settings.max_turns:
-            participant.chat_completed = True
-
         db.commit()
         db.refresh(assistant_message)
         return assistant_message

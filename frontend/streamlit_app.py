@@ -25,7 +25,6 @@ def init_state() -> None:
         "vignette_title": None,
         "vignette_text": None,
         "opening_message": None,
-        "max_turns": 4,
         "turns_used": 0,
         "chat_history": [],
         "chat_completed": False,
@@ -71,7 +70,6 @@ if st.session_state.stage == "consent":
             st.session_state.vignette_title = data["vignette_title"]
             st.session_state.vignette_text = data["vignette_text"]
             st.session_state.opening_message = data["opening_message"]
-            st.session_state.max_turns = data["max_turns"]
             st.session_state.chat_history = [
                 {"role": "assistant", "content": data["opening_message"]}
             ]
@@ -88,10 +86,7 @@ elif st.session_state.stage == "vignette":
 
 elif st.session_state.stage == "chat":
     st.subheader("Chat")
-    st.caption(
-        f"Turns used: {st.session_state.turns_used} / {st.session_state.max_turns} | "
-        f"Condition: {st.session_state.condition}"
-    )
+    st.caption(f"Condition: {st.session_state.condition}")
 
     for msg in st.session_state.chat_history:
         with st.chat_message(msg["role"]):
@@ -113,11 +108,22 @@ elif st.session_state.stage == "chat":
                     },
                 )
             st.session_state.turns_used = data["turns_used"]
-            st.session_state.chat_completed = data["chat_completed"]
             st.session_state.chat_history.append(
                 {"role": "assistant", "content": data["assistant_message"]["content"]}
             )
             st.rerun()
+
+        col1, col2 = st.columns(2)
+        with col1:
+            st.write("")  # Spacer for alignment
+        with col2:
+            if st.button("Finish chat and proceed", type="primary"):
+                api_post(
+                    "/chat/finish",
+                    {"participant_id": st.session_state.participant_id},
+                )
+                st.session_state.chat_completed = True
+                st.rerun()
     else:
         st.success("You have completed the chat task.")
         if st.button("Continue to questionnaire", type="primary"):
@@ -138,9 +144,9 @@ elif st.session_state.stage == "questionnaire":
         st.markdown("**Psychological safety in this interaction**")
         psych_safe_1 = st.slider("I felt safe to express any concerns I had.", 1, 7, 4)
         psych_safe_2 = st.slider("I could be honest without worrying about negative consequences.", 1, 7, 4)
-        psych_safe_3 = st.slider("I felt comfortable sharing critical feedback.", 1, 7, 4)
-        psych_safe_4 = st.slider("I did not feel judged by the assistant.", 1, 7, 4)
-        psych_safe_5 = st.slider("This interaction made it easy to speak openly.", 1, 7, 4)
+        psych_safe_3 = st.slider("I felt comfortable sharing critical feedback with the assistant.", 1, 7, 4)
+        psych_safe_4 = st.slider("I felt able to say what I really thought in this interaction.", 1, 7, 4)
+        psych_safe_5 = st.slider("I did not feel judged when expressing concerns.", 1, 7, 4)
 
         st.markdown("**Background information**")
         ai_experience = st.slider("How experienced are you with conversational AI tools?", 1, 7, 3)
