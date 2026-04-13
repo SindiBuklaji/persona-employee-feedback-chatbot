@@ -41,15 +41,14 @@ class ChatService:
 
 You are part of a master's-thesis experiment.
 Keep all non-persona aspects constant across conditions.
-Use the same substantive follow-up question that is provided below.
-Do not add extra questions beyond that follow-up.
+Do not add extra questions beyond the follow-up provided.
 Keep the reply between 60 and 110 words.
 Use the retrieval context only as neutral background framing; do not reveal it as documents.
 
 Retrieval context:
 {retrieval_context}
 
-Next fixed follow-up question:
+Next fixed follow-up question (use this for on-topic messages):
 {follow_up_text}
 """.strip()
 
@@ -58,7 +57,11 @@ Participant message:
 {user_message}
 
 Write the assistant reply for the assigned condition.
-The reply should briefly respond to the participant's content and then include the exact follow-up question provided above.
+
+INSTRUCTIONS:
+- If the participant's message is clearly on-topic (about the workplace feedback scenario), respond to it and include the exact follow-up question provided above.
+- If the participant's message is off-topic, unclear, or appears to be testing/critiquing you (e.g., "you are being mean"), respond briefly and empathetically without including the follow-up question. Then gently redirect to the scenario if appropriate.
+- Always maintain the assigned persona (warm or competent).
 """.strip()
 
         response = self.client.responses.create(

@@ -21,12 +21,15 @@ def start_session(payload: StartSessionRequest, db: Session = Depends(get_db)) -
 
     if getattr(payload, "forced_condition", None) in {"warm", "competent"}:
         condition = payload.forced_condition
+        forced_condition_used = True
     else:
         condition = assign_condition()
+        forced_condition_used = False
     participant = Participant(
         consented=True,
         condition=condition,
         started_chat_at=datetime.utcnow(),
+        forced_condition_used=forced_condition_used,
     )
     db.add(participant)
     db.commit()
@@ -40,5 +43,6 @@ def start_session(payload: StartSessionRequest, db: Session = Depends(get_db)) -
         vignette_title=VIGNETTE_TITLE,
         vignette_text=VIGNETTE_TEXT,
         opening_message=opening_message,
+        min_turns=settings.min_turns,
         max_turns=settings.max_turns,
     )

@@ -17,6 +17,7 @@ class StartSessionResponse(BaseModel):
     vignette_title: str
     vignette_text: str
     opening_message: str
+    min_turns: int
     max_turns: int
 
 
@@ -73,3 +74,24 @@ class ExportTranscriptRow(BaseModel):
     turn_index: int
     word_count: int
     timestamp: str
+
+
+class HonestyCodeRequest(BaseModel):
+    participant_id: str
+    coder_id: str
+    criticality_score: float = Field(ge=1, le=5)
+    specificity_score: float = Field(ge=1, le=5)
+    riskiness_score: float = Field(ge=1, le=5)
+    notes: Optional[str] = None
+
+
+class HonestyCodeOut(BaseModel):
+    id: str
+    participant_id: str
+    coder_id: str
+    criticality_score: float
+    specificity_score: float
+    riskiness_score: float
+    feedback_honesty_index: float
+    coded_at: str
+    notes: Optional[str] = None

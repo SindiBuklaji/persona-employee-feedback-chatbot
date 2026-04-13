@@ -7,3 +7,4 @@ python-dotenv==1.1.1
 openai==1.107.0
 numpy==2.3.2
 httpx==0.28.1
+psycopg2-binary==2.9.10

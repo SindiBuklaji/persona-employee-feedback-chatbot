@@ -31,6 +31,13 @@ def chat(payload: ChatRequest, db: Session = Depends(get_db)) -> ChatResponse:
     if participant.chat_completed:
         raise HTTPException(status_code=400, detail="Chat already completed.")
 
+    # Enforce hard cap on turns
+    if participant.total_turns >= settings.max_turns:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Maximum turns ({settings.max_turns}) reached. Please finish the chat."
+        )
+
     assistant_message = chat_service.process_user_message(db, participant, payload.message)
 
     turns_used = participant.total_turns
@@ -51,12 +58,19 @@ def chat(payload: ChatRequest, db: Session = Depends(get_db)) -> ChatResponse:
 
 @router.post("/finish", response_model=FinishChatResponse)
 def finish_chat(payload: FinishChatRequest, db: Session = Depends(get_db)) -> FinishChatResponse:
-    """Allow user to finish chat at any point and proceed to questionnaire."""
+    """Allow user to finish chat after minimum turns, proceed to questionnaire."""
     participant = db.get(Participant, payload.participant_id)
     if not participant:
         raise HTTPException(status_code=404, detail="Participant not found.")
     if participant.chat_completed:
         raise HTTPException(status_code=400, detail="Chat already completed.")
+
+    # Enforce minimum turns before allowing finish
+    if participant.total_turns < settings.min_turns:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Minimum {settings.min_turns} turns required before finishing. You have completed {participant.total_turns} turn(s)."
+        )
 
     participant.chat_completed = True
     participant.finished_chat_at = datetime.utcnow()

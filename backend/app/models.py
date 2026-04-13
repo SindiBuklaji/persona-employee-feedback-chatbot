@@ -21,6 +21,8 @@ class Participant(Base):
     total_user_words: Mapped[int] = mapped_column(Integer, default=0)
     started_chat_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     finished_chat_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    dropout_stage: Mapped[str | None] = mapped_column(String, nullable=True)
+    forced_condition_used: Mapped[bool] = mapped_column(Boolean, default=False)
 
     messages: Mapped[list["Message"]] = relationship(back_populates="participant", cascade="all, delete-orphan")
     questionnaire: Mapped["QuestionnaireResponse | None"] = relationship(
@@ -28,6 +30,7 @@ class Participant(Base):
         cascade="all, delete-orphan",
         uselist=False,
     )
+    honesty_codings: Mapped[list["HonestyCodings"]] = relationship(back_populates="participant", cascade="all, delete-orphan")
 
 
 class Message(Base):
@@ -72,3 +75,19 @@ class QuestionnaireResponse(Base):
     job_role: Mapped[str] = mapped_column(String)
 
     participant: Mapped[Participant] = relationship(back_populates="questionnaire")
+
+
+class HonestyCodings(Base):
+    __tablename__ = "honesty_codings"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True, default=lambda: str(uuid4()))
+    participant_id: Mapped[str] = mapped_column(ForeignKey("participants.id"), nullable=False)
+    coder_id: Mapped[str] = mapped_column(String, nullable=False)
+    criticality_score: Mapped[float] = mapped_column(Float, nullable=False)
+    specificity_score: Mapped[float] = mapped_column(Float, nullable=False)
+    riskiness_score: Mapped[float] = mapped_column(Float, nullable=False)
+    feedback_honesty_index: Mapped[float] = mapped_column(Float, nullable=False)
+    coded_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    notes: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+    participant: Mapped[Participant] = relationship(back_populates="honesty_codings")
