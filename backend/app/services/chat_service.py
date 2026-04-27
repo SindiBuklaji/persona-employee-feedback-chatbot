@@ -78,20 +78,31 @@ INSTRUCTIONS:
         return response.output_text.strip(), follow_up_key
 
     def process_user_message(self, db: Session, participant: Participant, user_message: str) -> Message:
+        from datetime import datetime
+        from app.services.metrics import character_count, sentence_count
+
         turn_index = participant.total_turns + 1
+        user_word_count = word_count(user_message)
 
         db.add(
             Message(
-                participant_id=participant.id,
+                participant_id=participant.participant_id,
                 role="user",
                 content=user_message,
                 turn_index=turn_index,
-                word_count=word_count(user_message),
+                turn_index_user_only=turn_index,  # For user messages, these are the same
+                word_count=user_word_count,
+                character_count=character_count(user_message),
+                sentence_count=sentence_count(user_message),
+                timestamp_created=datetime.utcnow(),
             )
         )
 
         participant.total_turns += 1
-        participant.total_user_words += word_count(user_message)
+        participant.total_user_words += user_word_count
+
+        # Get the user message to calculate response latency
+        user_message_time = datetime.utcnow()
 
         assistant_text, follow_up_key = self._build_assistant_reply(
             condition=participant.condition,
@@ -99,16 +110,28 @@ INSTRUCTIONS:
             turns_used=participant.total_turns,
         )
 
+        assistant_word_count = word_count(assistant_text)
+        assistant_message_time = datetime.utcnow()
+        response_latency = (assistant_message_time - user_message_time).total_seconds()
+
         assistant_message = Message(
-            participant_id=participant.id,
+            participant_id=participant.participant_id,
             role="assistant",
             content=assistant_text,
             turn_index=turn_index,
-            word_count=word_count(assistant_text),
+            turn_index_assistant_only=turn_index,  # Sequential assistant message counter
+            word_count=assistant_word_count,
+            character_count=character_count(assistant_text),
+            sentence_count=sentence_count(assistant_text),
+            response_latency_seconds=response_latency,
+            timestamp_created=assistant_message_time,
             follow_up_key=follow_up_key,
+            model_used=settings.openai_model,
+            temperature=settings.temperature,
         )
         db.add(assistant_message)
 
+        participant.total_assistant_words += assistant_word_count
         db.commit()
         db.refresh(assistant_message)
         return assistant_message

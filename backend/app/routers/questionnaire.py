@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -25,10 +27,12 @@ def submit_questionnaire(payload: QuestionnaireRequest, db: Session = Depends(ge
         payload.psych_safe_4,
         payload.psych_safe_5,
     ]
-    psych_mean = round(sum(psych_items) / len(psych_items), 4)
+    psychological_safety_mean = round(sum(psych_items) / len(psych_items), 4)
 
+    now = datetime.utcnow()
     row = QuestionnaireResponse(
         participant_id=payload.participant_id,
+        timestamp_submit=now,
         manip_warmth_friendly=payload.manip_warmth_friendly,
         manip_warmth_sincere=payload.manip_warmth_sincere,
         manip_competence_competent=payload.manip_competence_competent,
@@ -38,7 +42,7 @@ def submit_questionnaire(payload: QuestionnaireRequest, db: Session = Depends(ge
         psych_safe_3=payload.psych_safe_3,
         psych_safe_4=payload.psych_safe_4,
         psych_safe_5=payload.psych_safe_5,
-        psych_safety_mean=psych_mean,
+        psychological_safety_mean=psychological_safety_mean,
         ai_experience=payload.ai_experience,
         organizational_tenure_years=payload.organizational_tenure_years,
         age=payload.age,
@@ -50,10 +54,12 @@ def submit_questionnaire(payload: QuestionnaireRequest, db: Session = Depends(ge
     db.add(row)
     participant.questionnaire_completed = True
     participant.session_completed = True
+    participant.completion_stage = "completed"
+    participant.timestamp_questionnaire_submit = now
     db.commit()
 
     return QuestionnaireResponseOut(
-        participant_id=participant.id,
-        psychological_safety_mean=psych_mean,
+        participant_id=participant.participant_id,
+        psychological_safety_mean=psychological_safety_mean,
         questionnaire_completed=True,
     )

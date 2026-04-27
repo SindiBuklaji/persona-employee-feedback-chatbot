@@ -54,7 +54,7 @@ class QuestionnaireRequest(BaseModel):
     psych_safe_5: int = Field(ge=1, le=7)
     ai_experience: int = Field(ge=1, le=7)
     organizational_tenure_years: float = Field(ge=0)
-    age: int = Field(ge=16, le=100)
+    age: int = Field(ge=18, le=100)
     gender: str
     industry: str
     job_role: str
@@ -79,19 +79,19 @@ class ExportTranscriptRow(BaseModel):
 class HonestyCodeRequest(BaseModel):
     participant_id: str
     coder_id: str
-    criticality_score: float = Field(ge=1, le=5)
-    specificity_score: float = Field(ge=1, le=5)
-    riskiness_score: float = Field(ge=1, le=5)
-    notes: Optional[str] = None
+    criticality: int = Field(ge=1, le=5)
+    specificity: int = Field(ge=1, le=5)
+    riskiness: int = Field(ge=1, le=5)
+    coding_notes: Optional[str] = None
 
 
 class HonestyCodeOut(BaseModel):
-    id: str
+    coding_id: str
     participant_id: str
     coder_id: str
-    criticality_score: float
-    specificity_score: float
-    riskiness_score: float
+    criticality: int
+    specificity: int
+    riskiness: int
     feedback_honesty_index: float
-    coded_at: str
-    notes: Optional[str] = None
+    coding_notes: Optional[str] = None
+    timestamp_coded: str

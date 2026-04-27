@@ -16,49 +16,48 @@ router = APIRouter(prefix="/honesty-codings", tags=["honesty_codings"])
 def create_honesty_coding(payload: HonestyCodeRequest, db: Session = Depends(get_db)) -> HonestyCodeOut:
     """Submit a coding for a participant."""
     participant = db.execute(
-        select(Participant).where(Participant.id == payload.participant_id)
+        select(Participant).where(Participant.participant_id == payload.participant_id)
     ).scalar_one_or_none()
 
     if not participant:
         raise HTTPException(status_code=404, detail="Participant not found.")
 
     feedback_honesty_index = (
-        payload.criticality_score + payload.specificity_score + payload.riskiness_score
+        payload.criticality + payload.specificity + payload.riskiness
     ) / 3.0
 
     coding = HonestyCodings(
-        id=str(uuid4()),
         participant_id=payload.participant_id,
         coder_id=payload.coder_id,
-        criticality_score=payload.criticality_score,
-        specificity_score=payload.specificity_score,
-        riskiness_score=payload.riskiness_score,
+        criticality=payload.criticality,
+        specificity=payload.specificity,
+        riskiness=payload.riskiness,
         feedback_honesty_index=feedback_honesty_index,
-        coded_at=datetime.utcnow(),
-        notes=payload.notes,
+        timestamp_coded=datetime.utcnow(),
+        coding_notes=payload.coding_notes,
     )
     db.add(coding)
     db.commit()
     db.refresh(coding)
 
     return HonestyCodeOut(
-        id=coding.id,
+        coding_id=coding.coding_id,
         participant_id=coding.participant_id,
         coder_id=coding.coder_id,
-        criticality_score=coding.criticality_score,
-        specificity_score=coding.specificity_score,
-        riskiness_score=coding.riskiness_score,
+        criticality=coding.criticality,
+        specificity=coding.specificity,
+        riskiness=coding.riskiness,
         feedback_honesty_index=coding.feedback_honesty_index,
-        coded_at=coding.coded_at.isoformat(),
-        notes=coding.notes,
+        coding_notes=coding.coding_notes,
+        timestamp_coded=coding.timestamp_coded.isoformat(),
     )
 
 
-@router.get("/{participant_id}")
-def list_honesty_codings(participant_id: str, db: Session = Depends(get_db)):
+@router.get("/{participant_id}", response_model=list[HonestyCodeOut])
+def list_honesty_codings(participant_id: str, db: Session = Depends(get_db)) -> list[HonestyCodeOut]:
     """List all codings for a participant."""
     participant = db.execute(
-        select(Participant).where(Participant.id == participant_id)
+        select(Participant).where(Participant.participant_id == participant_id)
     ).scalar_one_or_none()
 
     if not participant:
@@ -70,15 +69,15 @@ def list_honesty_codings(participant_id: str, db: Session = Depends(get_db)):
 
     return [
         HonestyCodeOut(
-            id=coding.id,
+            coding_id=coding.coding_id,
             participant_id=coding.participant_id,
             coder_id=coding.coder_id,
-            criticality_score=coding.criticality_score,
-            specificity_score=coding.specificity_score,
-            riskiness_score=coding.riskiness_score,
+            criticality=coding.criticality,
+            specificity=coding.specificity,
+            riskiness=coding.riskiness,
             feedback_honesty_index=coding.feedback_honesty_index,
-            coded_at=coding.coded_at.isoformat(),
-            notes=coding.notes,
+            coding_notes=coding.coding_notes,
+            timestamp_coded=coding.timestamp_coded.isoformat(),
         )
         for coding in codings
     ]

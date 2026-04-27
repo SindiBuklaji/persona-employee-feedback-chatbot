@@ -38,12 +38,17 @@ def chat(payload: ChatRequest, db: Session = Depends(get_db)) -> ChatResponse:
             detail=f"Maximum turns ({settings.max_turns}) reached. Please finish the chat."
         )
 
+    # Set chat start timestamp on first turn
+    if participant.total_turns == 0:
+        participant.timestamp_chat_start = datetime.utcnow()
+        participant.completion_stage = "chat"
+
     assistant_message = chat_service.process_user_message(db, participant, payload.message)
 
     turns_used = participant.total_turns
 
     return ChatResponse(
-        participant_id=participant.id,
+        participant_id=participant.participant_id,
         condition=participant.condition,
         assistant_message=ChatMessageOut(
             role=assistant_message.role,
@@ -72,11 +77,13 @@ def finish_chat(payload: FinishChatRequest, db: Session = Depends(get_db)) -> Fi
             detail=f"Minimum {settings.min_turns} turns required before finishing. You have completed {participant.total_turns} turn(s)."
         )
 
+    now = datetime.utcnow()
     participant.chat_completed = True
-    participant.finished_chat_at = datetime.utcnow()
+    participant.timestamp_chat_end = now
+    participant.completion_stage = "questionnaire"
     db.commit()
 
     return FinishChatResponse(
-        participant_id=participant.id,
+        participant_id=participant.participant_id,
         chat_completed=True,
     )
