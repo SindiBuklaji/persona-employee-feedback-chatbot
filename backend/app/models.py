@@ -45,6 +45,7 @@ class Participant(Base):
         uselist=False,
     )
     honesty_codings: Mapped[list["HonestyCodings"]] = relationship(back_populates="participant", cascade="all, delete-orphan")
+    retrieval_logs: Mapped[list["RetrievalLog"]] = relationship(back_populates="participant", cascade="all, delete-orphan")
 
 
 class Message(Base):
@@ -79,6 +80,7 @@ class Message(Base):
     temperature: Mapped[float | None] = mapped_column(Float, nullable=True)
 
     participant: Mapped[Participant] = relationship(back_populates="messages")
+    retrieval_log: Mapped["RetrievalLog | None"] = relationship(back_populates="message", uselist=False)
 
 
 class QuestionnaireResponse(Base):
@@ -139,3 +141,31 @@ class HonestyCodings(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     participant: Mapped[Participant] = relationship(back_populates="honesty_codings")
+
+
+class RetrievalLog(Base):
+    __tablename__ = "retrieval_logs"
+
+    log_id: Mapped[str] = mapped_column(String, primary_key=True, default=lambda: str(uuid4()))
+    participant_id: Mapped[str] = mapped_column(ForeignKey("participants.participant_id"), nullable=False)
+    message_id: Mapped[str] = mapped_column(ForeignKey("messages.message_id"), nullable=False)
+    turn_index: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    # Retrieval Query & Context
+    user_message_text: Mapped[str] = mapped_column(Text, nullable=False)
+
+    # Retrieved Cards (stored as comma-separated IDs)
+    retrieved_card_ids: Mapped[str] = mapped_column(String, nullable=False)  # e.g., "psych_safety_001,org_silence_002,..."
+    retrieved_card_constructs: Mapped[str] = mapped_column(Text, nullable=False)  # e.g., "construct1; construct2; ..."
+
+    # Retrieval Details
+    retrieval_scores: Mapped[str] = mapped_column(String, nullable=False)  # e.g., "0.85,0.72,0.68"
+    retrieval_method: Mapped[str] = mapped_column(String, nullable=False)  # "embedding", "keyword_fallback", "disabled"
+    retrieval_top_k: Mapped[int] = mapped_column(Integer, nullable=False)
+    retrieval_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
+
+    # Timestamps
+    timestamp_created: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+    participant: Mapped[Participant] = relationship(back_populates="retrieval_logs")
+    message: Mapped[Message] = relationship(back_populates="retrieval_log")

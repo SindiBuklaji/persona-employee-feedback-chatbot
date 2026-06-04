@@ -7,7 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.db import get_db
-from app.models import HonestyCodings, Message, Participant, QuestionnaireResponse
+from app.models import HonestyCodings, Message, Participant, QuestionnaireResponse, RetrievalLog
 
 router = APIRouter(prefix="/export", tags=["export"])
 
@@ -200,4 +200,50 @@ def export_honesty_codings(db: Session = Depends(get_db)) -> StreamingResponse:
         iter([buffer.getvalue()]),
         media_type="text/csv",
         headers={"Content-Disposition": "attachment; filename=honesty_codings.csv"},
+    )
+
+
+@router.get("/retrieval_logs.csv")
+def export_retrieval_logs(db: Session = Depends(get_db)) -> StreamingResponse:
+    """Export retrieval logs for analysis of corpus usage."""
+    buffer = io.StringIO()
+    writer = csv.writer(buffer)
+    writer.writerow([
+        "participant_id",
+        "condition",
+        "turn_index",
+        "user_message_text",
+        "retrieved_card_ids",
+        "retrieved_card_constructs",
+        "retrieval_scores",
+        "retrieval_method",
+        "retrieval_enabled",
+        "timestamp_created",
+    ])
+
+    stmt = (
+        select(RetrievalLog, Participant.condition)
+        .join(Participant, RetrievalLog.participant_id == Participant.participant_id)
+        .order_by(RetrievalLog.participant_id, RetrievalLog.turn_index)
+    )
+
+    for log, condition in db.execute(stmt).all():
+        writer.writerow([
+            log.participant_id,
+            condition,
+            log.turn_index,
+            log.user_message_text,
+            log.retrieved_card_ids,
+            log.retrieved_card_constructs,
+            log.retrieval_scores,
+            log.retrieval_method,
+            log.retrieval_enabled,
+            log.timestamp_created.isoformat(),
+        ])
+
+    buffer.seek(0)
+    return StreamingResponse(
+        iter([buffer.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=retrieval_logs.csv"},
     )
