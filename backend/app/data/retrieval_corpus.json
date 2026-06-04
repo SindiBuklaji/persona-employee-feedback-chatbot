@@ -1,0 +1,446 @@
+{
+  "corpus_metadata": {
+    "version": "1.0",
+    "created_date": "2026-06-04",
+    "purpose": "Fixed retrieval corpus for persona-based employee feedback chatbot research study. Provides background evidence to inform chatbot responses in participant conversations without being cited to participants.",
+    "corpus_type": "fixed_evidence_card_corpus",
+    "participant_visible": false,
+    "no_live_web_retrieval": true,
+    "total_cards": 25,
+    "methodology_note": "The runtime retrieval corpus was primarily based on peer-reviewed organizational psychology and management literature, supplemented by a small number of foundational academic books and practitioner communication sources where directly relevant. All evidence is curated to support naturalistic, empathetic chatbot responses grounded in workplace psychology. Sources are not cited to participants; instead, responses are informed by research-backed understanding of workplace dynamics, feedback quality, and communication.",
+    "source_composition": {
+      "peer_reviewed_journal_articles": 21,
+      "peer_reviewed_book_chapter_annual_series": 1,
+      "practitioner_foundational_communication_text": 1,
+      "foundational_book_chapter": 1,
+      "edited_academic_book": 1
+    }
+  },
+  "evidence_items": [
+    {
+      "id": "psych_safety_001",
+      "construct": "Psychological safety and interpersonal risk-taking",
+      "complete_citation": "Edmondson, A. C. (1999). Psychological Safety and Learning Behavior in Work Teams. Administrative Science Quarterly, 44(2), 350–383. DOI: 10.2307/2666999",
+      "source_type": "Peer-reviewed journal",
+      "category": "1_psychological_safety_and_speaking_up",
+      "tags": ["psychological_safety", "voice", "team_dynamics", "learning", "risk_taking"],
+      "evidence_summary": "Psychological safety is the team-level belief that interpersonal risk-taking—asking questions, admitting mistakes, voicing concerns—is safe and will not result in embarrassment, rejection, or punishment. Research suggests that teams with higher psychological safety demonstrate more voice behavior and learning, even when uncertainty or mistakes are likely. Safety can be built through consistent leader and peer response patterns: acknowledging contributions, treating errors as learning opportunities, and demonstrating genuine interest in different perspectives. The presence of psychological safety enables team members to speak up more readily and to engage in the kind of dialogue necessary for learning and adaptation.",
+      "chatbot_behavior_guidance": "When participant shares concerns or hesitation about speaking up: (1) Validate that it reflects a reasonable assessment of whether it feels safe to voice things. (2) Ask exploratory questions about how others typically respond to concerns raised. (3) Help the participant think through what would need to be different to feel safer speaking up. (4) Explore small, lower-risk ways the participant might test the waters. (5) If safety barriers emerge, acknowledge them and help the participant understand their source.",
+      "why_useful_for_participant_conversations": "Helps chatbot recognize that hesitation to speak up is not individual timidity but a signal about team and manager dynamics. Enables the chatbot to help participants assess existing safety conditions and think through how to build or change them.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "psych_safety_002",
+      "construct": "Safety in asymmetric power relationships and leader openness to voice",
+      "complete_citation": "Detert, J. R., & Burris, E. R. (2007). Leadership Behavior and Employee Voice: Is the Door Really Open? Academy of Management Journal, 50(4), 869–884. DOI: 10.5465/amj.2007.26279183",
+      "source_type": "Peer-reviewed journal",
+      "category": "1_psychological_safety_and_speaking_up",
+      "tags": ["psychological_safety", "power_dynamics", "manager_relationship", "voice", "leader_behavior"],
+      "evidence_summary": "In supervisor-subordinate relationships, psychological safety is particularly important because the inherent power asymmetry creates vulnerability for the employee. Research suggests that employees assess whether a manager creates space for honest dialogue, treats dissent or concerns as legitimate input rather than insubordination, and demonstrates genuine interest in the employee's perspective. Leaders who visibly welcome voice—through inviting input, responding non-defensively to concerns, and taking action on feedback—can significantly increase employee willingness to speak candidly. The absence of explicit invitation or openness to voice, even when tolerance exists, may limit employee communication.",
+      "chatbot_behavior_guidance": "When discussing issues with a manager or team lead: (1) Normalize the power dynamic—acknowledge that it is harder to speak up to someone with authority. (2) Ask whether the manager has explicitly invited input or created space for concerns. (3) Explore what happened in previous attempts to voice concerns and how they were received. (4) Help the participant distinguish between 'I don't think it's safe' and 'My manager has never explicitly said I can speak up.' (5) Help them think through signals of openness they've observed or could test.",
+      "why_useful_for_participant_conversations": "Helps chatbot recognize that hesitation to speak to authority figures is adaptive and contextual. Enables the chatbot to help participants assess actual manager response patterns and think through whether, when, and how to test safety.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "psych_safety_003",
+      "construct": "Speaking up under uncertainty and cognitive diversity in teams",
+      "complete_citation": "Nembhard, I. M., & Edmondson, A. C. (2006). Making it Safe: The Effects of Leader Inclusiveness and Professional Status on Psychological Safety and Improvement Efforts in Health Care Teams. Journal of Organizational Behavior, 27(7), 941–966. DOI: 10.1002/job.413",
+      "source_type": "Peer-reviewed journal",
+      "category": "1_psychological_safety_and_speaking_up",
+      "tags": ["psychological_safety", "voice", "uncertainty", "cognitive_diversity", "learning"],
+      "evidence_summary": "Psychological safety is especially important in work environments that involve uncertainty, complexity, or high interdependence. In such contexts, speaking up about gaps in understanding, different viewpoints, or potential problems may be essential for learning and team effectiveness. Research suggests that leaders who actively solicit diverse perspectives, respond non-defensively to input, and acknowledge that good solutions may emerge from multiple viewpoints foster higher rates of voice. When leaders do not actively invite diverse perspectives or assume alignment, employees may remain hesitant to contribute different viewpoints, even when such contributions could benefit the team.",
+      "chatbot_behavior_guidance": "When the participant describes complex, ambiguous, or cross-functional work: (1) Acknowledge that good outcomes typically require different perspectives and input. (2) Ask whether their manager or team actively seeks different viewpoints or expects alignment. (3) Explore whether the participant has a perspective worth contributing and what's preventing them from sharing it. (4) Help them think through whether speaking up is framed as collaborative problem-solving or as expressing doubt or criticism. (5) Explore what voice looks like in their specific context.",
+      "why_useful_for_participant_conversations": "Helps chatbot recognize that when work is uncertain or interdependent, silence may compound problems. Enables the chatbot to probe whether the team or manager is actively inviting diverse viewpoints and to help participants think through the value of their perspective.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "psych_safety_004",
+      "construct": "Ethical leadership and willingness to receive voice",
+      "complete_citation": "Walumbwa, F. O., & Schaubroeck, J. (2009). Leader Personality Traits and Employee Voice Behavior: Mediating Roles of Ethical Leadership and Work Group Psychological Safety. Journal of Applied Psychology, 94(5), 1275–1286. DOI: 10.1037/a0015848",
+      "source_type": "Peer-reviewed journal",
+      "category": "1_psychological_safety_and_speaking_up",
+      "tags": ["psychological_safety", "voice", "leader_behavior", "ethical_leadership", "trust"],
+      "evidence_summary": "Leaders who demonstrate integrity, consistency between words and actions, and genuine care for follower development may be more likely to receive honest input from employees. Research suggests that employees assess leader reliability and openness to challenge before deciding whether to voice concerns. Even employees with short tenure can develop voice behavior if they perceive the leader as trustworthy and genuinely open to input. Conversely, leader inconsistency or defensiveness may silence even experienced, high-status employees. The relationship between leader integrity and employee voice suggests that trust built through demonstrated behavior shapes whether employees risk speaking up.",
+      "chatbot_behavior_guidance": "When learning about the participant's relationship with their manager: (1) Ask about consistency—does the manager's openness to input depend on mood, topic, or who is speaking? (2) Explore what happens with feedback the manager receives (is it ignored, acted on, or met with defensiveness?). (3) Help the participant identify specific instances where the manager received critical input well. (4) Assess whether the barrier is truly 'not safe to speak' or 'uncertain whether the manager will listen.' (5) Explore what trust would look like and what might rebuild it.",
+      "why_useful_for_participant_conversations": "Helps chatbot understand that psychological safety is built on demonstrated behavior, not just stated openness. Enables the chatbot to help participants make realistic assessments of whether their specific manager is likely to receive voice well.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "org_silence_001",
+      "construct": "Organizational silence and intentional withholding of concerns",
+      "complete_citation": "Morrison, E. W., & Milliken, F. J. (2000). Organizational Silence: A Barrier to Change and Development in a Pluralistic World. Academy of Management Review, 25(4), 706–725. DOI: 10.5465/amr.2000.3707697",
+      "source_type": "Peer-reviewed journal",
+      "category": "2_employee_voice_and_organizational_silence",
+      "tags": ["organizational_silence", "voice_suppression", "employee_voice", "feedback_quality", "trust"],
+      "evidence_summary": "Organizational silence occurs when employees intentionally withhold candid views, concerns, or ideas. Research suggests that silence emerges not from lack of opinion but from a calculated assessment: employees perceive that management is dismissive, unreceptive, or incapable of acting on feedback. When silence becomes normalized—when most people stay quiet—it can reinforce itself as new employees conform to the silent norm. Organizational silence may erode learning, innovation, and responsiveness. It is distinct from not having anything to say; employees may have observations and concerns but choose not to voice them.",
+      "chatbot_behavior_guidance": "When the participant describes a workplace problem but indicates they haven't spoken up about it: (1) Acknowledge the gap between what they observe and what they've shared. (2) Explore what makes them hesitant—ask 'What do you think would happen if you brought this up?' (3) Help them understand the perceived cost-benefit assessment. (4) Distinguish between 'I haven't tried' and 'I tried and learned not to bother'—prior experience shapes current silence. (5) Help them assess whether perceived risk or actual experience is driving the silence.",
+      "why_useful_for_participant_conversations": "Helps chatbot recognize that honest feedback about workplace problems is difficult precisely because the perceived cost-benefit feels skewed. Enables the chatbot to probe specific barriers (perceived dismissiveness, powerlessness, precedent of non-response) and help participants think through whether and how voice is possible.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "org_silence_002",
+      "construct": "Types of organizational silence: acquiescence and defensiveness",
+      "complete_citation": "Pinder, C. C., & Harlos, K. P. (2001). Employee Silence: Quiescence and Acquiescence as Responses to Perceived Injustice. In Research in Personnel and Human Resources Management, Vol. 20, pp. 331–369. Emerald Group Publishing.",
+      "source_type": "Peer-reviewed book chapter (annual series)",
+      "category": "2_employee_voice_and_organizational_silence",
+      "tags": ["organizational_silence", "voice_suppression", "injustice", "engagement", "coping"],
+      "evidence_summary": "Employee silence can take different forms: acquiescent silence (passive acceptance and learned helplessness) and defensive silence (intentional withholding to protect self-interest or the relationship). Research suggests that both forms may erode engagement, learning, and trust. Silence about perceived injustice may be particularly damaging because unaddressed grievances can fester and deepen dissatisfaction. Silence often becomes culturally normative when it is implicitly rewarded (no retaliation) or explicitly punished (speaking up triggers backlash). Once silent, employees may find breaking silence increasingly difficult—the longer they remain quiet, the harder it becomes to speak.",
+      "chatbot_behavior_guidance": "When the participant reveals they've been quiet about a problem: (1) Explore whether it is from learned helplessness ('nothing changes anyway') or self-protection ('I don't want to look like a complainer'). (2) Ask what they've observed about what happens when others speak up. (3) Explore the emotional and professional cost of staying silent. (4) Help them distinguish between 'I've never tried' and 'I tried and learned not to bother.' (5) Assess how long the silence has lasted and whether breaking it feels possible now.",
+      "why_useful_for_participant_conversations": "Helps chatbot recognize that silence is often adaptive in a silent culture, even if it is unhealthy. Enables the chatbot to understand the psychological cost of silence and help participants think through whether and how they might speak up.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "org_silence_003",
+      "construct": "Voice behavior: patterns of who speaks, what, and when",
+      "complete_citation": "LePine, J. A., & Van Dyne, L. (1998). Predicting Voice Behavior in Work Groups. Journal of Applied Psychology, 83(6), 853–868. DOI: 10.1037/0021-9010.83.6.853",
+      "source_type": "Peer-reviewed journal",
+      "category": "2_employee_voice_and_organizational_silence",
+      "tags": ["employee_voice", "voice_behavior", "engagement", "proactivity", "team_dynamics"],
+      "evidence_summary": "Employees who voice concerns, suggestions, or dissent tend to be higher in conscientiousness and agreeableness; however, voice behavior depends heavily on context. Research suggests that individuals with higher tenure, higher status, and stronger relationships with leaders may be more likely to voice. Yet organizational context often matters more than individual traits: when organizations have a history of responding to voice—even critical voice—and when leaders explicitly invite input, even lower-status or newer employees speak up. Voice is not uniform across topics or situations; people may speak up about some things but remain silent on others.",
+      "chatbot_behavior_guidance": "When the participant is hesitant to speak up: (1) Assess their tenure and status—newer or lower-status employees face higher perceived risk. (2) Ask what topics feel safer or riskier to voice about. (3) Explore whether they've seen others speak up and with what result. (4) Help them identify specific, lower-risk forms of voice that might build confidence. (5) Distinguish between 'I never speak up' and 'I speak up about some things but not others.'",
+      "why_useful_for_participant_conversations": "Helps chatbot understand that voice patterns are shaped by tenure, relationship quality, and organizational responsiveness—not just individual personality. Enables the chatbot to help participants assess their specific context and think through what voice might be possible.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "org_silence_004",
+      "construct": "Trust, psychological contract breach, and withdrawal",
+      "complete_citation": "Robinson, S. L. (1996). Trust and Breach of the Psychological Contract. Administrative Science Quarterly, 41(4), 574–599. DOI: 10.2307/2393868",
+      "source_type": "Peer-reviewed journal",
+      "category": "2_employee_voice_and_organizational_silence",
+      "tags": ["psychological_contract", "breach", "silence", "organizational_commitment", "trust"],
+      "evidence_summary": "When employees perceive that the organization has broken its implicit contract—promises about growth, safety, fair treatment, or reciprocal care—they often respond with withdrawal and silence rather than confrontation. Research suggests that such silence reflects both protective mechanisms (protecting the self from further hurt) and disengagement. Unlike voice, which assumes some hope for change, silence following contract breach may reflect a belief that the breach is permanent and complaint would be futile. This form of silence can be particularly destructive because it prevents renegotiation of expectations and erodes the foundation for future trust.",
+      "chatbot_behavior_guidance": "When the participant describes feeling unvalued, passed over, or let down: (1) Explore whether this reflects a specific incident or a pattern of treatment. (2) Ask whether they've spoken up before about similar issues and how it was received. (3) Assess whether they believe things can change or whether they've given up hope. (4) Help distinguish between a specific grievance (potentially fixable) and erosion of trust (harder to repair). (5) Explore what would need to happen to rebuild trust or whether the participant is ready to make a change.",
+      "why_useful_for_participant_conversations": "Helps chatbot recognize that silence sometimes reflects not fear but loss of trust. Enables the chatbot to help participants assess whether they still believe in the possibility of change and what rebuilding trust would require.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "feedback_quality_001",
+      "construct": "Feedback intervention theory and effectiveness",
+      "complete_citation": "Kluger, A. N., & DeNisi, A. (1996). The Effects of Feedback Interventions on Performance: A Historical Review, a Meta-Analysis, and a Preliminary Feedback Intervention Theory. Psychological Bulletin, 119(2), 254–284. DOI: 10.1037/0033-2909.119.2.254",
+      "source_type": "Peer-reviewed journal",
+      "category": "3_constructive_feedback_and_feedback_quality",
+      "tags": ["feedback", "performance", "intervention_theory", "learning"],
+      "evidence_summary": "Meta-analysis of 131 feedback studies reveals that approximately one-third of feedback interventions may have worsened performance. Research suggests that feedback is most effective when it directs attention to task strategies and improvements rather than to self-evaluation or self-esteem. Feedback that triggers threat, shame, or defensiveness may often backfire. Feedback can be more readily received when the feedback source is credible, when the feedback is specific rather than global, and when the recipient has agency in how to respond. Context—including relationship quality, timing, and communication mode—can shape whether feedback improves or harms performance.",
+      "chatbot_behavior_guidance": "When exploring feedback they've received or want to give: (1) Assess the effect—did it motivate or discourage them? (2) Explore whether it focused on strategy ('try X') versus character or ability. (3) Ask what they could or would do differently based on the feedback. (4) Help them think through how to give or receive feedback in ways that focus on improvement rather than judgment. (5) Normalize that poorly delivered feedback is common and defensive reactions are protective, not personal failing.",
+      "why_useful_for_participant_conversations": "Helps chatbot understand why feedback—even well-intentioned criticism—can harm if delivered poorly. Enables the chatbot to help participants think through what made feedback helpful versus unhelpful and what good feedback would look like for them.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "feedback_quality_002",
+      "construct": "Difficult conversations and defensiveness in feedback settings",
+      "complete_citation": "Stone, D., Patton, B., & Heen, S. (2010). Difficult Conversations: How to Discuss What Matters Most. Penguin Books. (Originally published by Harvard Negotiation Project, 1999.)",
+      "source_type": "Practitioner/foundational communication text",
+      "category": "3_constructive_feedback_and_feedback_quality",
+      "tags": ["feedback", "difficult_conversations", "receptiveness", "defensiveness", "communication"],
+      "evidence_summary": "Feedback recipients often shift into defensive mode when they perceive feedback as threat, attack, or judgment of character. Research suggests that defensiveness can block learning and often escalates conflict. Feedback may be better received when framed as a joint problem-solving conversation ('I've noticed X and I'm concerned about Y—what's happening?') rather than judgment ('You're doing X wrong'). Recipients' interpretation of intent matters significantly. When recipients believe the feedback-giver cares about them and the relationship, they may be more likely to hear feedback with curiosity rather than defensiveness.",
+      "chatbot_behavior_guidance": "When the participant describes feedback they received or conflict about feedback: (1) Explore their interpretation of the feedback-giver's intent—what did they think was meant? (2) Ask what would have made the feedback feel like support versus criticism. (3) Help them think through their own defensive reactions and what triggered them. (4) When helping them give feedback, frame it as shared problem-solving rather than judgment. (5) Emphasize care and relationship alongside honesty.",
+      "why_useful_for_participant_conversations": "Helps chatbot understand that feedback can feel like threat, and defensive reactions are normal protective responses. Enables the chatbot to help participants hear hard feedback with less defensiveness and think through how to give feedback in ways that invite listening.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "feedback_quality_003",
+      "construct": "Feedback-seeking behavior and organizational learning",
+      "complete_citation": "Ashford, S. J. (1986). Feedback-Seeking in Individual Adaptation: A Resource Perspective. Academy of Management Journal, 29(3), 465–487. DOI: 10.5465/256218",
+      "source_type": "Peer-reviewed journal",
+      "category": "3_constructive_feedback_and_feedback_quality",
+      "tags": ["feedback_seeking", "learning", "organizational_culture", "psychological_safety"],
+      "evidence_summary": "Employees may actively seek feedback when they perceive the feedback will be useful, the source is credible, and seeking feedback is safe (not seen as a sign of weakness or incompetence). Research suggests that high performers and growth-oriented employees are more likely to seek feedback, but this advantage can compound in organizational cultures that explicitly value continuous learning. In cultures where asking for feedback is unusual or carries stigma, even talented employees may avoid seeking input. Feedback-seeking is not purely an individual preference; it reflects organizational norms and whether employees perceive the environment as safe for such requests.",
+      "chatbot_behavior_guidance": "When the participant discusses learning, growth, or uncertainty: (1) Ask whether they seek feedback and from whom. (2) Explore whether asking for feedback feels safe or risky in their workplace. (3) Assess whether their organization explicitly values continuous improvement or assumes people should 'just know.' (4) Help them think through who they trust to give honest, useful feedback. (5) Normalize that feedback-seeking is a strength, not a sign of weakness or incompetence.",
+      "why_useful_for_participant_conversations": "Helps chatbot understand that not seeking feedback may reflect organizational culture rather than lack of motivation or confidence. Enables the chatbot to help participants assess whether feedback-seeking is possible in their context and how to build feedback relationships.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "manager_communication_001",
+      "construct": "Communication quality and clarity in supervisor-subordinate relationships",
+      "complete_citation": "Ferris, G. R., Munyon, T. P., Basik, K., & Buckley, M. R. (2008). The Performance Evaluation Context: Social, Emotional, Cognitive, Political, and Relationship Components. Human Resource Management Review, 18(3), 146–163. DOI: 10.1016/j.hrmr.2008.07.006",
+      "source_type": "Peer-reviewed journal",
+      "category": "4_manager_and_team_communication",
+      "tags": ["manager_communication", "clarity", "expectations", "feedback_setting", "relationship_quality"],
+      "evidence_summary": "Communication quality between supervisor and subordinate can shape how well employees understand expectations, how valued they feel, and whether they perceive the relationship as trusting. Research suggests that frequent, two-way communication—where both parties share perspectives and check for understanding—is associated with higher performance and job satisfaction. Poor communication may often reflect not lack of goodwill but insufficient time, skill, or structure. Many managers may assume subordinates understand expectations when they don't, and subordinates may assume managers understand their constraints when alignment hasn't been confirmed.",
+      "chatbot_behavior_guidance": "When the participant describes unclear expectations or poor communication with their manager: (1) Explore the frequency and structure of communication—regular one-on-ones, ad hoc, or something else? (2) Ask whether they've tried to clarify expectations and what happened. (3) Help them distinguish between 'manager won't explain' and 'manager hasn't realized we're misaligned.' (4) Explore what communication would help—more frequent check-ins, written clarity, or something else? (5) Help them think through how to ask for clearer communication.",
+      "why_useful_for_participant_conversations": "Helps chatbot recognize that communication gaps are often structural rather than intentional. Enables the chatbot to help participants identify what's missing and how to ask for it.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "manager_communication_002",
+      "construct": "Asynchronous and text-based communication limitations in feedback",
+      "complete_citation": "Byron, K. (2008). Carrying Too Heavy a Load? The Communication and Miscommunication of Emotion by Email. Academy of Management Review, 33(2), 309–327. DOI: 10.5465/amr.2008.31193458",
+      "source_type": "Peer-reviewed journal",
+      "category": "4_manager_and_team_communication",
+      "tags": ["communication_mode", "email", "tone", "miscommunication", "feedback"],
+      "evidence_summary": "Text-based communication (email, chat, messaging) may be particularly prone to misinterpretation around emotional tone, intent, and relationship. Research suggests that negative or critical feedback delivered via email may be perceived as harsher, more personal, and more rejecting than the same feedback in person. Text lacks vocal tone, facial expression, and relational context that help recipients understand intent. Ambiguous feedback in text ('This doesn't work') may be more likely to trigger defensive interpretation ('They think I'm incompetent') than in conversation where intent can be clarified immediately.",
+      "chatbot_behavior_guidance": "When the participant describes feedback or conflict that happened via email or chat: (1) Acknowledge that tone is difficult to read in text and misinterpretation is common. (2) Ask what they inferred versus what might have been intended. (3) Explore whether a face-to-face or synchronous conversation might clarify. (4) Help them consider whether responding via text will escalate or help clarify. (5) When helping them give feedback, encourage them to do difficult feedback in person or at least synchronously.",
+      "why_useful_for_participant_conversations": "Helps chatbot normalize that text miscommunication is common and not necessarily personal. Enables the chatbot to help participants interpret ambiguous messages with less defensiveness and choose better modes for important conversations.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "manager_communication_003",
+      "construct": "Grounding and shared understanding in communication",
+      "complete_citation": "Clark, H. H., & Brennan, S. E. (1991). Grounding in Communication. In L. B. Resnick, J. M. Levine, & S. D. Teasley (Eds.), Perspectives on Socially Shared Cognition (pp. 127–149). American Psychological Association.",
+      "source_type": "Foundational book chapter",
+      "category": "4_manager_and_team_communication",
+      "tags": ["communication", "shared_understanding", "clarity", "miscommunication", "assumptions"],
+      "evidence_summary": "Shared understanding (grounding) requires both parties to confirm they have the same interpretation. Research suggests that when communication is one-way or when people assume understanding without checking, misalignment can build silently. In work settings, this is especially problematic with expectations, priorities, and feedback—people may think they've understood each other when they haven't. Good communication requires explicit checking: 'What I hear you saying is… is that right?' Efficient teams may invest time in grounding when the stakes are high.",
+      "chatbot_behavior_guidance": "When the participant describes a situation where things went wrong or where they're unsure about expectations: (1) Ask what they think their manager expects versus what the manager actually said. (2) Explore whether they've confirmed understanding ('Did you ask?'). (3) Help them think through what different assumptions might explain the gap. (4) When helping them communicate, encourage them to check understanding explicitly. (5) Normalize that confirming understanding is a sign of good communication and attention, not a sign of not listening.",
+      "why_useful_for_participant_conversations": "Helps chatbot recognize that misalignment often reflects lack of shared understanding rather than miscommunication or lack of care. Enables the chatbot to help participants check understanding and communicate clearly.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "role_ambiguity_001",
+      "construct": "Role ambiguity, stress, and engagement",
+      "complete_citation": "Rizzo, J. R., House, R. J., & Lirtzman, S. I. (1970). Role Conflict and Ambiguity in Complex Organizations. Administrative Science Quarterly, 15(2), 150–163. DOI: 10.2307/2391486",
+      "source_type": "Peer-reviewed journal",
+      "category": "5_workload_stress_and_role_ambiguity",
+      "tags": ["role_ambiguity", "stress", "engagement", "clarity", "job_satisfaction"],
+      "evidence_summary": "Role ambiguity—unclear or conflicting expectations about job responsibilities, priorities, and performance criteria—may be a significant source of workplace stress, dissatisfaction, and disengagement. Research suggests that employees with ambiguous roles can experience higher anxiety, lower job satisfaction, and reduced organizational commitment. Ambiguity can be exacerbated when communication is infrequent, when priorities change without notice, or when multiple authority figures give conflicting direction. Even high-competence employees may struggle to perform well or feel confident when role expectations are unclear.",
+      "chatbot_behavior_guidance": "When the participant describes unclear assignments, changing priorities, or uncertainty about what success looks like: (1) Validate that this is a genuine stressor, not a personal failing or inability to handle the role. (2) Help them articulate which aspects are most ambiguous (priorities, success criteria, boundaries, decision authority?). (3) Ask whether they've sought clarification and what happened. (4) Explore whether the ambiguity is unintentional (manager assumes clarity exists) or symptomatic of broader communication problems. (5) Help them think through what information would help them perform better.",
+      "why_useful_for_participant_conversations": "Helps chatbot understand that confusion about job role is not just frustrating—it's cognitively and emotionally taxing. Enables the chatbot to ask questions that help participants identify what's missing and what asking for clarity might look like.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "role_ambiguity_002",
+      "construct": "Job demands and resources: stress from overload and underutilization",
+      "complete_citation": "Demerouti, E., Bakker, A. B., Nachreiner, F., & Schaufeli, W. B. (2001). The Job Demands-Resources Model of Burnout. Journal of Applied Psychology, 86(3), 499–512. DOI: 10.1037/0021-9010.86.3.499",
+      "source_type": "Peer-reviewed journal",
+      "category": "5_workload_stress_and_role_ambiguity",
+      "tags": ["job_demands", "burnout", "stress", "workload", "engagement"],
+      "evidence_summary": "Burnout and disengagement may arise from two pathways: (1) excessive job demands without adequate resources (overload, unclear priorities, unsupported goals), and (2) lack of job resources when demands are high (no support, limited autonomy, unclear feedback). Research suggests that workload stress is not just about quantity of work but about the gap between demands and capacity or clarity. Employees may sustain high workload if they have clear priorities, manager support, and belief that goals are achievable. Without these resources, even moderate workload can become depleting.",
+      "chatbot_behavior_guidance": "When the participant describes workload stress: (1) Explore both the demand side (how much?) and the resource side (what support exists?). (2) Ask whether the problem is quantity of work, conflicting priorities, unclear what's most important, or lack of support and tools. (3) Help them identify which resources are missing that would matter most. (4) Assess whether the issue is that demands exceed capacity or that they don't understand how demands fit together. (5) Explore what changes would help most.",
+      "why_useful_for_participant_conversations": "Helps chatbot understand that stress is multidimensional and contextual. Enables the chatbot to help participants identify which aspect of their workload situation is most stressful and what would help.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "role_ambiguity_003",
+      "construct": "Role clarity and personal engagement",
+      "complete_citation": "Kahn, W. A. (1990). Psychological Conditions of Personal Engagement and Disengagement at Work. Academy of Management Journal, 33(4), 692–724. DOI: 10.5465/256287",
+      "source_type": "Peer-reviewed journal",
+      "category": "5_workload_stress_and_role_ambiguity",
+      "tags": ["role_clarity", "engagement", "disengagement", "psychological_contract"],
+      "evidence_summary": "Personal engagement—the degree to which people invest themselves cognitively, emotionally, and behaviorally in their work—may depend partly on role clarity. Research suggests that when people understand what's expected, what success looks like, and how they contribute to the team, they are more likely to engage fully. Conversely, when roles are ambiguous, people may tend to withdraw (disengage, work just enough to avoid criticism, withhold discretionary effort). Disengagement may be a rational response to unclear expectations because fully engaging when you're unsure what you're doing carries risk.",
+      "chatbot_behavior_guidance": "When the participant seems withdrawn or disengaged: (1) Ask whether they understand what's expected of them. (2) Explore what clarity would help (success criteria, priorities, decision authority?). (3) Help them assess whether they've tried to get clarity and what happened. (4) Normalize that it's difficult to engage fully when you're unsure what you're doing. (5) Help them think through what would restore engagement.",
+      "why_useful_for_participant_conversations": "Helps chatbot recognize that disengagement may be a rational response to unclear role rather than lack of motivation. Enables the chatbot to help participants identify what clarity is missing and how to seek it.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "role_ambiguity_004",
+      "construct": "Burnout and withdrawal of discretionary effort",
+      "complete_citation": "Schaufeli, W. B., & Bakker, A. B. (2004). Job Demands, Job Resources, and their Relationship with Burnout and Engagement: A Multi-Sample Study. Journal of Organizational Behavior, 25(3), 293–315. DOI: 10.1002/job.248",
+      "source_type": "Peer-reviewed journal",
+      "category": "5_workload_stress_and_role_ambiguity",
+      "tags": ["burnout", "discretionary_effort", "engagement", "motivation", "stress"],
+      "evidence_summary": "When employees experience sustained stress, unclear expectations, or lack of support, they may withdraw discretionary effort—going through the motions but not investing energy in quality, innovation, or helping beyond minimum requirements. Research suggests that this withdrawal is often protective; it's a way to manage emotional exhaustion and limit exposure to further stress. However, withdrawal can trigger negative cycles: lower performance may lead to more criticism, which may lead to less support, which may increase withdrawal. Burned-out employees may appear 'disengaged' when they are actually protecting themselves from depletion.",
+      "chatbot_behavior_guidance": "When the participant describes feeling burnt out, going through the motions, or lacking motivation: (1) Explore what's draining them most (overload, conflict, lack of recognition, unclear goals?). (2) Ask whether they've always been this way at work or whether something changed. (3) Help them recognize that low motivation might be a protective response to stress, not a personal failing. (4) Assess what would help restore motivation (clearer goals, manager support, recognition, workload reduction?). (5) Explore what cost they're paying from staying withdrawn.",
+      "why_useful_for_participant_conversations": "Helps chatbot understand withdrawal as an adaptive stress response rather than laziness or lack of commitment. Enables the chatbot to help participants recognize what's driving the withdrawal and what would help restore engagement.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "fairness_recognition_001",
+      "construct": "Equity and fairness in resource allocation and recognition",
+      "complete_citation": "Adams, J. S. (1965). Inequity in Social Exchange. Advances in Experimental Social Psychology, 2, 267–299. DOI: 10.1016/S0065-2601(08)60108-2",
+      "source_type": "Peer-reviewed journal",
+      "category": "6_recognition_fairness_and_belonging",
+      "tags": ["equity_theory", "fairness", "recognition", "motivation", "justice"],
+      "evidence_summary": "Equity theory suggests that people assess fairness by comparing their input-to-outcome ratio with others. Research suggests that when people perceive their contributions are not fairly recognized or rewarded (relative to peers), they experience distress and may reduce effort, withdraw, or leave. Fairness is subjective and based on perception, not just objective reality. People may accept lower outcomes if they believe the distribution process is fair. Lack of recognition for good work may be particularly demoralizing when it combines with seeing others recognized for comparable or less work.",
+      "chatbot_behavior_guidance": "When the participant mentions feeling unappreciated, unfairly treated, or overlooked: (1) Explore specific instances—what weren't they recognized for? (2) Ask whether others have received similar recognition for comparable work. (3) Help them assess whether the lack of recognition is from oversight, different standards, or something else. (4) Explore the emotional impact—discouragement, anger, resignation? (5) Help them think through whether speaking up about recognition is possible.",
+      "why_useful_for_participant_conversations": "Helps chatbot understand that feeling undervalued affects motivation, commitment, and whether people see a future in the role. Enables the chatbot to help participants name the fairness issue and think through how to address it.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "fairness_recognition_002",
+      "construct": "Procedural justice and perceived fairness of processes",
+      "complete_citation": "Greenberg, J. (1987). A Taxonomy of Organizational Justice Theories. Academy of Management Review, 12(1), 9–22. DOI: 10.5465/amr.1987.4307799",
+      "source_type": "Peer-reviewed journal",
+      "category": "6_recognition_fairness_and_belonging",
+      "tags": ["procedural_justice", "fairness", "trust", "organizational_justice", "voice"],
+      "evidence_summary": "People judge fairness not just by outcomes but by whether the process for deciding outcomes is fair. Research suggests that fair processes include transparency, opportunity to be heard, consistency, and explanation. When people feel they've had a chance to voice their perspective—even if the final decision goes against them—they may be more likely to accept the outcome and maintain trust. Lack of voice or transparency in decision-making may erode trust and commitment, even if the outcome is favorable. This is particularly important in feedback, evaluation, and resource allocation decisions.",
+      "chatbot_behavior_guidance": "When the participant describes a decision or feedback they disagree with: (1) Explore whether they understood the reasoning behind it. (2) Ask whether they had a chance to provide input or perspective. (3) Assess whether the decision-making process felt transparent or opaque. (4) Help them distinguish between 'I disagree with the outcome' and 'I didn't feel heard in the process.' (5) Explore whether they could ask for explanation or reconsideration.",
+      "why_useful_for_participant_conversations": "Helps chatbot recognize that trust in decisions and feedback depends on process, not just outcome. Enables the chatbot to help participants assess whether fairness concern is about the decision itself or about being excluded from the decision.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "fairness_recognition_003",
+      "construct": "Relational energy and belonging at work",
+      "complete_citation": "Dutton, J. E., & Ragins, B. R. (Eds.). (2007). Exploring Positive Relationships at Work: Building a Theoretical and Research Foundation. Lawrence Erlbaum Associates.",
+      "source_type": "Edited academic book",
+      "category": "6_recognition_fairness_and_belonging",
+      "tags": ["belonging", "relationships", "engagement", "relational_energy", "inclusion"],
+      "evidence_summary": "Research suggests that people thrive at work when they experience positive relational energy—feeling valued, connected, and understood by colleagues and leaders. Lack of belonging creates subtle but profound stress. High-energy relationships (where people feel seen and appreciated) may increase engagement, resilience, and willingness to take risks. Low-energy relationships (where people feel invisible or dismissed) may increase stress and withdrawal. Belonging can be especially important for psychological safety—people need to feel they are part of the team, not peripheral to it.",
+      "chatbot_behavior_guidance": "When the participant describes feeling isolated, invisible, or outside the team: (1) Explore whether they feel connected to their manager and colleagues. (2) Ask whether they see themselves as part of the team or as an outsider. (3) Assess whether they have positive relationships at work or whether most interactions feel transactional or strained. (4) Help them think through what would increase sense of belonging. (5) Explore how sense of belonging affects their willingness to speak up or take risks.",
+      "why_useful_for_participant_conversations": "Helps chatbot recognize that belonging and relational connection affect everything—psychological safety, willingness to voice, engagement. Enables the chatbot to help participants identify whether isolation is part of the problem and what relational shifts might help.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "conflict_001",
+      "construct": "Task vs. relationship conflict and team effectiveness",
+      "complete_citation": "Jehn, K. A. (1995). A Multimethod Examination of the Benefits and Detriments of Intragroup Conflict. Administrative Science Quarterly, 40(2), 256–282. DOI: 10.2307/2393638",
+      "source_type": "Peer-reviewed journal",
+      "category": "7_workplace_conflict_and_negative_experiences",
+      "tags": ["conflict", "task_conflict", "relationship_conflict", "team_dynamics"],
+      "evidence_summary": "Task conflict (disagreement about work strategies, solutions, and priorities) can be productive—it may lead to better problem-solving. Relationship conflict (personal friction, disrespect, tension) is often uniformly harmful—it may reduce psychological safety, engagement, and performance. The distinction matters because task disagreement is not the same as relationship friction. Research suggests that teams that can disagree on strategies without taking it personally tend to have higher performance and stronger relationships. Teams that personalize disagreement (seeing disagreement as attack) may suffer both in task performance and team cohesion.",
+      "chatbot_behavior_guidance": "When the participant describes conflict: (1) Help them assess whether it's about the work and strategy or about the relationship. (2) Explore whether disagreement led to better solutions or escalated into personal tension. (3) Ask whether they can disagree with someone's idea without disliking the person. (4) Help them understand how to voice different perspectives without triggering defensiveness. (5) If relationship conflict is present, explore whether it can be repaired or whether it's too damaged.",
+      "why_useful_for_participant_conversations": "Helps chatbot understand that not all conflict is bad—task disagreement can be healthy. Enables the chatbot to help participants distinguish between productive disagreement and harmful relationship friction.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "conflict_002",
+      "construct": "Incivility and cumulative stress in the workplace",
+      "complete_citation": "Andersson, L. M., & Pearson, C. M. (1999). Tit for Tat? The Spiraling Effect of Incivility in the Workplace. Academy of Management Review, 24(3), 452–471. DOI: 10.5465/amr.1999.2202131",
+      "source_type": "Peer-reviewed journal",
+      "category": "7_workplace_conflict_and_negative_experiences",
+      "tags": ["incivility", "stress", "negative_interactions", "engagement", "burnout"],
+      "evidence_summary": "Workplace incivility—rude, dismissive, or disrespectful interactions—may accumulate stress and erode engagement. Research suggests that a single rude comment might be forgettable, but a pattern of disrespect can create persistent stress. Incivility is often not confrontational (yelling, explicit criticism) but subtle (dismissiveness, interrupting, ignoring contributions). Targets of incivility may reduce effort, withdraw socially, and often leave. Witnesses of incivility may also experience stress and reduced engagement. Incivility often triggers protective withdrawal or defensive behavior rather than speaking up.",
+      "chatbot_behavior_guidance": "When the participant describes repeated dismissiveness, rudeness, or disrespect: (1) Validate that it's stressful and demoralizing. (2) Explore whether the pattern is from one person or systemic. (3) Ask how they've responded—do they withdraw, retaliate, or speak up? (4) Help them assess the cost of staying in an uncivil environment. (5) If they're considering speaking up, help them think through how to address it without escalating.",
+      "why_useful_for_participant_conversations": "Helps chatbot recognize that accumulated incivility is a real stressor and driver of disengagement. Enables the chatbot to help participants name the pattern and think through whether and how to address it.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "confidentiality_trust_001",
+      "construct": "Trust and information sharing in vulnerable contexts",
+      "complete_citation": "Gillespie, N., & Mann, L. (2004). Transformational Leadership and Shared Values: The Building Blocks for Trust in Organizational Contexts. Journal of Managerial Psychology, 19(6), 588–607. DOI: 10.1108/02683940410551507",
+      "source_type": "Peer-reviewed journal",
+      "category": "8_confidentiality_and_trust_in_feedback_settings",
+      "tags": ["trust", "vulnerability", "confidentiality", "psychological_safety", "information_sharing"],
+      "evidence_summary": "People share vulnerable information (concerns, mistakes, worries) only when they trust that it will be held confidentially and used fairly. Research suggests that trust in feedback settings is built on consistent behavior: the feedback-giver respects confidentiality, uses feedback for development rather than punishment, and demonstrates genuine care for the person. Breaches of confidentiality—feedback being shared widely, used against the person, or treated dismissively—may destroy trust quickly and teach people to conceal rather than reveal.",
+      "chatbot_behavior_guidance": "When the participant is considering giving feedback or expressing concerns: (1) Ask whether they trust the recipient to keep it confidential. (2) Explore whether they've seen the person handle others' feedback fairly or use it against them. (3) Help them assess the risk and their comfort level. (4) If they're hesitant, explore whether the hesitation is about confidentiality, fairness, or something else. (5) Help them think through how to frame feedback in a way that feels safer.",
+      "why_useful_for_participant_conversations": "Helps chatbot understand that willingness to voice depends on trust that information will be handled fairly and confidentially. Enables the chatbot to help participants assess whether their manager or team is trustworthy with feedback.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    },
+    {
+      "id": "confidentiality_trust_002",
+      "construct": "Uncertainty reduction in new or asymmetric relationships",
+      "complete_citation": "Berger, C. R., & Calabrese, R. J. (1975). Some Explorations in Initial Interaction and Beyond: Toward a Developmental Theory of Interpersonal Communication. Human Communication Research, 1(2), 99–112. DOI: 10.1111/j.1468-2958.1975.tb00258.x",
+      "source_type": "Peer-reviewed journal",
+      "category": "8_confidentiality_and_trust_in_feedback_settings",
+      "tags": ["uncertainty_reduction", "trust", "vulnerability", "information_seeking", "communication"],
+      "evidence_summary": "When interacting with someone new or whose intentions are unclear, people may reduce uncertainty through information-seeking and careful self-disclosure. Research suggests that people share low-risk information first, observe how it's received, then gradually share more. In feedback settings, people may do the same—testing whether it's safe to open up by sharing small concerns first. If the recipient responds with care and confidentiality, they may open up more. If the recipient responds dismissively or shares the information widely, they may stop sharing.",
+      "chatbot_behavior_guidance": "When the participant is hesitant to open up or testing the waters: (1) Normalize that they're gathering information about whether it's safe to voice things. (2) Ask what small things they've already shared and how they were received. (3) Help them plan a low-risk opening if they want to test safety. (4) Explore what they would do if they shared something small and it went well versus poorly. (5) Help them recognize they're being wise, not timid.",
+      "why_useful_for_participant_conversations": "Helps chatbot recognize that cautious opening up is smart adaptation to uncertainty. Enables the chatbot to help participants think through how to build trust gradually and assess safety signals.",
+      "participant_visible": false,
+      "verification": {
+        "metadata_verified": true,
+        "content_relevance_verified": true,
+        "included_in_final_corpus": true
+      }
+    }
+  ]
+}
