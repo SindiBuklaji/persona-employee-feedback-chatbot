@@ -3,12 +3,12 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     openai_api_key: str
-    openai_model: str = "gpt-5-mini"
+    openai_model: str = "gpt-4o-mini"
     openai_embedding_model: str = "text-embedding-3-small"
     database_url: str = "sqlite:///./thesis_chatbot.db"
     min_turns: int = 3
     max_turns: int = 5
-    temperature: float = 0.2
+    temperature: float = 1.0
     top_k_retrieval: int = 3
     allowed_origins: str = "http://localhost:8501"
     debug: bool = False
