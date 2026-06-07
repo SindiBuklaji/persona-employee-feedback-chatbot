@@ -16,22 +16,34 @@ In the chat, please:
 - suggest what should change.
 """.strip()
 
-# These follow-up prompts must stay substantively identical across conditions.
+# Core follow-up sequence: same constructs, different phrasings by condition
 FOLLOW_UP_SEQUENCE = [
     {
         "key": "issue_detail",
-        "prompt": "What exactly is happening in this situation? Please describe the main issue as concretely as possible.",
+        "warm": "What’s going on? Tell me what you’re seeing.",
+        "competent": "What’s the main issue you’re seeing?",
     },
     {
         "key": "impact",
-        "prompt": "How does this issue affect your work, motivation, or the team’s functioning?",
+        "warm": "How’s it affecting you?",
+        "competent": "What impact does that have on your work or the team?",
     },
     {
         "key": "causes",
-        "prompt": "What do you think are the main causes or contributing factors behind this problem?",
+        "warm": "What do you think is behind it?",
+        "competent": "What do you think is the root cause?",
     },
     {
         "key": "improvement",
-        "prompt": "What changes or actions would most improve this situation? Please be as specific as possible.",
+        "warm": "What would help?",
+        "competent": "What would fix it?",
     },
 ]
+
+
+def get_follow_up_prompt(condition: str, follow_up_key: str) -> str:
+    """Get persona-specific wording for follow-up questions."""
+    for item in FOLLOW_UP_SEQUENCE:
+        if item["key"] == follow_up_key:
+            return item.get(condition, item.get("warm", ""))
+    return ""

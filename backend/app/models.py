@@ -151,9 +151,6 @@ class RetrievalLog(Base):
     message_id: Mapped[str] = mapped_column(ForeignKey("messages.message_id"), nullable=False)
     turn_index: Mapped[int] = mapped_column(Integer, nullable=False)
 
-    # Retrieval Query & Context
-    user_message_text: Mapped[str] = mapped_column(Text, nullable=False)
-
     # Retrieved Cards (stored as comma-separated IDs)
     retrieved_card_ids: Mapped[str] = mapped_column(String, nullable=False)  # e.g., "psych_safety_001,org_silence_002,..."
     retrieved_card_constructs: Mapped[str] = mapped_column(Text, nullable=False)  # e.g., "construct1; construct2; ..."
@@ -163,6 +160,7 @@ class RetrievalLog(Base):
     retrieval_method: Mapped[str] = mapped_column(String, nullable=False)  # "embedding", "keyword_fallback", "disabled"
     retrieval_top_k: Mapped[int] = mapped_column(Integer, nullable=False)
     retrieval_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
+    corpus_version: Mapped[str] = mapped_column(String, default="1.0")  # For reproducibility
 
     # Timestamps
     timestamp_created: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)

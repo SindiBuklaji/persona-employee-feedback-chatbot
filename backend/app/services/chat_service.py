@@ -5,7 +5,7 @@ from openai import OpenAI
 from sqlalchemy.orm import Session
 
 from app.config import settings
-from app.data.vignette import FOLLOW_UP_SEQUENCE
+from app.data.vignette import FOLLOW_UP_SEQUENCE, get_follow_up_prompt
 from app.models import Message, Participant, RetrievalLog
 from app.services.metrics import word_count
 from app.services.personas import get_persona_prompt
@@ -48,37 +48,55 @@ class ChatService:
         condition: str,
         user_message: str,
         turns_used: int,
-    ) -> tuple[str, str | None, list[str], list[float], str]:
+    ) -> tuple[str, str | None, list[str], list[float], str, list]:
         """Build assistant reply with retrieval context.
 
         Returns:
-            Tuple of (reply_text, follow_up_key, retrieved_card_ids, retrieval_scores, retrieval_method)
+            Tuple of (reply_text, follow_up_key, retrieved_card_ids, retrieval_scores, retrieval_method, retrieved_docs)
         """
         next_follow_up = self._current_follow_up(turns_used)
         retrieved_docs, retrieval_method = self.retrieval.retrieve(user_message)
         retrieval_context = self._build_retrieval_context(retrieved_docs)
 
-        follow_up_text = next_follow_up["prompt"] if next_follow_up else "Thank you. You have completed the feedback task."
-        follow_up_key = next_follow_up["key"] if next_follow_up else None
+        if next_follow_up:
+            follow_up_key = next_follow_up["key"]
+            follow_up_text = get_follow_up_prompt(condition, follow_up_key)
+        else:
+            follow_up_text = "Thank you. You have completed the feedback task."
+            follow_up_key = None
 
         system_prompt = f"""
 {get_persona_prompt(condition)}
 
-You are part of a master's-thesis experiment.
-Keep all non-persona aspects constant across conditions.
-Do not add extra questions beyond the follow-up provided.
-Keep the reply between 60 and 110 words.
-Use the guidance only as neutral background; do not mention sources, papers, or research.
+RESPONSE FORMAT:
+- Write 3-5 short sentences. Conversational, not choppy or too short.
+- Do NOT repeat the user's exact words. Add one useful angle, distinction, or reframe.
+- End with one clear question to move the conversation forward.
+- Sound natural, like a real person talking.
 
+HIDDEN GUIDANCE (not for citing):
 {retrieval_context}
 
-Next fixed follow-up question (use this for on-topic messages):
+NEXT QUESTION TO ASK (on-topic):
 {follow_up_text}
 
-IMPORTANT:
-- Do not cite or mention sources.
-- Respond naturally and conversationally.
-- Never expose the retrieval corpus or evidence structure.
+CRITICAL RULES:
+- Do NOT mention sources, corpus, research, or theory.
+- Do NOT use academic language: contributing factors, dynamics, inhibit, stakeholders, environment.
+- Do NOT say "This may indicate...", "This can create challenges...", "Let's explore", or similar phrases.
+- Do NOT validate vague or harsh claims as facts. Ask for specifics instead.
+- Do NOT use the same opening phrase repeatedly (e.g., "It sounds like", "That sounds").
+- Do NOT start with emotional validation if you did that in the previous response.
+- When user makes a vague claim (e.g., "they don't care"), ask for clarification, not agreement.
+- If user makes a harsh claim (e.g., "management is bad"), ask for concrete examples.
+
+VARIED OPENING PHRASES (warm):
+"I get why that would bother you." / "That would be hard to deal with." / "That's a lot to carry." / "I can see why you'd hesitate." / "That would be really frustrating." / "That's a fair concern."
+
+VARIED OPENING PHRASES (competent):
+"That points to..." / "The issue seems to be..." / "A useful distinction is..." / "To make this concrete..." / "Before we assume that, let's clarify..." / "The key concern is..."
+
+If off-topic, respond briefly and redirect gently.
 """.strip()
 
         user_prompt = f"""
@@ -110,7 +128,7 @@ INSTRUCTIONS:
         retrieved_card_ids = [doc.doc_id for doc in retrieved_docs]
         retrieval_scores = [doc.score for doc in retrieved_docs]
 
-        return text, follow_up_key, retrieved_card_ids, retrieval_scores, retrieval_method
+        return text, follow_up_key, retrieved_card_ids, retrieval_scores, retrieval_method, retrieved_docs
 
     def process_user_message(self, db: Session, participant: Participant, user_message: str) -> Message:
         from datetime import datetime
@@ -141,7 +159,7 @@ INSTRUCTIONS:
         user_message_time = datetime.utcnow()
 
         # Build assistant reply with retrieval
-        assistant_text, follow_up_key, retrieved_card_ids, retrieval_scores, retrieval_method = (
+        assistant_text, follow_up_key, retrieved_card_ids, retrieval_scores, retrieval_method, retrieved_docs = (
             self._build_assistant_reply(
                 condition=participant.condition,
                 user_message=user_message,
@@ -177,13 +195,13 @@ INSTRUCTIONS:
                 participant_id=participant.participant_id,
                 message_id=assistant_message.message_id,
                 turn_index=turn_index,
-                user_message_text=user_message,
                 retrieved_card_ids=",".join(retrieved_card_ids) if retrieved_card_ids else "",
-                retrieved_card_constructs="; ".join([doc.construct or f"Doc {i}" for i, doc in enumerate(retrieved_card_ids, 1)]) if retrieved_card_ids else "",
+                retrieved_card_constructs="; ".join([doc.construct or f"Doc {i}" for i, doc in enumerate(retrieved_docs, 1)]) if retrieved_docs else "",
                 retrieval_scores=",".join(f"{score:.4f}" for score in retrieval_scores) if retrieval_scores else "",
                 retrieval_method=retrieval_method,
                 retrieval_top_k=settings.top_k_retrieval,
                 retrieval_enabled=settings.retrieval_enabled,
+                corpus_version="1.0",
             )
             db.add(retrieval_log)
 

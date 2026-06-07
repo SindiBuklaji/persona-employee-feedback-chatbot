@@ -205,19 +205,25 @@ def export_honesty_codings(db: Session = Depends(get_db)) -> StreamingResponse:
 
 @router.get("/retrieval_logs.csv")
 def export_retrieval_logs(db: Session = Depends(get_db)) -> StreamingResponse:
-    """Export retrieval logs for analysis of corpus usage."""
+    """Export retrieval logs for auditability and reproducibility.
+
+    Note: User messages are stored in the messages table and linked via message_id.
+    Retrieval logs contain only aggregate metadata needed for analysis.
+    """
     buffer = io.StringIO()
     writer = csv.writer(buffer)
     writer.writerow([
         "participant_id",
         "condition",
         "turn_index",
-        "user_message_text",
+        "message_id",
         "retrieved_card_ids",
         "retrieved_card_constructs",
         "retrieval_scores",
         "retrieval_method",
         "retrieval_enabled",
+        "retrieval_top_k",
+        "corpus_version",
         "timestamp_created",
     ])
 
@@ -232,12 +238,14 @@ def export_retrieval_logs(db: Session = Depends(get_db)) -> StreamingResponse:
             log.participant_id,
             condition,
             log.turn_index,
-            log.user_message_text,
+            log.message_id,
             log.retrieved_card_ids,
             log.retrieved_card_constructs,
             log.retrieval_scores,
             log.retrieval_method,
             log.retrieval_enabled,
+            log.retrieval_top_k,
+            log.corpus_version,
             log.timestamp_created.isoformat(),
         ])
 

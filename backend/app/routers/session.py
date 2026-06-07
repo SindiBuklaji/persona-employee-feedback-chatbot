@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.config import settings
-from app.data.vignette import FOLLOW_UP_SEQUENCE, VIGNETTE_TEXT, VIGNETTE_TITLE
+from app.data.vignette import FOLLOW_UP_SEQUENCE, VIGNETTE_TEXT, VIGNETTE_TITLE, get_follow_up_prompt
 from app.db import get_db
 from app.models import Participant
 from app.schemas import StartSessionRequest, StartSessionResponse
@@ -38,7 +38,7 @@ def start_session(payload: StartSessionRequest, db: Session = Depends(get_db)) -
     db.commit()
     db.refresh(participant)
 
-    opening_message = opening_message_for_condition(condition, FOLLOW_UP_SEQUENCE[0]["prompt"])
+    opening_message = opening_message_for_condition(condition, get_follow_up_prompt(condition, FOLLOW_UP_SEQUENCE[0]["key"]))
 
     return StartSessionResponse(
         participant_id=participant.participant_id,
