@@ -1,19 +1,25 @@
-VIGNETTE_TITLE = "Giving Feedback About Workload and Team Coordination"
+VIGNETTE_TITLE = "Your Team Situation"
 
 VIGNETTE_TEXT = """
-Imagine you are a working student, intern, or early-career employee in a team. Over the past several weeks, tasks have often been assigned at short notice, priorities have changed without explanation, and responsibilities have not always been clearly defined. As a result, work is sometimes duplicated, deadlines are harder to meet, and you often end up taking on extra tasks to make sure things are completed.
+Imagine you are a junior team member or intern. Over the past few weeks, you've noticed some issues:
 
-Communication in the team is also inconsistent. Important information is sometimes shared too late, different people give conflicting instructions, and it is often unclear who is responsible for final decisions. You feel that these issues are affecting both team performance and your own work experience, but because you are in a relatively junior position, you are unsure how directly to raise these concerns.
+• Tasks are assigned at the last minute
+• Priorities change without explanation
+• Responsibilities aren't always clear
+• Important information comes too late
+• Different people give conflicting instructions
+• Work sometimes gets duplicated
 
-Please provide feedback as if this input could be reviewed by people responsible for improving team processes.
+Because you're newer to the team, you're not sure how to bring these up directly.
+
+---
+
+**Please give feedback as if you were in this situation. There are no right or wrong answers. Respond naturally and honestly.**
 
 In the chat, please:
-
-- describe what you think is going wrong,
-
-- give examples if relevant,
-
-- suggest what should change.
+• Describe what you think is going wrong
+• Give examples if relevant
+• Suggest what should change
 """.strip()
 
 # Core follow-up sequence: same constructs, different phrasings by condition

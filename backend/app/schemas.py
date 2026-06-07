@@ -43,21 +43,35 @@ class ChatResponse(BaseModel):
 
 class QuestionnaireRequest(BaseModel):
     participant_id: str
-    manip_warmth_friendly: int = Field(ge=1, le=7)
-    manip_warmth_sincere: int = Field(ge=1, le=7)
-    manip_competence_competent: int = Field(ge=1, le=7)
-    manip_competence_skilled: int = Field(ge=1, le=7)
+
+    # PERCEPTION: How did you perceive the assistant? (1-7 scale)
+    perc_warm_warm: int = Field(ge=1, le=7)
+    perc_warm_friendly: int = Field(ge=1, le=7)
+    perc_warm_understanding: int = Field(ge=1, le=7)
+    perc_comp_competent: int = Field(ge=1, le=7)
+    perc_comp_structured: int = Field(ge=1, le=7)
+    perc_comp_capable: int = Field(ge=1, le=7)
+
+    # PSYCHOLOGICAL SAFETY: How safe did you feel during the conversation? (1-7 scale)
     psych_safe_1: int = Field(ge=1, le=7)
     psych_safe_2: int = Field(ge=1, le=7)
     psych_safe_3: int = Field(ge=1, le=7)
     psych_safe_4: int = Field(ge=1, le=7)
     psych_safe_5: int = Field(ge=1, le=7)
-    ai_experience: int = Field(ge=1, le=7)
-    organizational_tenure_years: float = Field(ge=0)
-    age: int = Field(ge=18, le=100)
-    gender: str
-    industry: str
-    job_role: str
+
+    # OPENNESS/HONESTY: How openly did you respond? (1-7 scale)
+    openness_1: int = Field(ge=1, le=7)
+    openness_2: int = Field(ge=1, le=7)
+    openness_3: int = Field(ge=1, le=7)
+    openness_4: int = Field(ge=1, le=7)
+
+    # CONTROL VARIABLES
+    ai_experience: int = Field(ge=1, le=7, description="Prior conversational AI experience")
+    years_work_experience: Optional[float] = Field(None, ge=0, description="Total years of work experience")
+    age: Optional[int] = Field(None, ge=18, le=100, description="Age (optional)")
+    gender: Optional[str] = Field(None, description="Gender (optional)")
+    industry: Optional[str] = Field(None, description="Industry (optional)")
+    job_role: Optional[str] = Field(None, description="Job role (optional)")
 
 
 class QuestionnaireResponseOut(BaseModel):

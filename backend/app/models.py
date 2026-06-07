@@ -34,9 +34,10 @@ class Participant(Base):
     session_completed: Mapped[bool] = mapped_column(Boolean, default=False)
 
     # Engagement Metrics
-    total_turns: Mapped[int] = mapped_column(Integer, default=0)
+    total_turns: Mapped[int] = mapped_column(Integer, default=0)  # Total user turns
     total_user_words: Mapped[int] = mapped_column(Integer, default=0)
     total_assistant_words: Mapped[int] = mapped_column(Integer, default=0)
+    average_user_message_length: Mapped[float | None] = mapped_column(Float, nullable=True)  # Computed on completion
 
     messages: Mapped[list["Message"]] = relationship(back_populates="participant", cascade="all, delete-orphan")
     questionnaire: Mapped["QuestionnaireResponse | None"] = relationship(
@@ -90,31 +91,46 @@ class QuestionnaireResponse(Base):
     participant_id: Mapped[str] = mapped_column(ForeignKey("participants.participant_id"), unique=True, nullable=False)
 
     # Timestamps
-    timestamp_start: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)  # When form loads
-    timestamp_submit: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)  # When submitted
+    timestamp_start: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    timestamp_submit: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
-    # Psychological Safety (5 items, 1-7 scale)
-    psych_safe_1: Mapped[int] = mapped_column(Integer)
-    psych_safe_2: Mapped[int] = mapped_column(Integer)
-    psych_safe_3: Mapped[int] = mapped_column(Integer)
-    psych_safe_4: Mapped[int] = mapped_column(Integer)
-    psych_safe_5: Mapped[int] = mapped_column(Integer)
-    psychological_safety_mean: Mapped[float] = mapped_column(Float)
+    # PERCEPTION ITEMS (1-7 scale): "How did you perceive the assistant?"
+    # Warmth (3 items)
+    perc_warm_warm: Mapped[int] = mapped_column(Integer, nullable=True)
+    perc_warm_friendly: Mapped[int] = mapped_column(Integer, nullable=True)
+    perc_warm_understanding: Mapped[int] = mapped_column(Integer, nullable=True)
+    # Competence (3 items)
+    perc_comp_competent: Mapped[int] = mapped_column(Integer, nullable=True)
+    perc_comp_structured: Mapped[int] = mapped_column(Integer, nullable=True)
+    perc_comp_capable: Mapped[int] = mapped_column(Integer, nullable=True)
 
-    # Manipulation Checks (1-7 scale)
-    manip_warmth_friendly: Mapped[int] = mapped_column(Integer)
-    manip_warmth_sincere: Mapped[int] = mapped_column(Integer)
-    manip_competence_competent: Mapped[int] = mapped_column(Integer)
-    manip_competence_skilled: Mapped[int] = mapped_column(Integer)
+    # PSYCHOLOGICAL SAFETY (1-7 scale): "How safe did you feel during the conversation?"
+    psych_safe_1: Mapped[int] = mapped_column(Integer, nullable=True)  # I felt safe to express concerns
+    psych_safe_2: Mapped[int] = mapped_column(Integer, nullable=True)  # Could be honest without consequences
+    psych_safe_3: Mapped[int] = mapped_column(Integer, nullable=True)  # Comfortable sharing critical feedback
+    psych_safe_4: Mapped[int] = mapped_column(Integer, nullable=True)  # Able to say what I really thought
+    psych_safe_5: Mapped[int] = mapped_column(Integer, nullable=True)  # Did not feel judged
 
-    # Demographics & Covariates
-    ai_experience: Mapped[int] = mapped_column(Integer)
-    organizational_tenure_years: Mapped[float] = mapped_column(Float)
-    age: Mapped[int] = mapped_column(Integer)
-    gender: Mapped[str] = mapped_column(String)
-    industry: Mapped[str] = mapped_column(String)
-    job_role: Mapped[str] = mapped_column(String)
+    # OPENNESS/HONESTY (1-7 scale): "How openly did you respond?"
+    openness_1: Mapped[int] = mapped_column(Integer, nullable=True)  # Answered honestly
+    openness_2: Mapped[int] = mapped_column(Integer, nullable=True)  # Shared real thoughts
+    openness_3: Mapped[int] = mapped_column(Integer, nullable=True)  # Gave concrete details
+    openness_4: Mapped[int] = mapped_column(Integer, nullable=True)  # Held back some things (reverse-coded)
+
+    # COMPUTED SCORES
+    perceived_warmth_mean: Mapped[float | None] = mapped_column(Float, nullable=True)
+    perceived_competence_mean: Mapped[float | None] = mapped_column(Float, nullable=True)
+    psychological_safety_mean: Mapped[float | None] = mapped_column(Float, nullable=True)
+    self_reported_honesty_mean: Mapped[float | None] = mapped_column(Float, nullable=True)
+
+    # CONTROL VARIABLES & DEMOGRAPHICS
+    ai_experience: Mapped[int | None] = mapped_column(Integer, nullable=True)  # 1-7 scale
+    years_work_experience: Mapped[float | None] = mapped_column(Float, nullable=True)
+    age: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    gender: Mapped[str | None] = mapped_column(String, nullable=True)  # Optional
+    industry: Mapped[str | None] = mapped_column(String, nullable=True)  # Optional
+    job_role: Mapped[str | None] = mapped_column(String, nullable=True)  # Optional
 
     participant: Mapped[Participant] = relationship(back_populates="questionnaire")
 

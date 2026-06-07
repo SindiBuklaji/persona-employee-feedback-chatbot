@@ -28,8 +28,8 @@ def export_transcripts(db: Session = Depends(get_db)) -> StreamingResponse:
 
     stmt = (
         select(Message, Participant.condition)
-        .join(Participant, Message.participant_id == Participant.id)
-        .order_by(Message.participant_id, Message.turn_index, Message.created_at)
+        .join(Participant, Message.participant_id == Participant.participant_id)
+        .order_by(Message.participant_id, Message.turn_index)
     )
 
     for message, condition in db.execute(stmt).all():
@@ -53,37 +53,35 @@ def export_transcripts(db: Session = Depends(get_db)) -> StreamingResponse:
 
 @router.get("/participants.csv")
 def export_participants(db: Session = Depends(get_db)) -> StreamingResponse:
-    """Export all participants with aggregate session data."""
+    """Export engagement metrics and completion status for all participants."""
     buffer = io.StringIO()
     writer = csv.writer(buffer)
     writer.writerow([
         "participant_id",
         "condition",
-        "consented",
-        "started_at",
-        "finished_chat_at",
-        "task_completed",
-        "turn_count",
+        "completed_task",
+        "number_user_turns",
         "total_user_word_count",
+        "average_user_message_length",
+        "started_at",
+        "completed_at",
         "dropout_stage",
-        "forced_condition_used",
         "created_at",
     ])
 
     participants = db.execute(select(Participant)).scalars().all()
     for participant in participants:
         writer.writerow([
-            participant.id,
+            participant.participant_id,
             participant.condition,
-            participant.consented,
-            participant.started_chat_at.isoformat() if participant.started_chat_at else None,
-            participant.finished_chat_at.isoformat() if participant.finished_chat_at else None,
             participant.session_completed,
             participant.total_turns,
             participant.total_user_words,
+            participant.average_user_message_length,
+            participant.timestamp_session_start.isoformat() if participant.timestamp_session_start else None,
+            participant.timestamp_questionnaire_submit.isoformat() if participant.timestamp_questionnaire_submit else None,
             participant.dropout_stage,
-            participant.forced_condition_used,
-            participant.created_at.isoformat(),
+            participant.created_at.isoformat() if participant.created_at else None,
         ])
 
     buffer.seek(0)
@@ -96,57 +94,83 @@ def export_participants(db: Session = Depends(get_db)) -> StreamingResponse:
 
 @router.get("/questionnaires.csv")
 def export_questionnaires(db: Session = Depends(get_db)) -> StreamingResponse:
-    """Export all questionnaire responses."""
+    """Export all questionnaire responses with perception, safety, and openness items."""
     buffer = io.StringIO()
     writer = csv.writer(buffer)
     writer.writerow([
         "participant_id",
         "condition",
-        "manip_warmth_friendly",
-        "manip_warmth_sincere",
-        "manip_competence_competent",
-        "manip_competence_skilled",
+        # Perception items
+        "perc_warm_warm",
+        "perc_warm_friendly",
+        "perc_warm_understanding",
+        "perc_comp_competent",
+        "perc_comp_structured",
+        "perc_comp_capable",
+        "perceived_warmth_mean",
+        "perceived_competence_mean",
+        # Psychological safety items
         "psych_safe_1",
         "psych_safe_2",
         "psych_safe_3",
         "psych_safe_4",
         "psych_safe_5",
-        "psych_safety_mean",
+        "psychological_safety_mean",
+        # Openness/honesty items
+        "openness_1",
+        "openness_2",
+        "openness_3",
+        "openness_4",
+        "self_reported_honesty_mean",
+        # Control variables
         "ai_experience",
-        "organizational_tenure_years",
+        "years_work_experience",
         "age",
         "gender",
         "industry",
         "job_role",
-        "created_at",
+        "timestamp_submit",
     ])
 
     stmt = (
         select(QuestionnaireResponse, Participant.condition)
-        .join(Participant, QuestionnaireResponse.participant_id == Participant.id)
+        .join(Participant, QuestionnaireResponse.participant_id == Participant.participant_id)
     )
 
     for questionnaire, condition in db.execute(stmt).all():
         writer.writerow([
             questionnaire.participant_id,
             condition,
-            questionnaire.manip_warmth_friendly,
-            questionnaire.manip_warmth_sincere,
-            questionnaire.manip_competence_competent,
-            questionnaire.manip_competence_skilled,
+            # Perception items
+            questionnaire.perc_warm_warm,
+            questionnaire.perc_warm_friendly,
+            questionnaire.perc_warm_understanding,
+            questionnaire.perc_comp_competent,
+            questionnaire.perc_comp_structured,
+            questionnaire.perc_comp_capable,
+            questionnaire.perceived_warmth_mean,
+            questionnaire.perceived_competence_mean,
+            # Psychological safety items
             questionnaire.psych_safe_1,
             questionnaire.psych_safe_2,
             questionnaire.psych_safe_3,
             questionnaire.psych_safe_4,
             questionnaire.psych_safe_5,
-            questionnaire.psych_safety_mean,
+            questionnaire.psychological_safety_mean,
+            # Openness/honesty items
+            questionnaire.openness_1,
+            questionnaire.openness_2,
+            questionnaire.openness_3,
+            questionnaire.openness_4,
+            questionnaire.self_reported_honesty_mean,
+            # Control variables
             questionnaire.ai_experience,
-            questionnaire.organizational_tenure_years,
+            questionnaire.years_work_experience,
             questionnaire.age,
             questionnaire.gender,
             questionnaire.industry,
             questionnaire.job_role,
-            questionnaire.created_at.isoformat(),
+            questionnaire.timestamp_submit.isoformat() if questionnaire.timestamp_submit else None,
         ])
 
     buffer.seek(0)
@@ -177,22 +201,22 @@ def export_honesty_codings(db: Session = Depends(get_db)) -> StreamingResponse:
 
     stmt = (
         select(HonestyCodings, Participant.condition)
-        .join(Participant, HonestyCodings.participant_id == Participant.id)
-        .order_by(HonestyCodings.participant_id, HonestyCodings.coded_at)
+        .join(Participant, HonestyCodings.participant_id == Participant.participant_id)
+        .order_by(HonestyCodings.participant_id, HonestyCodings.timestamp_coded)
     )
 
     for coding, condition in db.execute(stmt).all():
         writer.writerow([
-            coding.id,
+            coding.coding_id,
             coding.participant_id,
             condition,
             coding.coder_id,
-            coding.criticality_score,
-            coding.specificity_score,
-            coding.riskiness_score,
+            coding.criticality,
+            coding.specificity,
+            coding.riskiness,
             coding.feedback_honesty_index,
-            coding.coded_at.isoformat(),
-            coding.notes,
+            coding.timestamp_coded.isoformat(),
+            coding.coding_notes,
         ])
 
     buffer.seek(0)
@@ -254,4 +278,104 @@ def export_retrieval_logs(db: Session = Depends(get_db)) -> StreamingResponse:
         iter([buffer.getvalue()]),
         media_type="text/csv",
         headers={"Content-Disposition": "attachment; filename=retrieval_logs.csv"},
+    )
+
+
+@router.get("/analysis_dataset.csv")
+def export_analysis_dataset(db: Session = Depends(get_db)) -> StreamingResponse:
+    """Export combined analysis dataset: one row per participant with all engagement, perception, and outcome measures."""
+    buffer = io.StringIO()
+    writer = csv.writer(buffer)
+    writer.writerow([
+        # Participant & condition
+        "participant_id",
+        "condition",
+        # Engagement metrics
+        "completed_task",
+        "number_user_turns",
+        "total_user_word_count",
+        "average_user_message_length",
+        # Perception measures
+        "perc_warm_warm",
+        "perc_warm_friendly",
+        "perc_warm_understanding",
+        "perceived_warmth_score",
+        "perc_comp_competent",
+        "perc_comp_structured",
+        "perc_comp_capable",
+        "perceived_competence_score",
+        # Psychological safety measures
+        "psych_safe_1",
+        "psych_safe_2",
+        "psych_safe_3",
+        "psych_safe_4",
+        "psych_safe_5",
+        "psychological_safety_score",
+        # Openness/honesty measures
+        "openness_1",
+        "openness_2",
+        "openness_3",
+        "openness_4",
+        "self_reported_honesty_score",
+        # Control variables
+        "prior_ai_experience",
+        "years_work_experience",
+        "age",
+        "gender",
+        "industry",
+        "job_role",
+    ])
+
+    participants = db.execute(select(Participant)).scalars().all()
+    for participant in participants:
+        # Get questionnaire if exists
+        questionnaire = db.query(QuestionnaireResponse).filter(
+            QuestionnaireResponse.participant_id == participant.participant_id
+        ).first()
+
+        writer.writerow([
+            # Participant & condition
+            participant.participant_id,
+            participant.condition,
+            # Engagement metrics
+            int(participant.session_completed),
+            participant.total_turns,
+            participant.total_user_words,
+            participant.average_user_message_length or "",
+            # Perception measures
+            questionnaire.perc_warm_warm if questionnaire else "",
+            questionnaire.perc_warm_friendly if questionnaire else "",
+            questionnaire.perc_warm_understanding if questionnaire else "",
+            questionnaire.perceived_warmth_mean if questionnaire else "",
+            questionnaire.perc_comp_competent if questionnaire else "",
+            questionnaire.perc_comp_structured if questionnaire else "",
+            questionnaire.perc_comp_capable if questionnaire else "",
+            questionnaire.perceived_competence_mean if questionnaire else "",
+            # Psychological safety measures
+            questionnaire.psych_safe_1 if questionnaire else "",
+            questionnaire.psych_safe_2 if questionnaire else "",
+            questionnaire.psych_safe_3 if questionnaire else "",
+            questionnaire.psych_safe_4 if questionnaire else "",
+            questionnaire.psych_safe_5 if questionnaire else "",
+            questionnaire.psychological_safety_mean if questionnaire else "",
+            # Openness/honesty measures
+            questionnaire.openness_1 if questionnaire else "",
+            questionnaire.openness_2 if questionnaire else "",
+            questionnaire.openness_3 if questionnaire else "",
+            questionnaire.openness_4 if questionnaire else "",
+            questionnaire.self_reported_honesty_mean if questionnaire else "",
+            # Control variables
+            questionnaire.ai_experience if questionnaire else "",
+            questionnaire.years_work_experience if questionnaire else "",
+            questionnaire.age if questionnaire else "",
+            questionnaire.gender if questionnaire else "",
+            questionnaire.industry if questionnaire else "",
+            questionnaire.job_role if questionnaire else "",
+        ])
+
+    buffer.seek(0)
+    return StreamingResponse(
+        iter([buffer.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=analysis_dataset.csv"},
     )

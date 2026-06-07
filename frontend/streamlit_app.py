@@ -221,49 +221,92 @@ elif st.session_state.stage == "questionnaire":
 
         with col1:
             st.subheader("📊 How did you perceive the assistant?")
-            manip_warmth_friendly = st.slider(
+            st.markdown("**Warmth**")
+            perc_warm_warm = st.slider(
+                "The assistant seemed warm.",
+                1, 7, 4,
+                key="perc_warm_warm"
+            )
+            perc_warm_friendly = st.slider(
                 "The assistant seemed friendly.",
                 1, 7, 4,
-                help="1 = Not friendly, 7 = Very friendly"
+                key="perc_warm_friendly"
             )
-            manip_warmth_sincere = st.slider(
-                "The assistant seemed sincere.",
+            perc_warm_understanding = st.slider(
+                "The assistant seemed understanding.",
                 1, 7, 4,
-                help="1 = Not sincere, 7 = Very sincere"
+                key="perc_warm_understanding"
             )
-            manip_competence_competent = st.slider(
+
+            st.markdown("**Competence**")
+            perc_comp_competent = st.slider(
                 "The assistant seemed competent.",
                 1, 7, 4,
-                help="1 = Not competent, 7 = Very competent"
+                key="perc_comp_competent"
             )
-            manip_competence_skilled = st.slider(
-                "The assistant seemed skilled.",
+            perc_comp_structured = st.slider(
+                "The assistant seemed structured.",
                 1, 7, 4,
-                help="1 = Not skilled, 7 = Very skilled"
+                key="perc_comp_structured"
+            )
+            perc_comp_capable = st.slider(
+                "The assistant seemed capable.",
+                1, 7, 4,
+                key="perc_comp_capable"
             )
 
         with col2:
-            st.subheader("🛡️ How safe did you feel?")
+            st.subheader("🛡️ How safe did you feel during the conversation?")
             psych_safe_1 = st.slider(
                 "I felt safe to express any concerns I had.",
-                1, 7, 4
+                1, 7, 4,
+                key="psych_safe_1"
             )
             psych_safe_2 = st.slider(
                 "I could be honest without worrying about negative consequences.",
-                1, 7, 4
+                1, 7, 4,
+                key="psych_safe_2"
             )
             psych_safe_3 = st.slider(
                 "I felt comfortable sharing critical feedback.",
-                1, 7, 4
+                1, 7, 4,
+                key="psych_safe_3"
             )
             psych_safe_4 = st.slider(
                 "I felt able to say what I really thought.",
-                1, 7, 4
+                1, 7, 4,
+                key="psych_safe_4"
             )
             psych_safe_5 = st.slider(
                 "I did not feel judged when expressing concerns.",
-                1, 7, 4
+                1, 7, 4,
+                key="psych_safe_5"
             )
+
+        st.divider()
+
+        st.subheader("💭 How openly did you respond?")
+        openness_1 = st.slider(
+            "I answered the assistant honestly.",
+            1, 7, 4,
+            key="openness_1"
+        )
+        openness_2 = st.slider(
+            "I shared my real thoughts during the conversation.",
+            1, 7, 4,
+            key="openness_2"
+        )
+        openness_3 = st.slider(
+            "I gave concrete details about the situation.",
+            1, 7, 4,
+            key="openness_3"
+        )
+        openness_4 = st.slider(
+            "I held back some things I was thinking.",
+            1, 7, 4,
+            key="openness_4",
+            help="(This will be reverse-scored)"
+        )
 
         st.divider()
 
@@ -272,25 +315,31 @@ elif st.session_state.stage == "questionnaire":
 
         with col_bg1:
             ai_experience = st.slider(
-                "Experience with conversational AI",
+                "How much experience do you have with conversational AI?",
                 1, 7, 3,
                 help="1 = No experience, 7 = Very experienced"
             )
-            organizational_tenure_years = st.number_input(
+            years_work_experience = st.number_input(
                 "Years of work experience",
                 min_value=0.0,
                 max_value=70.0,
-                step=0.5
+                step=0.5,
+                value=None
             )
 
         with col_bg2:
             age = st.number_input(
-                "Age",
+                "Age (optional)",
                 min_value=18,
                 max_value=100,
-                step=1
+                step=1,
+                value=None
             )
-            gender = st.text_input("Gender (optional)")
+            gender = st.selectbox(
+                "Gender (optional)",
+                ["", "Female", "Male", "Prefer not to say"],
+                index=0
+            )
 
         with col_bg3:
             industry = st.text_input("Industry (optional)")
@@ -306,21 +355,31 @@ elif st.session_state.stage == "questionnaire":
                     "/questionnaire",
                     {
                         "participant_id": st.session_state.participant_id,
-                        "manip_warmth_friendly": manip_warmth_friendly,
-                        "manip_warmth_sincere": manip_warmth_sincere,
-                        "manip_competence_competent": manip_competence_competent,
-                        "manip_competence_skilled": manip_competence_skilled,
+                        # Perception items
+                        "perc_warm_warm": perc_warm_warm,
+                        "perc_warm_friendly": perc_warm_friendly,
+                        "perc_warm_understanding": perc_warm_understanding,
+                        "perc_comp_competent": perc_comp_competent,
+                        "perc_comp_structured": perc_comp_structured,
+                        "perc_comp_capable": perc_comp_capable,
+                        # Psychological safety items
                         "psych_safe_1": psych_safe_1,
                         "psych_safe_2": psych_safe_2,
                         "psych_safe_3": psych_safe_3,
                         "psych_safe_4": psych_safe_4,
                         "psych_safe_5": psych_safe_5,
+                        # Openness items
+                        "openness_1": openness_1,
+                        "openness_2": openness_2,
+                        "openness_3": openness_3,
+                        "openness_4": openness_4,
+                        # Control variables
                         "ai_experience": ai_experience,
-                        "organizational_tenure_years": organizational_tenure_years,
-                        "age": age,
-                        "gender": gender,
-                        "industry": industry,
-                        "job_role": job_role,
+                        "years_work_experience": years_work_experience,
+                        "age": age if age else None,
+                        "gender": gender if gender else None,
+                        "industry": industry if industry else None,
+                        "job_role": job_role if job_role else None,
                     },
                 )
                 st.session_state.stage = "done"
