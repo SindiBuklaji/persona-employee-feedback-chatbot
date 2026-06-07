@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.config import settings
+from app.data.vignette import FOLLOW_UP_SEQUENCE
 from app.db import get_db
 from app.models import Participant
 from app.schemas import ChatMessageOut, ChatRequest, ChatResponse
@@ -47,6 +48,10 @@ def chat(payload: ChatRequest, db: Session = Depends(get_db)) -> ChatResponse:
 
     turns_used = participant.total_turns
 
+    # Task is complete when all follow-up questions have been asked
+    # This is backend-driven, not LLM-driven
+    task_complete = turns_used >= len(FOLLOW_UP_SEQUENCE)
+
     return ChatResponse(
         participant_id=participant.participant_id,
         condition=participant.condition,
@@ -57,7 +62,7 @@ def chat(payload: ChatRequest, db: Session = Depends(get_db)) -> ChatResponse:
             follow_up_key=assistant_message.follow_up_key,
         ),
         turns_used=turns_used,
-        chat_completed=participant.chat_completed,
+        chat_completed=task_complete,  # True when all follow-ups done, False otherwise
     )
 
 

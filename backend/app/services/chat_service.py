@@ -58,12 +58,20 @@ class ChatService:
         retrieved_docs, retrieval_method = self.retrieval.retrieve(user_message)
         retrieval_context = self._build_retrieval_context(retrieved_docs)
 
+        is_complete = next_follow_up is None
+
         if next_follow_up:
             follow_up_key = next_follow_up["key"]
             follow_up_text = get_follow_up_prompt(condition, follow_up_key)
+            completion_instruction = "- End with one clear question to move the conversation forward."
         else:
-            follow_up_text = "Thank you. You have completed the feedback task."
+            follow_up_text = ""
             follow_up_key = None
+            completion_instruction = (
+                "- Do NOT ask a question. The task is complete. "
+                "Acknowledge what the participant shared and end naturally. "
+                "Use a closing phrase like 'You have completed the feedback task.' or similar."
+            )
 
         system_prompt = f"""
 {get_persona_prompt(condition)}
@@ -71,14 +79,14 @@ class ChatService:
 RESPONSE FORMAT:
 - Write 3-5 short sentences. Conversational, not choppy or too short.
 - Do NOT repeat the user's exact words. Add one useful angle, distinction, or reframe.
-- End with one clear question to move the conversation forward.
+{completion_instruction}
 - Sound natural, like a real person talking.
 
 HIDDEN GUIDANCE (not for citing):
 {retrieval_context}
 
-NEXT QUESTION TO ASK (on-topic):
-{follow_up_text}
+{"NEXT QUESTION (continue conversation):" if follow_up_text else "TASK STATUS:"}
+{follow_up_text if follow_up_text else "The feedback task is now complete. Do not ask another question."}
 
 CRITICAL RULES:
 - Do NOT mention sources, corpus, research, or theory.
@@ -106,8 +114,9 @@ Participant message:
 Write the assistant reply for the assigned condition.
 
 INSTRUCTIONS:
-- If the message is clearly on-topic (about the workplace feedback scenario), respond and include the exact follow-up question provided above.
-- If off-topic, unclear, or testing/critiquing (e.g., "you are being mean"), respond briefly and empathetically without the follow-up. Gently redirect if appropriate.
+- If the message is clearly on-topic (about the workplace feedback scenario), respond appropriately.
+{"- Include the exact follow-up question provided in the system prompt to continue the conversation." if not is_complete else "- Do NOT ask a follow-up question. Acknowledge completion and end naturally."}
+- If off-topic, unclear, or testing/critiquing (e.g., "you are being mean"), respond briefly and empathetically without asking a follow-up. Gently redirect if appropriate.
 - Always maintain the assigned persona (warm or competent).
 """.strip()
 
