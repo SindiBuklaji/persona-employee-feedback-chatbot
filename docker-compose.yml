@@ -30,6 +30,10 @@ services:
     env_file: ./backend/.env
     environment:
       DATABASE_URL: postgresql://postgres:password123@postgres:5432/thesis_chatbot
+      DEBUG: "true"
+      RETRIEVAL_ENABLED: "true"
+      RETRIEVAL_USE_EMBEDDINGS: "true"
+      RETRIEVAL_LOGGING_ENABLED: "true"
     depends_on:
       postgres:
         condition: service_healthy

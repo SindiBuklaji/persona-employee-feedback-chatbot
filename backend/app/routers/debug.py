@@ -2,14 +2,17 @@
 Debug endpoints for development and testing.
 
 Only available when DEBUG=true environment variable is set.
+Endpoints are conditionally registered in main.py.
 """
 
+import logging
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
 from app.config import settings
 from app.services.retrieval import RetrievalService
 
+logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/debug", tags=["debug"])
 
 

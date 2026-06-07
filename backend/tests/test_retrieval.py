@@ -53,25 +53,51 @@ def test_corpus_load():
 
 
 def test_retrieval_service():
-    """Test retrieval service with sample queries."""
+    """Test retrieval service with sample queries and expected category matching."""
     from app.services.retrieval import RetrievalService
 
     service = RetrievalService()
 
-    # Test queries from requirements
+    # Test queries with expected category matching rules
     test_queries = {
-        "safety": "I do not feel safe giving honest feedback to my manager.",
-        "workload": "My workload is too much and priorities keep changing.",
-        "recognition": "I feel like my work is not recognized.",
-        "conflict": "I had a conflict with a colleague and now I avoid speaking up.",
-        "confidentiality": "I am not sure whether my feedback will stay confidential.",
+        "safety": {
+            "query": "I do not feel safe giving honest feedback to my manager.",
+            "expected_categories": ["1_psychological_safety_and_speaking_up", "2_employee_voice_and_organizational_silence"],
+            "min_match": 2,  # At least 2 of top 3 from these categories
+        },
+        "workload": {
+            "query": "My workload is too much and priorities keep changing.",
+            "expected_categories": ["5_workload_stress_and_role_ambiguity"],
+            "min_match": 2,  # At least 2 of top 3 from this category
+        },
+        "recognition": {
+            "query": "I feel like my work is not recognized.",
+            "expected_categories": ["6_recognition_fairness_and_belonging"],
+            "min_match": 2,  # At least 2 of top 3 from this category
+        },
+        "conflict": {
+            "query": "I had a conflict with a colleague and now I avoid speaking up.",
+            "expected_categories": ["7_workplace_conflict_and_negative_experiences"],
+            "min_match": 1,  # At least 1 of top 3 from this category
+        },
+        "confidentiality": {
+            "query": "I am not sure whether my feedback will stay confidential.",
+            "expected_categories": ["8_confidentiality_and_trust_in_feedback_settings"],
+            "min_match": 1,  # At least 1 of top 2 from this category
+        },
     }
 
     print("\n" + "=" * 70)
-    print("RETRIEVAL SERVICE SMOKE TEST")
+    print("RETRIEVAL SERVICE SMOKE TEST WITH CATEGORY VALIDATION")
     print("=" * 70)
 
-    for test_name, query in test_queries.items():
+    all_passed = True
+
+    for test_name, test_config in test_queries.items():
+        query = test_config["query"]
+        expected_cats = test_config["expected_categories"]
+        min_match = test_config["min_match"]
+
         retrieved, method = service.retrieve(query, top_k=3)
 
         print(f"\n[{test_name.upper()}]")
@@ -85,15 +111,29 @@ def test_retrieval_service():
             print(f"     Tags: {', '.join(doc.tags[:3])}...")
             print(f"     Score: {doc.score:.4f}")
 
-        # Verify expected categories
+        # Check category matching
         categories = [doc.category for doc in retrieved]
-        print(f"  Categories: {categories}")
+        matching_count = sum(1 for cat in categories if cat in expected_cats)
+        print(f"  Expected categories: {expected_cats}")
+        print(f"  Matched: {matching_count}/{min_match} required")
+
+        # Validate
+        test_passed = matching_count >= min_match
+        status = "[PASS]" if test_passed else "[FAIL]"
+        print(f"  {status} {matching_count}/{min_match} cards from expected categories")
+
+        if not test_passed:
+            all_passed = False
 
         assert len(retrieved) > 0, f"No cards retrieved for {test_name}"
         assert len(retrieved) <= 3, f"Too many cards retrieved for {test_name}"
+        assert test_passed, f"{test_name} test failed: got {matching_count}, expected {min_match}"
 
     print("\n" + "=" * 70)
-    print("[OK] All smoke tests passed")
+    if all_passed:
+        print("[OK] All category validation tests passed")
+    else:
+        print("[FAIL] Some category validation tests failed")
     print("=" * 70)
 
 
