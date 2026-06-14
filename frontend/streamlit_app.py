@@ -15,17 +15,17 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Modern color palette
+# Soft light purple color palette
 COLORS = {
-    "bg": "#F7F8FB",
+    "bg": "#F5F3FF",
     "card": "#FFFFFF",
     "text": "#1F2937",
     "muted": "#6B7280",
-    "border": "#E5E7EB",
-    "primary": "#3B82F6",
-    "teal": "#14B8A6",
-    "assistant_bubble": "#EEF4FF",
-    "user_bubble": "#2563EB",
+    "border": "#E9D5FF",
+    "primary": "#8B5CF6",
+    "teal": "#8B5CF6",
+    "assistant_bubble": "#F4F4F7",
+    "user_bubble": "#7C3AED",
 }
 
 # Custom CSS for modern design
@@ -220,7 +220,8 @@ st.markdown(f"""
 
     .chat-bubble.user {{
         background-color: {COLORS['user_bubble']};
-        color: white;
+        color: #FFFFFF;
+        font-weight: 500;
     }}
 
     /* Input area styling */
@@ -272,6 +273,74 @@ st.markdown(f"""
         margin: 0;
         font-size: 1.75rem;
     }}
+
+    /* Navigation button row - ensure proper alignment */
+    [data-testid="column"] > div:has(> button) {{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 2.5rem;
+    }}
+
+    /* Compact navigation buttons */
+    [data-testid="column"] button {{
+        width: 44px !important;
+        height: 44px !important;
+        padding: 0 !important;
+        min-height: 44px !important;
+        border-radius: 8px;
+        font-size: 1.25rem;
+        border: 1px solid {COLORS['border']};
+        background-color: {COLORS['card']};
+        color: {COLORS['text']};
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }}
+
+    [data-testid="column"] button:hover {{
+        background-color: {COLORS['primary']};
+        color: white;
+        border-color: {COLORS['primary']};
+    }}
+
+    .nav-button-container {{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        min-height: 2.5rem;
+    }}
+
+    /* Slider styling - minimal, let Streamlit defaults mostly work */
+    .stSlider {{
+        padding: 0.5rem 0;
+    }}
+
+    /* Demographics section - grid layout */
+    .demographics-grid {{
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1rem;
+    }}
+
+    @media (max-width: 768px) {{
+        .demographics-grid {{
+            grid-template-columns: 1fr;
+        }}
+    }}
+
+    .demo-label {{
+        font-size: 0.85rem !important;
+        font-weight: 600;
+        margin-bottom: 0.4rem;
+        color: {COLORS['text']};
+        display: block;
+        white-space: normal;
+    }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -302,8 +371,8 @@ def init_state() -> None:
 def progress_indicator(current: int, total: int = 3):
     """Display modern progress indicator"""
     st.markdown(f"""
-    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1.5rem;">
-        <span style="font-size: 0.875rem; color: {COLORS['muted']};">
+    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; height: 2.5rem;">
+        <span style="font-size: 0.875rem; color: {COLORS['muted']}; white-space: nowrap;">
             Step {current} of {total}
         </span>
         <div style="flex-grow: 1; height: 4px; background-color: {COLORS['border']}; border-radius: 2px; overflow: hidden;">
@@ -345,32 +414,67 @@ if "loading" not in st.session_state:
 
 # CONSENT PAGE
 if st.session_state.stage == "consent":
-    col1, col2 = st.columns([1, 1], gap="large")
+    col1, col2 = st.columns([1.1, 0.9], gap="large")
 
     with col1:
         st.markdown("# 👋 Welcome")
         st.markdown("""
-        You will read a short workplace scenario, interact with an AI assistant, and answer a brief questionnaire about your experience.
+        Thank you for your interest in this study. You will read a short workplace scenario, interact with an AI assistant, and answer a brief questionnaire about your experience.
 
         **What to expect:**
-        - **Scenario** (1 min) — Read a workplace situation
-        - **Chat** (5 min) — Have a 3-5 turn conversation with an AI assistant
-        - **Questionnaire** (3 min) — Share your thoughts and background
         """)
 
-        st.markdown("### Eligibility")
-        st.markdown("✓ You must be at least 18 years old  \n✓ You should have some workplace experience")
+        st.markdown(f"""
+        <div style="display: grid; gap: 0.75rem; margin: 1rem 0;">
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+                <span style="font-size: 1.25rem; min-width: 24px;">📋</span>
+                <div>
+                    <strong style="color: {COLORS['text']};">Scenario</strong>
+                    <span style="color: {COLORS['muted']}; font-size: 0.9rem;"> — 1 minute</span>
+                    <p style="margin: 0.25rem 0 0 0; color: {COLORS['muted']}; font-size: 0.9rem;">Read a short workplace situation</p>
+                </div>
+            </div>
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+                <span style="font-size: 1.25rem; min-width: 24px;">💬</span>
+                <div>
+                    <strong style="color: {COLORS['text']};">Chat</strong>
+                    <span style="color: {COLORS['muted']}; font-size: 0.9rem;"> — 5 minutes</span>
+                    <p style="margin: 0.25rem 0 0 0; color: {COLORS['muted']}; font-size: 0.9rem;">Have a 3–5 turn conversation with an AI assistant</p>
+                </div>
+            </div>
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
+                <span style="font-size: 1.25rem; min-width: 24px;">📝</span>
+                <div>
+                    <strong style="color: {COLORS['text']};">Questionnaire</strong>
+                    <span style="color: {COLORS['muted']}; font-size: 0.9rem;"> — 3 minutes</span>
+                    <p style="margin: 0.25rem 0 0 0; color: {COLORS['muted']}; font-size: 0.9rem;">Share your thoughts and background</p>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("### Requirements")
+        st.markdown(f"""
+        <div style="margin: 1.5rem 0;">
+            <span style="color: {COLORS['primary']}; font-weight: 600;">✓</span> You must be at least 18 years old
+            <br/>
+            <span style="color: {COLORS['primary']}; font-weight: 600;">✓</span> You should have some workplace experience
+        </div>
+        """, unsafe_allow_html=True)
 
     with col2:
-        with st.container():
-            st.markdown(f"""
-            <div class="card">
-                <h3 style="margin-top: 0;">Ready to participate?</h3>
-            </div>
-            """, unsafe_allow_html=True)
+        st.markdown(f"""
+        <div style="padding: 1.5rem; background-color: {COLORS['card']}; border-radius: 12px; border: 1px solid {COLORS['border']};
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.08); height: fit-content; position: sticky; top: 100px;">
+            <h3 style="margin: 0 0 1rem 0; color: {COLORS['text']};">Ready to participate?</h3>
+        </div>
+        """, unsafe_allow_html=True)
 
-            consent = st.checkbox("I have read and agree to participate in this study")
+        consent = st.checkbox("I have read and agree to participate in this study", value=False)
 
+        # Check if DEBUG mode is enabled (via environment variable)
+        debug_mode = os.getenv("DEBUG", "").lower() in ("true", "1", "yes")
+        if debug_mode:
             testing_mode = st.checkbox("🧪 Testing mode (developers only)")
             forced_condition = None
 
@@ -380,32 +484,49 @@ if st.session_state.stage == "consent":
                     ["warm", "competent"],
                     horizontal=True,
                 )
+        else:
+            testing_mode = False
+            forced_condition = None
 
-            if st.button("Begin Study →", use_container_width=True):
-                if not consent:
-                    st.error("Please agree to participate to continue.")
-                else:
-                    payload = {"consented": True}
-                    if testing_mode and forced_condition:
-                        payload["forced_condition"] = forced_condition
+        st.markdown("")  # spacing
+        if st.button("Begin Study", use_container_width=True):
+            if not consent:
+                st.error("Please agree to participate to continue.")
+            else:
+                payload = {"consented": True}
+                if testing_mode and forced_condition:
+                    payload["forced_condition"] = forced_condition
 
-                    data = api_post("/session/start", payload)
-                    st.session_state.participant_id = data["participant_id"]
-                    st.session_state.condition = data["condition"]
-                    st.session_state.vignette_title = data["vignette_title"]
-                    st.session_state.vignette_text = data["vignette_text"]
-                    st.session_state.opening_message = data["opening_message"]
-                    st.session_state.min_turns = data.get("min_turns", 3)
-                    st.session_state.max_turns = data.get("max_turns", 5)
-                    st.session_state.chat_history = [
-                        {"role": "assistant", "content": data["opening_message"]}
-                    ]
-                    st.session_state.stage = "vignette"
-                    st.rerun()
+                data = api_post("/session/start", payload)
+                st.session_state.participant_id = data["participant_id"]
+                st.session_state.condition = data["condition"]
+                st.session_state.vignette_title = data["vignette_title"]
+                st.session_state.vignette_text = data["vignette_text"]
+                st.session_state.opening_message = data["opening_message"]
+                st.session_state.min_turns = data.get("min_turns", 3)
+                st.session_state.max_turns = data.get("max_turns", 5)
+                st.session_state.chat_history = [
+                    {"role": "assistant", "content": data["opening_message"]}
+                ]
+                st.session_state.stage = "vignette"
+                st.rerun()
 
 # VIGNETTE PAGE
 elif st.session_state.stage == "vignette":
-    progress_indicator(1)
+    col_back, col_progress, col_next = st.columns([0.12, 0.76, 0.12])
+
+    with col_back:
+        if st.button("←", key="back_from_vignette", help="Back to consent"):
+            st.session_state.stage = "consent"
+            st.rerun()
+
+    with col_progress:
+        progress_indicator(1)
+
+    with col_next:
+        if st.button("→", key="next_from_vignette", help="Begin chat"):
+            st.session_state.stage = "chat"
+            st.rerun()
 
     st.markdown("# 📋 Scenario")
 
@@ -415,15 +536,25 @@ elif st.session_state.stage == "vignette":
     </div>
     """, unsafe_allow_html=True)
 
-    col1, col2, col3 = st.columns([1, 1, 1])
-    with col2:
-        if st.button("Begin Chat →", use_container_width=True):
-            st.session_state.stage = "chat"
-            st.rerun()
-
 # CHAT PAGE
 elif st.session_state.stage == "chat":
-    progress_indicator(2)
+    col_back, col_progress, col_next = st.columns([0.12, 0.76, 0.12])
+
+    with col_back:
+        if st.button("←", key="back_from_chat", help="Back to scenario"):
+            st.session_state.stage = "vignette"
+            st.rerun()
+
+    with col_progress:
+        progress_indicator(2)
+
+    with col_next:
+        if st.session_state.chat_completed:
+            if st.button("→", key="next_from_chat", help="Continue to questionnaire"):
+                st.session_state.stage = "questionnaire"
+                st.rerun()
+        else:
+            st.write("")
 
     st.markdown("# 💬 Chat")
 
@@ -467,7 +598,7 @@ elif st.session_state.stage == "chat":
                     st.rerun()
 
         # Show Finish Chat button only after min turns are completed
-        if st.session_state.turns_used >= st.session_state.min_turns:
+        if st.session_state.turns_used >= st.session_state.min_turns and not st.session_state.chat_completed:
             st.markdown(f'<div style="text-align: center; margin-top: 1.5rem;"></div>', unsafe_allow_html=True)
             col_center = st.columns([1, 1, 1])[1]
             with col_center:
@@ -478,131 +609,182 @@ elif st.session_state.stage == "chat":
                             {"participant_id": st.session_state.participant_id},
                         )
                         st.session_state.chat_completed = True
+                        st.session_state.stage = "questionnaire"
                         st.rerun()
                     except Exception as e:
                         st.error(f"Cannot finish yet: {str(e)}")
-    else:
-        st.success("✓ Chat completed!")
-        col_center = st.columns([1, 1, 1])[1]
-        with col_center:
-            if st.button("Continue to Questionnaire →", use_container_width=True):
-                st.session_state.stage = "questionnaire"
-                st.rerun()
 
 # QUESTIONNAIRE PAGE
 elif st.session_state.stage == "questionnaire":
-    progress_indicator(3)
+    col_back, col_progress, col_next = st.columns([0.12, 0.76, 0.12])
+
+    with col_back:
+        if st.button("←", key="back_from_questionnaire", help="Back to chat"):
+            st.session_state.stage = "chat"
+            st.rerun()
+
+    with col_progress:
+        progress_indicator(3)
+
+    with col_next:
+        st.write("")
 
     st.markdown("# 📝 Feedback Questionnaire")
     st.markdown("Please answer all required questions.")
 
     with st.form("questionnaire_form"):
-        def likert_question(label: str, key: str, anchor_low: str = "Strongly disagree", anchor_mid: str = "Neither", anchor_high: str = "Strongly agree"):
-            st.markdown(f"**{label}**")
-            st.caption(f"1 = {anchor_low} | 4 = {anchor_mid} | 7 = {anchor_high}")
-            value = st.radio(
-                label=label,
-                options=[1, 2, 3, 4, 5, 6, 7],
-                format_func=lambda x: str(x),
-                horizontal=True,
+        def likert_item(question: str, key: str) -> int:
+            """Render a single Likert scale item with question label and scale."""
+            st.markdown(f"""
+            <div style="margin-bottom: 2rem; padding: 1.25rem; background-color: {COLORS['card']};
+                        border-radius: 12px; border: 1px solid {COLORS['border']};">
+                <div style="margin-bottom: 0.75rem;">
+                    <p style="margin: 0; font-weight: 600; color: {COLORS['text']}; font-size: 0.95rem;">
+                        {question}
+                    </p>
+                    <p style="margin: 0.5rem 0 0 0; font-size: 0.8rem; color: {COLORS['muted']};">
+                        1 = Strongly disagree &nbsp; • &nbsp; 7 = Strongly agree
+                    </p>
+                </div>
+            """, unsafe_allow_html=True)
+
+            value = st.slider(
+                label=question,
+                min_value=1,
+                max_value=7,
+                value=4,
+                step=1,
                 key=key,
                 label_visibility="collapsed"
             )
+
+            st.markdown("</div>", unsafe_allow_html=True)
             return value
 
-        col1, col2 = st.columns([1, 1], gap="large")
+        # Perception Section
+        st.markdown(f"<h3 style='margin-top: 0; margin-bottom: 1.5rem;'>📊 How did you perceive the assistant?</h3>", unsafe_allow_html=True)
 
-        with col1:
-            st.markdown(f"""
-            <div class="card">
-                <h3>📊 How did you perceive the assistant?</h3>
-            </div>
-            """, unsafe_allow_html=True)
-
-            st.markdown("**Warmth**")
-            perc_warm_warm = likert_question("The assistant seemed warm.", "perc_warm_warm")
-            perc_warm_friendly = likert_question("The assistant seemed friendly.", "perc_warm_friendly")
-            perc_warm_understanding = likert_question("The assistant seemed understanding.", "perc_warm_understanding")
-
-            st.markdown("**Competence**")
-            perc_comp_competent = likert_question("The assistant seemed competent.", "perc_comp_competent")
-            perc_comp_structured = likert_question("The assistant seemed structured.", "perc_comp_structured")
-            perc_comp_capable = likert_question("The assistant seemed capable.", "perc_comp_capable")
-
-        with col2:
-            st.markdown(f"""
-            <div class="card">
-                <h3>🛡️ How safe did you feel during the conversation?</h3>
-            </div>
-            """, unsafe_allow_html=True)
-
-            psych_safe_1 = likert_question("I felt safe to express any concerns I had.", "psych_safe_1")
-            psych_safe_2 = likert_question("I could be honest without worrying about negative consequences.", "psych_safe_2")
-            psych_safe_3 = likert_question("I felt comfortable sharing critical feedback.", "psych_safe_3")
-            psych_safe_4 = likert_question("I felt able to say what I really thought.", "psych_safe_4")
-            psych_safe_5 = likert_question("I did not feel judged when expressing concerns.", "psych_safe_5")
+        perc_warm_warm = likert_item("The assistant seemed warm.", "perc_warm_warm")
+        perc_warm_friendly = likert_item("The assistant seemed friendly.", "perc_warm_friendly")
+        perc_warm_understanding = likert_item("The assistant seemed understanding.", "perc_warm_understanding")
+        perc_comp_competent = likert_item("The assistant seemed competent.", "perc_comp_competent")
+        perc_comp_structured = likert_item("The assistant seemed structured.", "perc_comp_structured")
+        perc_comp_capable = likert_item("The assistant seemed capable.", "perc_comp_capable")
 
         st.divider()
 
-        st.markdown(f"""
-        <div class="card">
-            <h3>💭 How openly did you respond?</h3>
-        </div>
-        """, unsafe_allow_html=True)
+        # Safety Section
+        st.markdown(f"<h3 style='margin-top: 0; margin-bottom: 1.5rem;'>🛡️ How safe did you feel during the conversation?</h3>", unsafe_allow_html=True)
 
-        openness_1 = likert_question("I answered the assistant honestly.", "openness_1")
-        openness_2 = likert_question("I shared my real thoughts during the conversation.", "openness_2")
-        openness_3 = likert_question("I gave concrete details about the situation.", "openness_3")
-        openness_4 = likert_question("I held back some things I was thinking.", "openness_4")
+        psych_safe_1 = likert_item("I felt safe to express any concerns I had.", "psych_safe_1")
+        psych_safe_2 = likert_item("I could be honest without worrying about negative consequences.", "psych_safe_2")
+        psych_safe_3 = likert_item("I felt comfortable sharing critical feedback.", "psych_safe_3")
+        psych_safe_4 = likert_item("I felt able to say what I really thought.", "psych_safe_4")
+        psych_safe_5 = likert_item("I did not feel judged when expressing concerns.", "psych_safe_5")
+
+        st.divider()
+
+        # Openness Section
+        st.markdown(f"<h3 style='margin-top: 0; margin-bottom: 1.5rem;'>💭 How openly did you respond?</h3>", unsafe_allow_html=True)
+
+        openness_1 = likert_item("I answered the assistant honestly.", "openness_1")
+        openness_2 = likert_item("I shared my real thoughts during the conversation.", "openness_2")
+        openness_3 = likert_item("I gave concrete details about the situation.", "openness_3")
+        openness_4 = likert_item("I held back some things I was thinking.", "openness_4")
         st.caption("(Note: This item will be reverse-scored in analysis)")
 
         st.divider()
 
+        # Demographics Section
+        st.markdown(f"<h3 style='margin-top: 0; margin-bottom: 1.5rem;'>ℹ️ About you</h3>", unsafe_allow_html=True)
+
+        st.markdown('<div class="demographics-grid">', unsafe_allow_html=True)
+
+        # Column 1: AI Experience
         st.markdown(f"""
-        <div class="card">
-            <h3>ℹ️ About you</h3>
+        <div>
+            <span class="demo-label">Experience with conversational AI</span>
         </div>
         """, unsafe_allow_html=True)
+        ai_exp_selection = st.selectbox(
+            label="AI Experience",
+            options=["", "1 - No experience", "2", "3", "4", "5", "6", "7 - Very experienced"],
+            index=0,
+            label_visibility="collapsed"
+        )
+        if ai_exp_selection and ai_exp_selection != "":
+            st.session_state.ai_experience = int(ai_exp_selection.split()[0])
+        else:
+            st.session_state.ai_experience = None
 
-        col_bg1, col_bg2, col_bg3 = st.columns([1, 1, 1])
+        # Column 2: Years of work experience
+        st.markdown(f"""
+        <div>
+            <span class="demo-label">Years of work experience</span>
+        </div>
+        """, unsafe_allow_html=True)
+        years_work_experience = st.number_input(
+            "Years of work experience",
+            min_value=0.0,
+            max_value=70.0,
+            step=0.5,
+            value=None,
+            label_visibility="collapsed"
+        )
 
-        with col_bg1:
-            st.markdown("**Experience with conversational AI**")
-            st.caption("1 = No experience | 7 = Very experienced")
-            ai_experience = st.radio(
-                label="Experience",
-                options=[1, 2, 3, 4, 5, 6, 7],
-                format_func=lambda x: str(x),
-                horizontal=True,
-                key="ai_experience",
-                label_visibility="collapsed"
-            )
+        # Column 3: Age
+        st.markdown(f"""
+        <div>
+            <span class="demo-label">Age (optional)</span>
+        </div>
+        """, unsafe_allow_html=True)
+        age = st.number_input(
+            "Age",
+            min_value=18,
+            max_value=100,
+            step=1,
+            value=None,
+            label_visibility="collapsed"
+        )
 
-            years_work_experience = st.number_input(
-                "Years of work experience",
-                min_value=0.0,
-                max_value=70.0,
-                step=0.5,
-                value=None
-            )
+        # Column 4: Gender
+        st.markdown(f"""
+        <div>
+            <span class="demo-label">Gender (optional)</span>
+        </div>
+        """, unsafe_allow_html=True)
+        gender = st.selectbox(
+            "Gender",
+            ["", "Female", "Male", "Prefer not to say"],
+            index=0,
+            label_visibility="collapsed"
+        )
 
-        with col_bg2:
-            age = st.number_input(
-                "Age (optional)",
-                min_value=18,
-                max_value=100,
-                step=1,
-                value=None
-            )
-            gender = st.selectbox(
-                "Gender (optional)",
-                ["", "Female", "Male", "Prefer not to say"],
-                index=0
-            )
+        # Column 5: Industry
+        st.markdown(f"""
+        <div>
+            <span class="demo-label">Industry (optional)</span>
+        </div>
+        """, unsafe_allow_html=True)
+        industry = st.text_input(
+            "Industry",
+            value="",
+            label_visibility="collapsed"
+        )
 
-        with col_bg3:
-            industry = st.text_input("Industry (optional)")
-            job_role = st.text_input("Job role (optional)")
+        # Column 6: Job role
+        st.markdown(f"""
+        <div>
+            <span class="demo-label">Job role (optional)</span>
+        </div>
+        """, unsafe_allow_html=True)
+        job_role = st.text_input(
+            "Job role",
+            value="",
+            label_visibility="collapsed"
+        )
+
+        st.markdown('</div>', unsafe_allow_html=True)
 
         st.divider()
 
@@ -648,7 +830,7 @@ elif st.session_state.stage == "questionnaire":
                         "openness_2": st.session_state.openness_2,
                         "openness_3": st.session_state.openness_3,
                         "openness_4": st.session_state.openness_4,
-                        "ai_experience": st.session_state.ai_experience,
+                        "ai_experience": st.session_state.get("ai_experience"),
                         "years_work_experience": years_work_experience,
                         "age": age if age else None,
                         "gender": gender if gender else None,

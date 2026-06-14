@@ -80,9 +80,15 @@ class Message(Base):
     model_used: Mapped[str | None] = mapped_column(String, nullable=True)
     temperature: Mapped[float | None] = mapped_column(Float, nullable=True)
 
-    # Off-topic handling
-    is_off_topic_redirect: Mapped[bool] = mapped_column(Boolean, default=False)  # Marks when assistant redirected off-topic user message
-    off_topic_reason: Mapped[str | None] = mapped_column(String, nullable=True)  # Reason for off-topic detection (for analysis)
+    # Off-topic handling (legacy fields, kept for backwards compatibility)
+    is_off_topic_redirect: Mapped[bool] = mapped_column(Boolean, default=False)
+    off_topic_reason: Mapped[str | None] = mapped_column(String, nullable=True)
+
+    # Semantic relevance classification (user messages only)
+    relevance_label: Mapped[str | None] = mapped_column(String, nullable=True)  # substantive_on_topic, vague_but_relevant, clearly_off_topic, safety_concern
+    relevance_confidence: Mapped[float | None] = mapped_column(Float, nullable=True)  # 0.0-1.0
+    is_valid_turn: Mapped[bool | None] = mapped_column(Boolean, nullable=True)  # Whether message counts toward valid turns
+    safety_concern: Mapped[bool] = mapped_column(Boolean, default=False)  # True if self-harm/harm content detected
 
     participant: Mapped[Participant] = relationship(back_populates="messages")
     retrieval_log: Mapped["RetrievalLog | None"] = relationship(back_populates="message", uselist=False)
@@ -100,14 +106,17 @@ class QuestionnaireResponse(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     # PERCEPTION ITEMS (1-7 scale): "How did you perceive the assistant?"
-    # Warmth (3 items)
-    perc_warm_warm: Mapped[int] = mapped_column(Integer, nullable=True)
-    perc_warm_friendly: Mapped[int] = mapped_column(Integer, nullable=True)
-    perc_warm_understanding: Mapped[int] = mapped_column(Integer, nullable=True)
-    # Competence (3 items)
-    perc_comp_competent: Mapped[int] = mapped_column(Integer, nullable=True)
-    perc_comp_structured: Mapped[int] = mapped_column(Integer, nullable=True)
-    perc_comp_capable: Mapped[int] = mapped_column(Integer, nullable=True)
+    # Warmth (4 items)
+    perc_warm_warm: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant seemed warm.
+    perc_warm_friendly: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant seemed friendly.
+    perc_warm_understanding: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant seemed understanding.
+    perc_warm_comfortable: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant made me feel comfortable.
+    # Structured/Direct (5 items)
+    perc_struct_structured: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant seemed structured.
+    perc_struct_direct: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant seemed direct.
+    perc_struct_professional: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant seemed professional.
+    perc_struct_task_focused: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant seemed task-focused.
+    perc_struct_capable: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant seemed capable.
 
     # PSYCHOLOGICAL SAFETY (1-7 scale): "How safe did you feel during the conversation?"
     psych_safe_1: Mapped[int] = mapped_column(Integer, nullable=True)  # I felt safe to express concerns

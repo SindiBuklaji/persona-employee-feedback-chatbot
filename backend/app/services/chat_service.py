@@ -8,9 +8,9 @@ from app.config import settings
 from app.data.vignette import FOLLOW_UP_SEQUENCE, get_follow_up_prompt
 from app.models import Message, Participant, RetrievalLog
 from app.services.metrics import word_count
-from app.services.off_topic_detection import is_off_topic, build_redirect_response
 from app.services.personas import get_persona_prompt
 from app.services.retrieval import RetrievalService
+from app.services.semantic_relevance import SemanticRelevanceClassifier
 
 logger = logging.getLogger(__name__)
 
@@ -19,6 +19,7 @@ class ChatService:
     def __init__(self) -> None:
         self.client = OpenAI(api_key=settings.openai_api_key)
         self.retrieval = RetrievalService()
+        self.relevance_classifier = SemanticRelevanceClassifier()
 
     def _current_follow_up(self, turns_used: int) -> dict | None:
         if turns_used >= len(FOLLOW_UP_SEQUENCE):
@@ -49,40 +50,66 @@ class ChatService:
         condition: str,
         user_message: str,
         turns_used: int,
-    ) -> tuple[str, str | None, list[str], list[float], str, list, str | None]:
-        """Build assistant reply with retrieval context.
+    ) -> tuple[str, str | None, list[str], list[float], str, list, str | None, dict]:
+        """Build assistant reply with retrieval context and semantic relevance.
 
         Returns:
-            Tuple of (reply_text, follow_up_key, retrieved_card_ids, retrieval_scores, retrieval_method, retrieved_docs, off_topic_reason)
+            Tuple of (reply_text, follow_up_key, retrieved_card_ids, retrieval_scores, retrieval_method, retrieved_docs, off_topic_reason, classification)
         """
         next_follow_up = self._current_follow_up(turns_used)
+        follow_up_key = next_follow_up["key"] if next_follow_up else None
 
-        # Check for off-topic or low-quality messages
-        off_topic_result = is_off_topic(user_message)
-        if off_topic_result.is_off_topic:
-            logger.info(f"Off-topic detection: {off_topic_result.reason}")
+        # Classify semantic relevance
+        classification = self.relevance_classifier.classify(user_message, follow_up_key)
+        logger.info(f"Semantic relevance: {classification['label']} (confidence: {classification['confidence']:.2f})")
 
-            # Get current follow-up question for redirect
-            if next_follow_up:
-                follow_up_key = next_follow_up["key"]
-                follow_up_text = get_follow_up_prompt(condition, follow_up_key)
-                redirect_response = build_redirect_response(condition, follow_up_text)
+        # Handle safety concerns immediately
+        if classification["label"] == "safety_concern":
+            logger.warning("Safety concern detected in user message")
+            if condition == "warm":
+                safety_response = (
+                    "I'm concerned about what you've shared. Please reach out for support right away—"
+                    "call a crisis line or talk to someone you trust."
+                )
             else:
-                # Task complete, just acknowledge gently
+                safety_response = (
+                    "This is serious. Please contact a crisis helpline or trusted person immediately."
+                )
+            return (
+                safety_response,
+                None,
+                [],
+                [],
+                "safety_concern",
+                [],
+                "safety_concern",
+                classification,
+            )
+
+        # Handle clearly off-topic messages
+        if classification["label"] == "clearly_off_topic":
+            logger.info("Clearly off-topic message detected")
+            if next_follow_up:
+                follow_up_text = get_follow_up_prompt(condition, follow_up_key)
                 if condition == "warm":
-                    redirect_response = "Thanks for that. You've completed the feedback task!"
+                    redirect = f"Let's focus on the workplace situation. {follow_up_text}"
                 else:
-                    redirect_response = "Noted. You've completed the feedback task."
-                follow_up_key = None
+                    redirect = f"Please answer based on the workplace scenario. {follow_up_text}"
+            else:
+                if condition == "warm":
+                    redirect = "You have completed the feedback task."
+                else:
+                    redirect = "You have completed the feedback task."
 
             return (
-                redirect_response,
-                follow_up_key,
-                [],  # No retrieved cards for redirect
-                [],  # No scores
-                "off_topic_redirect",
-                [],  # No docs
-                off_topic_result.reason,  # Return the off-topic reason
+                redirect,
+                follow_up_key if next_follow_up else None,
+                [],
+                [],
+                "clearly_off_topic",
+                [],
+                "clearly_off_topic",
+                classification,
             )
 
         retrieved_docs, retrieval_method = self.retrieval.retrieve(user_message)
@@ -167,7 +194,7 @@ INSTRUCTIONS:
         retrieved_card_ids = [doc.doc_id for doc in retrieved_docs]
         retrieval_scores = [doc.score for doc in retrieved_docs]
 
-        return text, follow_up_key, retrieved_card_ids, retrieval_scores, retrieval_method, retrieved_docs, None
+        return text, follow_up_key, retrieved_card_ids, retrieval_scores, retrieval_method, retrieved_docs, None, classification
 
     def process_user_message(self, db: Session, participant: Participant, user_message: str) -> Message:
         from datetime import datetime
@@ -198,17 +225,30 @@ INSTRUCTIONS:
         user_message_time = datetime.utcnow()
 
         # Build assistant reply with retrieval
-        assistant_text, follow_up_key, retrieved_card_ids, retrieval_scores, retrieval_method, retrieved_docs, off_topic_reason = (
-            self._build_assistant_reply(
-                condition=participant.condition,
-                user_message=user_message,
-                turns_used=participant.total_turns,
-            )
+        (
+            assistant_text,
+            follow_up_key,
+            retrieved_card_ids,
+            retrieval_scores,
+            retrieval_method,
+            retrieved_docs,
+            off_topic_reason,
+            classification,
+        ) = self._build_assistant_reply(
+            condition=participant.condition,
+            user_message=user_message,
+            turns_used=participant.total_turns,
         )
 
         assistant_word_count = word_count(assistant_text)
         assistant_message_time = datetime.utcnow()
         response_latency = (assistant_message_time - user_message_time).total_seconds()
+
+        # Store semantic relevance classification in user message
+        user_msg_obj.relevance_label = classification.get("label")
+        user_msg_obj.relevance_confidence = classification.get("confidence")
+        user_msg_obj.is_valid_turn = classification.get("is_valid_turn", True)
+        user_msg_obj.safety_concern = classification.get("label") == "safety_concern"
 
         assistant_message = Message(
             participant_id=participant.participant_id,
