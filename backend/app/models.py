@@ -80,6 +80,10 @@ class Message(Base):
     model_used: Mapped[str | None] = mapped_column(String, nullable=True)
     temperature: Mapped[float | None] = mapped_column(Float, nullable=True)
 
+    # Off-topic handling
+    is_off_topic_redirect: Mapped[bool] = mapped_column(Boolean, default=False)  # Marks when assistant redirected off-topic user message
+    off_topic_reason: Mapped[str | None] = mapped_column(String, nullable=True)  # Reason for off-topic detection (for analysis)
+
     participant: Mapped[Participant] = relationship(back_populates="messages")
     retrieval_log: Mapped["RetrievalLog | None"] = relationship(back_populates="message", uselist=False)
 

@@ -3,12 +3,12 @@ VIGNETTE_TITLE = "Your Team Situation"
 VIGNETTE_TEXT = """
 Imagine you are a junior team member or intern. Over the past few weeks, you've noticed some issues:
 
-• Tasks are assigned at the last minute
-• Priorities change without explanation
-• Responsibilities aren't always clear
-• Important information comes too late
-• Different people give conflicting instructions
-• Work sometimes gets duplicated
+- Tasks are assigned at the last minute
+- Priorities change without explanation
+- Responsibilities aren't always clear
+- Important information comes too late
+- Different people give conflicting instructions
+- Work sometimes gets duplicated
 
 Because you're newer to the team, you're not sure how to bring these up directly.
 
@@ -17,9 +17,9 @@ Because you're newer to the team, you're not sure how to bring these up directly
 **Please give feedback as if you were in this situation. There are no right or wrong answers. Respond naturally and honestly.**
 
 In the chat, please:
-• Describe what you think is going wrong
-• Give examples if relevant
-• Suggest what should change
+- Describe what you think is going wrong
+- Give examples if relevant
+- Suggest what should change
 """.strip()
 
 # Core follow-up sequence: same constructs, different phrasings by condition

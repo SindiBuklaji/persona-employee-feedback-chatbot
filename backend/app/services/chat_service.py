@@ -8,6 +8,7 @@ from app.config import settings
 from app.data.vignette import FOLLOW_UP_SEQUENCE, get_follow_up_prompt
 from app.models import Message, Participant, RetrievalLog
 from app.services.metrics import word_count
+from app.services.off_topic_detection import is_off_topic, build_redirect_response
 from app.services.personas import get_persona_prompt
 from app.services.retrieval import RetrievalService
 
@@ -48,13 +49,42 @@ class ChatService:
         condition: str,
         user_message: str,
         turns_used: int,
-    ) -> tuple[str, str | None, list[str], list[float], str, list]:
+    ) -> tuple[str, str | None, list[str], list[float], str, list, str | None]:
         """Build assistant reply with retrieval context.
 
         Returns:
-            Tuple of (reply_text, follow_up_key, retrieved_card_ids, retrieval_scores, retrieval_method, retrieved_docs)
+            Tuple of (reply_text, follow_up_key, retrieved_card_ids, retrieval_scores, retrieval_method, retrieved_docs, off_topic_reason)
         """
         next_follow_up = self._current_follow_up(turns_used)
+
+        # Check for off-topic or low-quality messages
+        off_topic_result = is_off_topic(user_message)
+        if off_topic_result.is_off_topic:
+            logger.info(f"Off-topic detection: {off_topic_result.reason}")
+
+            # Get current follow-up question for redirect
+            if next_follow_up:
+                follow_up_key = next_follow_up["key"]
+                follow_up_text = get_follow_up_prompt(condition, follow_up_key)
+                redirect_response = build_redirect_response(condition, follow_up_text)
+            else:
+                # Task complete, just acknowledge gently
+                if condition == "warm":
+                    redirect_response = "Thanks for that. You've completed the feedback task!"
+                else:
+                    redirect_response = "Noted. You've completed the feedback task."
+                follow_up_key = None
+
+            return (
+                redirect_response,
+                follow_up_key,
+                [],  # No retrieved cards for redirect
+                [],  # No scores
+                "off_topic_redirect",
+                [],  # No docs
+                off_topic_result.reason,  # Return the off-topic reason
+            )
+
         retrieved_docs, retrieval_method = self.retrieval.retrieve(user_message)
         retrieval_context = self._build_retrieval_context(retrieved_docs)
 
@@ -137,7 +167,7 @@ INSTRUCTIONS:
         retrieved_card_ids = [doc.doc_id for doc in retrieved_docs]
         retrieval_scores = [doc.score for doc in retrieved_docs]
 
-        return text, follow_up_key, retrieved_card_ids, retrieval_scores, retrieval_method, retrieved_docs
+        return text, follow_up_key, retrieved_card_ids, retrieval_scores, retrieval_method, retrieved_docs, None
 
     def process_user_message(self, db: Session, participant: Participant, user_message: str) -> Message:
         from datetime import datetime
@@ -168,7 +198,7 @@ INSTRUCTIONS:
         user_message_time = datetime.utcnow()
 
         # Build assistant reply with retrieval
-        assistant_text, follow_up_key, retrieved_card_ids, retrieval_scores, retrieval_method, retrieved_docs = (
+        assistant_text, follow_up_key, retrieved_card_ids, retrieval_scores, retrieval_method, retrieved_docs, off_topic_reason = (
             self._build_assistant_reply(
                 condition=participant.condition,
                 user_message=user_message,
@@ -194,6 +224,8 @@ INSTRUCTIONS:
             follow_up_key=follow_up_key,
             model_used=settings.openai_model,
             temperature=settings.temperature,
+            is_off_topic_redirect=off_topic_reason is not None,
+            off_topic_reason=off_topic_reason,
         )
         db.add(assistant_message)
         db.flush()
