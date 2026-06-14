@@ -33,7 +33,7 @@ def chat(payload: ChatRequest, db: Session = Depends(get_db)) -> ChatResponse:
         raise HTTPException(status_code=400, detail="Chat already completed.")
 
     # Enforce hard cap on turns
-    if participant.total_turns >= settings.max_turns:
+    if participant.total_turns > settings.max_turns:
         raise HTTPException(
             status_code=400,
             detail=f"Maximum turns ({settings.max_turns}) reached. Please finish the chat."

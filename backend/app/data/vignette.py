@@ -44,6 +44,11 @@ FOLLOW_UP_SEQUENCE = [
         "warm": "What would help?",
         "competent": "What would fix it?",
     },
+    {
+        "key": "reflection",
+        "warm": "Is there anything else you’d like to add about this situation?",
+        "competent": "Is there anything else important you’d like to add?",
+    },
 ]
 
 

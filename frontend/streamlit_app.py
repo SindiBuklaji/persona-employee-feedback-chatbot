@@ -577,7 +577,6 @@ elif st.session_state.stage == "questionnaire":
                 key="ai_experience",
                 label_visibility="collapsed"
             )
-            form_responses["ai_experience"] = ai_experience
 
             years_work_experience = st.number_input(
                 "Years of work experience",
