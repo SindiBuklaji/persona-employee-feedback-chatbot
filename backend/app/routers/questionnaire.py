@@ -22,16 +22,16 @@ def submit_questionnaire(payload: QuestionnaireRequest, db: Session = Depends(ge
 
     # Compute means for perception scales
     warmth_items = [
-        payload.perc_warm_warm,
         payload.perc_warm_friendly,
         payload.perc_warm_understanding,
+        payload.perc_warm_comfortable,
     ]
     perceived_warmth_mean = round(sum(warmth_items) / len(warmth_items), 4)
 
     competence_items = [
-        payload.perc_comp_competent,
-        payload.perc_comp_structured,
-        payload.perc_comp_capable,
+        payload.perc_struct_direct,
+        payload.perc_struct_professional,
+        payload.perc_struct_task_focused,
     ]
     perceived_competence_mean = round(sum(competence_items) / len(competence_items), 4)
 
@@ -66,12 +66,12 @@ def submit_questionnaire(payload: QuestionnaireRequest, db: Session = Depends(ge
         participant_id=payload.participant_id,
         timestamp_submit=now,
         # Perception items
-        perc_warm_warm=payload.perc_warm_warm,
         perc_warm_friendly=payload.perc_warm_friendly,
         perc_warm_understanding=payload.perc_warm_understanding,
-        perc_comp_competent=payload.perc_comp_competent,
-        perc_comp_structured=payload.perc_comp_structured,
-        perc_comp_capable=payload.perc_comp_capable,
+        perc_warm_comfortable=payload.perc_warm_comfortable,
+        perc_struct_direct=payload.perc_struct_direct,
+        perc_struct_professional=payload.perc_struct_professional,
+        perc_struct_task_focused=payload.perc_struct_task_focused,
         # Psychological safety items
         psych_safe_1=payload.psych_safe_1,
         psych_safe_2=payload.psych_safe_2,

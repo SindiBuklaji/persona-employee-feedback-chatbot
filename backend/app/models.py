@@ -106,17 +106,14 @@ class QuestionnaireResponse(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     # PERCEPTION ITEMS (1-7 scale): "How did you perceive the assistant?"
-    # Warmth (4 items)
-    perc_warm_warm: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant seemed warm.
+    # Warmth (3 items)
     perc_warm_friendly: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant seemed friendly.
     perc_warm_understanding: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant seemed understanding.
     perc_warm_comfortable: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant made me feel comfortable.
-    # Structured/Direct (5 items)
-    perc_struct_structured: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant seemed structured.
+    # Structured/Direct (3 items)
     perc_struct_direct: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant seemed direct.
     perc_struct_professional: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant seemed professional.
     perc_struct_task_focused: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant seemed task-focused.
-    perc_struct_capable: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant seemed capable.
 
     # PSYCHOLOGICAL SAFETY (1-7 scale): "How safe did you feel during the conversation?"
     psych_safe_1: Mapped[int] = mapped_column(Integer, nullable=True)  # I felt safe to express concerns

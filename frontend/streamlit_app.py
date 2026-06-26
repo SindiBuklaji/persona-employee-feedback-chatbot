@@ -664,12 +664,12 @@ elif st.session_state.stage == "questionnaire":
         # Perception Section
         st.markdown(f"<h3 style='margin-top: 0; margin-bottom: 1.5rem;'>📊 How did you perceive the assistant?</h3>", unsafe_allow_html=True)
 
-        perc_warm_warm = likert_item("The assistant seemed warm.", "perc_warm_warm")
         perc_warm_friendly = likert_item("The assistant seemed friendly.", "perc_warm_friendly")
         perc_warm_understanding = likert_item("The assistant seemed understanding.", "perc_warm_understanding")
-        perc_comp_competent = likert_item("The assistant seemed competent.", "perc_comp_competent")
-        perc_comp_structured = likert_item("The assistant seemed structured.", "perc_comp_structured")
-        perc_comp_capable = likert_item("The assistant seemed capable.", "perc_comp_capable")
+        perc_warm_comfortable = likert_item("The assistant made me feel comfortable.", "perc_warm_comfortable")
+        perc_struct_direct = likert_item("The assistant seemed direct.", "perc_struct_direct")
+        perc_struct_professional = likert_item("The assistant seemed professional.", "perc_struct_professional")
+        perc_struct_task_focused = likert_item("The assistant seemed task-focused.", "perc_struct_task_focused")
 
         st.divider()
 
@@ -796,8 +796,8 @@ elif st.session_state.stage == "questionnaire":
         if submitted:
             # Validate all required fields are answered
             required_items = [
-                "perc_warm_warm", "perc_warm_friendly", "perc_warm_understanding",
-                "perc_comp_competent", "perc_comp_structured", "perc_comp_capable",
+                "perc_warm_friendly", "perc_warm_understanding", "perc_warm_comfortable",
+                "perc_struct_direct", "perc_struct_professional", "perc_struct_task_focused",
                 "psych_safe_1", "psych_safe_2", "psych_safe_3", "psych_safe_4", "psych_safe_5",
                 "openness_1", "openness_2", "openness_3", "openness_4",
                 "ai_experience"
@@ -815,12 +815,12 @@ elif st.session_state.stage == "questionnaire":
                     "/questionnaire",
                     {
                         "participant_id": st.session_state.participant_id,
-                        "perc_warm_warm": st.session_state.perc_warm_warm,
                         "perc_warm_friendly": st.session_state.perc_warm_friendly,
                         "perc_warm_understanding": st.session_state.perc_warm_understanding,
-                        "perc_comp_competent": st.session_state.perc_comp_competent,
-                        "perc_comp_structured": st.session_state.perc_comp_structured,
-                        "perc_comp_capable": st.session_state.perc_comp_capable,
+                        "perc_warm_comfortable": st.session_state.perc_warm_comfortable,
+                        "perc_struct_direct": st.session_state.perc_struct_direct,
+                        "perc_struct_professional": st.session_state.perc_struct_professional,
+                        "perc_struct_task_focused": st.session_state.perc_struct_task_focused,
                         "psych_safe_1": st.session_state.psych_safe_1,
                         "psych_safe_2": st.session_state.psych_safe_2,
                         "psych_safe_3": st.session_state.psych_safe_3,

@@ -45,12 +45,14 @@ class QuestionnaireRequest(BaseModel):
     participant_id: str
 
     # PERCEPTION: How did you perceive the assistant? (1-7 scale)
-    perc_warm_warm: int = Field(ge=1, le=7)
+    # Warmth
     perc_warm_friendly: int = Field(ge=1, le=7)
     perc_warm_understanding: int = Field(ge=1, le=7)
-    perc_comp_competent: int = Field(ge=1, le=7)
-    perc_comp_structured: int = Field(ge=1, le=7)
-    perc_comp_capable: int = Field(ge=1, le=7)
+    perc_warm_comfortable: int = Field(ge=1, le=7)
+    # Structured/Direct
+    perc_struct_direct: int = Field(ge=1, le=7)
+    perc_struct_professional: int = Field(ge=1, le=7)
+    perc_struct_task_focused: int = Field(ge=1, le=7)
 
     # PSYCHOLOGICAL SAFETY: How safe did you feel during the conversation? (1-7 scale)
     psych_safe_1: int = Field(ge=1, le=7)
