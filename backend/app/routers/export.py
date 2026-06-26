@@ -1,19 +1,45 @@
 import csv
 import io
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, Header
 from fastapi.responses import StreamingResponse
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.config import settings
 from app.db import get_db
 from app.models import HonestyCodings, Message, Participant, QuestionnaireResponse, RetrievalLog
 
 router = APIRouter(prefix="/export", tags=["export"])
 
 
+def verify_admin_token(authorization: str = Header(None)) -> None:
+    """Verify the admin token from Authorization header.
+
+    Expected format: "Bearer <token>"
+    """
+    if not settings.admin_token:
+        # In development (no admin_token set), allow all exports
+        return
+
+    if not authorization:
+        raise HTTPException(status_code=401, detail="Admin token required")
+
+    try:
+        scheme, token = authorization.split(" ", 1)
+        if scheme.lower() != "bearer":
+            raise ValueError("Invalid authorization scheme")
+    except ValueError:
+        raise HTTPException(status_code=401, detail="Invalid authorization header format")
+
+    if token != settings.admin_token:
+        raise HTTPException(status_code=401, detail="Invalid admin token")
+
+    return
+
+
 @router.get("/transcripts.csv")
-def export_transcripts(db: Session = Depends(get_db)) -> StreamingResponse:
+def export_transcripts(db: Session = Depends(get_db), _: None = Depends(verify_admin_token)) -> StreamingResponse:
     buffer = io.StringIO()
     writer = csv.writer(buffer)
     writer.writerow([
@@ -52,7 +78,7 @@ def export_transcripts(db: Session = Depends(get_db)) -> StreamingResponse:
 
 
 @router.get("/participants.csv")
-def export_participants(db: Session = Depends(get_db)) -> StreamingResponse:
+def export_participants(db: Session = Depends(get_db), _: None = Depends(verify_admin_token)) -> StreamingResponse:
     """Export engagement metrics and completion status for all participants."""
     buffer = io.StringIO()
     writer = csv.writer(buffer)
@@ -93,20 +119,21 @@ def export_participants(db: Session = Depends(get_db)) -> StreamingResponse:
 
 
 @router.get("/questionnaires.csv")
-def export_questionnaires(db: Session = Depends(get_db)) -> StreamingResponse:
+def export_questionnaires(db: Session = Depends(get_db), _: None = Depends(verify_admin_token)) -> StreamingResponse:
     """Export all questionnaire responses with perception, safety, and openness items."""
     buffer = io.StringIO()
     writer = csv.writer(buffer)
     writer.writerow([
         "participant_id",
         "condition",
-        # Perception items
-        "perc_warm_warm",
+        # Perception items - Warmth
         "perc_warm_friendly",
         "perc_warm_understanding",
-        "perc_comp_competent",
-        "perc_comp_structured",
-        "perc_comp_capable",
+        "perc_warm_comfortable",
+        # Perception items - Structured/Direct
+        "perc_struct_direct",
+        "perc_struct_professional",
+        "perc_struct_task_focused",
         "perceived_warmth_mean",
         "perceived_competence_mean",
         # Psychological safety items
@@ -141,13 +168,14 @@ def export_questionnaires(db: Session = Depends(get_db)) -> StreamingResponse:
         writer.writerow([
             questionnaire.participant_id,
             condition,
-            # Perception items
-            questionnaire.perc_warm_warm,
+            # Perception items - Warmth
             questionnaire.perc_warm_friendly,
             questionnaire.perc_warm_understanding,
-            questionnaire.perc_comp_competent,
-            questionnaire.perc_comp_structured,
-            questionnaire.perc_comp_capable,
+            questionnaire.perc_warm_comfortable,
+            # Perception items - Structured/Direct
+            questionnaire.perc_struct_direct,
+            questionnaire.perc_struct_professional,
+            questionnaire.perc_struct_task_focused,
             questionnaire.perceived_warmth_mean,
             questionnaire.perceived_competence_mean,
             # Psychological safety items
@@ -182,7 +210,7 @@ def export_questionnaires(db: Session = Depends(get_db)) -> StreamingResponse:
 
 
 @router.get("/honesty_codings.csv")
-def export_honesty_codings(db: Session = Depends(get_db)) -> StreamingResponse:
+def export_honesty_codings(db: Session = Depends(get_db), _: None = Depends(verify_admin_token)) -> StreamingResponse:
     """Export all honesty codings."""
     buffer = io.StringIO()
     writer = csv.writer(buffer)
@@ -228,7 +256,7 @@ def export_honesty_codings(db: Session = Depends(get_db)) -> StreamingResponse:
 
 
 @router.get("/retrieval_logs.csv")
-def export_retrieval_logs(db: Session = Depends(get_db)) -> StreamingResponse:
+def export_retrieval_logs(db: Session = Depends(get_db), _: None = Depends(verify_admin_token)) -> StreamingResponse:
     """Export retrieval logs for auditability and reproducibility.
 
     Note: User messages are stored in the messages table and linked via message_id.
@@ -282,7 +310,7 @@ def export_retrieval_logs(db: Session = Depends(get_db)) -> StreamingResponse:
 
 
 @router.get("/analysis_dataset.csv")
-def export_analysis_dataset(db: Session = Depends(get_db)) -> StreamingResponse:
+def export_analysis_dataset(db: Session = Depends(get_db), _: None = Depends(verify_admin_token)) -> StreamingResponse:
     """Export combined analysis dataset: one row per participant with all engagement, perception, and outcome measures."""
     buffer = io.StringIO()
     writer = csv.writer(buffer)
@@ -295,14 +323,15 @@ def export_analysis_dataset(db: Session = Depends(get_db)) -> StreamingResponse:
         "number_user_turns",
         "total_user_word_count",
         "average_user_message_length",
-        # Perception measures
-        "perc_warm_warm",
+        # Perception measures - Warmth
         "perc_warm_friendly",
         "perc_warm_understanding",
+        "perc_warm_comfortable",
         "perceived_warmth_score",
-        "perc_comp_competent",
-        "perc_comp_structured",
-        "perc_comp_capable",
+        # Perception measures - Structured/Direct
+        "perc_struct_direct",
+        "perc_struct_professional",
+        "perc_struct_task_focused",
         "perceived_competence_score",
         # Psychological safety measures
         "psych_safe_1",
@@ -342,14 +371,15 @@ def export_analysis_dataset(db: Session = Depends(get_db)) -> StreamingResponse:
             participant.total_turns,
             participant.total_user_words,
             participant.average_user_message_length or "",
-            # Perception measures
-            questionnaire.perc_warm_warm if questionnaire else "",
+            # Perception measures - Warmth
             questionnaire.perc_warm_friendly if questionnaire else "",
             questionnaire.perc_warm_understanding if questionnaire else "",
+            questionnaire.perc_warm_comfortable if questionnaire else "",
             questionnaire.perceived_warmth_mean if questionnaire else "",
-            questionnaire.perc_comp_competent if questionnaire else "",
-            questionnaire.perc_comp_structured if questionnaire else "",
-            questionnaire.perc_comp_capable if questionnaire else "",
+            # Perception measures - Structured/Direct
+            questionnaire.perc_struct_direct if questionnaire else "",
+            questionnaire.perc_struct_professional if questionnaire else "",
+            questionnaire.perc_struct_task_focused if questionnaire else "",
             questionnaire.perceived_competence_mean if questionnaire else "",
             # Psychological safety measures
             questionnaire.psych_safe_1 if questionnaire else "",

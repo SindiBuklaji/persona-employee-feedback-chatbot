@@ -17,8 +17,13 @@ COPY . .
 # Expose port
 EXPOSE 8501
 
-# Create .streamlit config directory
-RUN mkdir -p ~/.streamlit
+# Create .streamlit config directory and add production config
+RUN mkdir -p ~/.streamlit && \
+    echo "[client]" > ~/.streamlit/config.toml && \
+    echo "showErrorDetails = false" >> ~/.streamlit/config.toml && \
+    echo "[server]" >> ~/.streamlit/config.toml && \
+    echo "headless = true" >> ~/.streamlit/config.toml && \
+    echo "enableXsrfProtection = true" >> ~/.streamlit/config.toml
 
-# Run streamlit
-CMD ["streamlit", "run", "streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+# Run streamlit in production mode
+CMD ["streamlit", "run", "streamlit_app.py", "--server.port=8501", "--server.address=0.0.0.0", "--client.toolbarMode=minimal"]

@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     top_k_retrieval: int = 3
     allowed_origins: str = "http://localhost:8501"
     debug: bool = False
+    admin_token: str = ""
 
     # Retrieval configuration
     retrieval_enabled: bool = True
