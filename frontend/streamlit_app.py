@@ -15,16 +15,16 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Soft light purple color palette
+# Modern purple color palette with better mobile contrast
 COLORS = {
-    "bg": "#F5F3FF",
-    "card": "#FFFFFF",
-    "text": "#1F2937",
-    "muted": "#6B7280",
-    "border": "#E9D5FF",
-    "primary": "#8B5CF6",
-    "teal": "#8B5CF6",
-    "assistant_bubble": "#F4F4F7",
+    "bg": "#FFFFFF",
+    "card": "#F8F6FF",
+    "text": "#111827",
+    "muted": "#4B5563",
+    "border": "#D4CAFF",
+    "primary": "#7C3AED",
+    "teal": "#7C3AED",
+    "assistant_bubble": "#EDE9FE",
     "user_bubble": "#7C3AED",
 }
 
