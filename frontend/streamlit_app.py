@@ -199,23 +199,52 @@ st.markdown(f"""
             background-color: {COLORS_DARK['card']};
         }}
 
-        /* Chat container - dark background like scenario page */
+        /* Chat container - dark background matching app theme */
         .chat-container {{
             display: flex !important;
             flex-direction: column;
             gap: 0.75rem;
-            padding: 1.5rem;
+            padding: 1.25rem;
             background-color: {COLORS_DARK['card']};
             border-radius: 12px;
-            min-height: 400px;
+            min-height: 350px;
+            max-height: 65vh;
+            overflow-y: auto;
             border: 1px solid {COLORS_DARK['border']};
             margin-bottom: 1rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }}
+
+        /* Message row - reduce spacing */
+        .message-row {{
+            display: flex !important;
+            align-items: flex-end;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            width: 100%;
+        }}
+
+        .message-row.user {{
+            justify-content: flex-end;
+        }}
+
+        /* Avatar styling */
+        .avatar {{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 24px;
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            margin-top: 0.25rem;
         }}
 
         .avatar.assistant {{
-            background-color: {COLORS_DARK['assistant_bubble']};
-            color: white;
+            background-color: #2D2742;
+            color: #F9FAFB;
         }}
 
         .avatar.user {{
@@ -223,20 +252,31 @@ st.markdown(f"""
             color: {COLORS_DARK['text']};
         }}
 
+        /* Chat bubble styling */
+        .chat-bubble {{
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            line-height: 1.5;
+            word-wrap: break-word;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            max-width: 75%;
+            flex-wrap: wrap;
+        }}
+
         .chat-bubble.assistant {{
-            background-color: {COLORS_DARK['assistant_bubble']};
-            color: {COLORS_DARK['text']};
-            border: 1px solid {COLORS_DARK['border']};
-            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            background-color: #2D2742;
+            color: #F9FAFB;
+            border: 1px solid #4C3F73;
         }}
 
         .chat-bubble.user {{
-            background-color: {COLORS_DARK['user_bubble']};
-            color: white;
+            background-color: #8B5CF6;
+            color: #FFFFFF;
             font-weight: 500;
+            border: none;
         }}
 
-        /* Input area */
+        /* Input area styling */
         .input-container {{
             display: flex;
             gap: 0.75rem;
@@ -249,15 +289,54 @@ st.markdown(f"""
         .input-container input {{
             flex: 1;
             padding: 0.75rem;
-            border: 1px solid {COLORS_DARK['border']};
+            border: 1px solid {COLORS_DARK['border']} !important;
             border-radius: 8px;
             font-size: 1rem;
-            background-color: {COLORS_DARK['input_bg']};
-            color: {COLORS_DARK['text']};
+            background-color: {COLORS_DARK['input_bg']} !important;
+            color: {COLORS_DARK['text']} !important;
         }}
 
         .input-container input::placeholder {{
-            color: {COLORS_DARK['muted']};
+            color: #A1A1AA !important;
+        }}
+
+        .input-container input:focus {{
+            outline: none;
+            border-color: {COLORS_DARK['primary']} !important;
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1);
+        }}
+
+        /* Streamlit chat input styling */
+        .stChatInput {{
+            background-color: transparent;
+        }}
+
+        .stChatInputContainer {{
+            background-color: transparent;
+        }}
+
+        /* Override Streamlit input styling */
+        [data-testid="stChatInput"] input {{
+            background-color: {COLORS_DARK['input_bg']} !important;
+            border: 1px solid {COLORS_DARK['border']} !important;
+            color: {COLORS_DARK['text']} !important;
+            border-radius: 8px !important;
+        }}
+
+        [data-testid="stChatInput"] input::placeholder {{
+            color: #A1A1AA !important;
+        }}
+
+        /* Button styling in chat area */
+        .stChatInput button {{
+            background-color: {COLORS_DARK['primary']} !important;
+            color: white !important;
+            border: none !important;
+        }}
+
+        .stChatInput button:hover {{
+            background-color: {COLORS_DARK['accent']} !important;
+            color: {COLORS_DARK['bg']} !important;
         }}
 
         /* Loading and indicators */
