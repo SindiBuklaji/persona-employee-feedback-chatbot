@@ -312,6 +312,37 @@ st.markdown(f"""
             color: {COLORS_DARK['text']};
             border: 1px solid {COLORS_DARK['border']};
         }}
+
+        /* Override all inline light colors in dark mode */
+        /* Target divs with light mode card background */
+        div[style*="#F8F6FF"],
+        div[style*="background-color: #F8F6FF"] {{
+            background-color: {COLORS_DARK['card']} !important;
+            border-color: {COLORS_DARK['border']} !important;
+        }}
+
+        /* Target text with light mode colors */
+        p[style*="#111827"],
+        p[style*="color: #111827"],
+        span[style*="#111827"],
+        span[style*="color: #111827"],
+        h3[style*="#111827"],
+        h3[style*="color: #111827"] {{
+            color: {COLORS_DARK['text']} !important;
+        }}
+
+        /* Target muted text */
+        p[style*="#4B5563"],
+        p[style*="color: #4B5563"],
+        span[style*="#4B5563"],
+        span[style*="color: #4B5563"] {{
+            color: {COLORS_DARK['muted']} !important;
+        }}
+
+        /* Target border colors */
+        div[style*="border: 1px solid #D4CAFF"] {{
+            border-color: {COLORS_DARK['border']} !important;
+        }}
     }}
 
     /* Light Mode - Shared styles */
