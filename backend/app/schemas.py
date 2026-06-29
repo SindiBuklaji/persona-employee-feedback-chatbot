@@ -44,28 +44,21 @@ class ChatResponse(BaseModel):
 class QuestionnaireRequest(BaseModel):
     participant_id: str
 
-    # PERCEPTION: How did you perceive the assistant? (1-7 scale)
-    # Warmth
-    perc_warm_friendly: int = Field(ge=1, le=7)
-    perc_warm_understanding: int = Field(ge=1, le=7)
-    perc_warm_comfortable: int = Field(ge=1, le=7)
-    # Structured/Direct
-    perc_struct_direct: int = Field(ge=1, le=7)
-    perc_struct_professional: int = Field(ge=1, le=7)
-    perc_struct_task_focused: int = Field(ge=1, le=7)
+    # MANIPULATION CHECK: Assistant style perception (bipolar sliders, 1-7 scale)
+    perc_warmth_bipolar: int = Field(ge=1, le=7, description="1=Warm/supportive, 7=Direct/formal")
+    perc_task_focus_bipolar: int = Field(ge=1, le=7, description="1=Comforting, 7=Task-focused")
 
     # PSYCHOLOGICAL SAFETY: How safe did you feel during the conversation? (1-7 scale)
     psych_safe_1: int = Field(ge=1, le=7)
     psych_safe_2: int = Field(ge=1, le=7)
     psych_safe_3: int = Field(ge=1, le=7)
-    psych_safe_4: int = Field(ge=1, le=7)
-    psych_safe_5: int = Field(ge=1, le=7)
 
     # OPENNESS/HONESTY: How openly did you respond? (1-7 scale)
     openness_1: int = Field(ge=1, le=7)
     openness_2: int = Field(ge=1, le=7)
-    openness_3: int = Field(ge=1, le=7)
-    openness_4: int = Field(ge=1, le=7)
+
+    # ENGAGEMENT (optional)
+    engagement_self_report: int = Field(ge=1, le=7)
 
     # CONTROL VARIABLES
     ai_experience: int = Field(ge=1, le=7, description="Prior conversational AI experience")

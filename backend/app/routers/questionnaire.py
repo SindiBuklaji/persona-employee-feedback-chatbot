@@ -20,38 +20,22 @@ def submit_questionnaire(payload: QuestionnaireRequest, db: Session = Depends(ge
     if participant.questionnaire_completed:
         raise HTTPException(status_code=400, detail="Questionnaire already submitted.")
 
-    # Compute means for perception scales
-    warmth_items = [
-        payload.perc_warm_friendly,
-        payload.perc_warm_understanding,
-        payload.perc_warm_comfortable,
-    ]
-    perceived_warmth_mean = round(sum(warmth_items) / len(warmth_items), 4)
+    # Manipulation check (bipolar sliders) - no means needed, just store raw values
+    # These are diagnostic checks, not dependent variables
 
-    competence_items = [
-        payload.perc_struct_direct,
-        payload.perc_struct_professional,
-        payload.perc_struct_task_focused,
-    ]
-    perceived_competence_mean = round(sum(competence_items) / len(competence_items), 4)
-
-    # Compute mean for psychological safety
+    # Compute mean for psychological safety (3 items)
     psych_items = [
         payload.psych_safe_1,
         payload.psych_safe_2,
         payload.psych_safe_3,
-        payload.psych_safe_4,
-        payload.psych_safe_5,
     ]
     psychological_safety_mean = round(sum(psych_items) / len(psych_items), 4)
 
-    # Compute mean for openness/honesty (with reverse-coding for openness_4)
-    # openness_4 is "I held back some things" - reverse code it
+    # Compute mean for openness/honesty (2 items with reverse-coding for openness_2)
+    # openness_2 is "I held back some things" - reverse code it
     openness_items = [
         payload.openness_1,
-        payload.openness_2,
-        payload.openness_3,
-        (8 - payload.openness_4),  # Reverse code: 1→7, 2→6, ..., 7→1
+        (8 - payload.openness_2),  # Reverse code: 1→7, 2→6, ..., 7→1
     ]
     self_reported_honesty_mean = round(sum(openness_items) / len(openness_items), 4)
 
@@ -65,27 +49,19 @@ def submit_questionnaire(payload: QuestionnaireRequest, db: Session = Depends(ge
     row = QuestionnaireResponse(
         participant_id=payload.participant_id,
         timestamp_submit=now,
-        # Perception items
-        perc_warm_friendly=payload.perc_warm_friendly,
-        perc_warm_understanding=payload.perc_warm_understanding,
-        perc_warm_comfortable=payload.perc_warm_comfortable,
-        perc_struct_direct=payload.perc_struct_direct,
-        perc_struct_professional=payload.perc_struct_professional,
-        perc_struct_task_focused=payload.perc_struct_task_focused,
+        # Manipulation check (bipolar items)
+        perc_warmth_bipolar=payload.perc_warmth_bipolar,
+        perc_task_focus_bipolar=payload.perc_task_focus_bipolar,
         # Psychological safety items
         psych_safe_1=payload.psych_safe_1,
         psych_safe_2=payload.psych_safe_2,
         psych_safe_3=payload.psych_safe_3,
-        psych_safe_4=payload.psych_safe_4,
-        psych_safe_5=payload.psych_safe_5,
         # Openness/honesty items
         openness_1=payload.openness_1,
         openness_2=payload.openness_2,
-        openness_3=payload.openness_3,
-        openness_4=payload.openness_4,
+        # Engagement item
+        engagement_self_report=payload.engagement_self_report,
         # Computed means
-        perceived_warmth_mean=perceived_warmth_mean,
-        perceived_competence_mean=perceived_competence_mean,
         psychological_safety_mean=psychological_safety_mean,
         self_reported_honesty_mean=self_reported_honesty_mean,
         # Control variables

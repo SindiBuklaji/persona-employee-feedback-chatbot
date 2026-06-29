@@ -1055,7 +1055,7 @@ elif st.session_state.stage == "questionnaire":
     st.markdown("Please answer all required questions.")
 
     with st.form("questionnaire_form"):
-        def likert_item(question: str, key: str) -> int:
+        def likert_item(question: str, key: str, scale_label: str = "1 = Strongly disagree • 7 = Strongly agree") -> int:
             """Render a single Likert scale item with question label and scale."""
             st.markdown(f"""
             <div style="margin-bottom: 2rem; padding: 1.25rem; background-color: {COLORS['card']};
@@ -1065,7 +1065,7 @@ elif st.session_state.stage == "questionnaire":
                         {question}
                     </p>
                     <p style="margin: 0.5rem 0 0 0; font-size: 0.8rem; color: {COLORS['muted']};">
-                        1 = Strongly disagree &nbsp; • &nbsp; 7 = Strongly agree
+                        {scale_label}
                     </p>
                 </div>
             """, unsafe_allow_html=True)
@@ -1083,26 +1083,60 @@ elif st.session_state.stage == "questionnaire":
             st.markdown("</div>", unsafe_allow_html=True)
             return value
 
-        # Perception Section
-        st.markdown(f"<h3 style='margin-top: 0; margin-bottom: 1.5rem;'>📊 How did you perceive the assistant?</h3>", unsafe_allow_html=True)
+        def bipolar_item(question: str, left_label: str, right_label: str, key: str) -> int:
+            """Render a bipolar slider item for comparative scales."""
+            st.markdown(f"""
+            <div style="margin-bottom: 2rem; padding: 1.25rem; background-color: {COLORS['card']};
+                        border-radius: 12px; border: 1px solid {COLORS['border']};">
+                <div style="margin-bottom: 0.75rem;">
+                    <p style="margin: 0; font-weight: 600; color: {COLORS['text']}; font-size: 0.95rem;">
+                        {question}
+                    </p>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: {COLORS['muted']}; margin-bottom: 0.5rem;">
+                        <span>{left_label}</span>
+                        <span>{right_label}</span>
+                    </div>
+                </div>
+            """, unsafe_allow_html=True)
 
-        perc_warm_friendly = likert_item("The assistant seemed friendly.", "perc_warm_friendly")
-        perc_warm_understanding = likert_item("The assistant seemed understanding.", "perc_warm_understanding")
-        perc_warm_comfortable = likert_item("The assistant made me feel comfortable.", "perc_warm_comfortable")
-        perc_struct_direct = likert_item("The assistant seemed direct.", "perc_struct_direct")
-        perc_struct_professional = likert_item("The assistant seemed professional.", "perc_struct_professional")
-        perc_struct_task_focused = likert_item("The assistant seemed task-focused.", "perc_struct_task_focused")
+            value = st.slider(
+                label=question,
+                min_value=1,
+                max_value=7,
+                value=4,
+                step=1,
+                key=key,
+                label_visibility="collapsed"
+            )
+
+            st.markdown("</div>", unsafe_allow_html=True)
+            return value
+
+        # MANIPULATION CHECK Section
+        st.markdown(f"<h3 style='margin-top: 0; margin-bottom: 1.5rem;'>📊 How would you describe the assistant's style?</h3>", unsafe_allow_html=True)
+        st.markdown(f"<p style='color: {COLORS['muted']}; font-size: 0.9rem; margin-bottom: 1.5rem;'>Move the slider toward the side that better describes the assistant.</p>", unsafe_allow_html=True)
+
+        perc_warmth_bipolar = bipolar_item(
+            "Assistant's interpersonal approach",
+            "Warm and supportive",
+            "Direct and formal",
+            "perc_warmth_bipolar"
+        )
+        perc_task_focus_bipolar = bipolar_item(
+            "Assistant's focus",
+            "Comforting and empathetic",
+            "Task-focused and efficient",
+            "perc_task_focus_bipolar"
+        )
 
         st.divider()
 
         # Safety Section
         st.markdown(f"<h3 style='margin-top: 0; margin-bottom: 1.5rem;'>🛡️ How safe did you feel during the conversation?</h3>", unsafe_allow_html=True)
 
-        psych_safe_1 = likert_item("I felt safe to express any concerns I had.", "psych_safe_1")
-        psych_safe_2 = likert_item("I could be honest without worrying about negative consequences.", "psych_safe_2")
+        psych_safe_1 = likert_item("I felt safe to express concerns during the conversation.", "psych_safe_1")
+        psych_safe_2 = likert_item("I could be honest without worrying about being judged.", "psych_safe_2")
         psych_safe_3 = likert_item("I felt comfortable sharing critical feedback.", "psych_safe_3")
-        psych_safe_4 = likert_item("I felt able to say what I really thought.", "psych_safe_4")
-        psych_safe_5 = likert_item("I did not feel judged when expressing concerns.", "psych_safe_5")
 
         st.divider()
 
@@ -1110,10 +1144,15 @@ elif st.session_state.stage == "questionnaire":
         st.markdown(f"<h3 style='margin-top: 0; margin-bottom: 1.5rem;'>💭 How openly did you respond?</h3>", unsafe_allow_html=True)
 
         openness_1 = likert_item("I answered the assistant honestly.", "openness_1")
-        openness_2 = likert_item("I shared my real thoughts during the conversation.", "openness_2")
-        openness_3 = likert_item("I gave concrete details about the situation.", "openness_3")
-        openness_4 = likert_item("I held back some things I was thinking.", "openness_4")
-        st.caption("(Note: This item will be reverse-scored in analysis)")
+        openness_2 = likert_item("I held back some things I was thinking.", "openness_2")
+        st.caption("(Note: Last item will be reverse-scored in analysis)")
+
+        st.divider()
+
+        # Engagement Section
+        st.markdown(f"<h3 style='margin-top: 0; margin-bottom: 1.5rem;'>⚡ Engagement</h3>", unsafe_allow_html=True)
+
+        engagement_self_report = likert_item("I felt engaged during the conversation.", "engagement_self_report")
 
         st.divider()
 
@@ -1232,10 +1271,10 @@ elif st.session_state.stage == "questionnaire":
         if submitted:
             # Validate all required fields are answered
             required_items = [
-                "perc_warm_friendly", "perc_warm_understanding", "perc_warm_comfortable",
-                "perc_struct_direct", "perc_struct_professional", "perc_struct_task_focused",
-                "psych_safe_1", "psych_safe_2", "psych_safe_3", "psych_safe_4", "psych_safe_5",
-                "openness_1", "openness_2", "openness_3", "openness_4",
+                "perc_warmth_bipolar", "perc_task_focus_bipolar",
+                "psych_safe_1", "psych_safe_2", "psych_safe_3",
+                "openness_1", "openness_2",
+                "engagement_self_report",
                 "ai_experience"
             ]
 
@@ -1250,21 +1289,14 @@ elif st.session_state.stage == "questionnaire":
                 # Ensure all required fields are integers
                 payload = {
                     "participant_id": st.session_state.participant_id,
-                    "perc_warm_friendly": int(st.session_state.perc_warm_friendly),
-                    "perc_warm_understanding": int(st.session_state.perc_warm_understanding),
-                    "perc_warm_comfortable": int(st.session_state.perc_warm_comfortable),
-                    "perc_struct_direct": int(st.session_state.perc_struct_direct),
-                    "perc_struct_professional": int(st.session_state.perc_struct_professional),
-                    "perc_struct_task_focused": int(st.session_state.perc_struct_task_focused),
+                    "perc_warmth_bipolar": int(st.session_state.perc_warmth_bipolar),
+                    "perc_task_focus_bipolar": int(st.session_state.perc_task_focus_bipolar),
                     "psych_safe_1": int(st.session_state.psych_safe_1),
                     "psych_safe_2": int(st.session_state.psych_safe_2),
                     "psych_safe_3": int(st.session_state.psych_safe_3),
-                    "psych_safe_4": int(st.session_state.psych_safe_4),
-                    "psych_safe_5": int(st.session_state.psych_safe_5),
                     "openness_1": int(st.session_state.openness_1),
                     "openness_2": int(st.session_state.openness_2),
-                    "openness_3": int(st.session_state.openness_3),
-                    "openness_4": int(st.session_state.openness_4),
+                    "engagement_self_report": int(st.session_state.engagement_self_report),
                     "ai_experience": int(st.session_state.ai_experience),
                     "years_work_experience": float(years_work_experience) if years_work_experience else None,
                     "age": int(age) if age else None,

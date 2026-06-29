@@ -105,28 +105,21 @@ class QuestionnaireResponse(Base):
     timestamp_submit: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
-    # PERCEPTION ITEMS (1-7 scale): "How did you perceive the assistant?"
-    # Warmth (3 items)
-    perc_warm_friendly: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant seemed friendly.
-    perc_warm_understanding: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant seemed understanding.
-    perc_warm_comfortable: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant made me feel comfortable.
-    # Structured/Direct (3 items)
-    perc_struct_direct: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant seemed direct.
-    perc_struct_professional: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant seemed professional.
-    perc_struct_task_focused: Mapped[int] = mapped_column(Integer, nullable=True)  # The assistant seemed task-focused.
+    # MANIPULATION CHECK: Assistant style perception (bipolar sliders, 1-7 scale)
+    perc_warmth_bipolar: Mapped[int] = mapped_column(Integer, nullable=True)  # 1=Warm/supportive, 7=Direct/formal
+    perc_task_focus_bipolar: Mapped[int] = mapped_column(Integer, nullable=True)  # 1=Comforting, 7=Task-focused
 
     # PSYCHOLOGICAL SAFETY (1-7 scale): "How safe did you feel during the conversation?"
     psych_safe_1: Mapped[int] = mapped_column(Integer, nullable=True)  # I felt safe to express concerns
     psych_safe_2: Mapped[int] = mapped_column(Integer, nullable=True)  # Could be honest without consequences
     psych_safe_3: Mapped[int] = mapped_column(Integer, nullable=True)  # Comfortable sharing critical feedback
-    psych_safe_4: Mapped[int] = mapped_column(Integer, nullable=True)  # Able to say what I really thought
-    psych_safe_5: Mapped[int] = mapped_column(Integer, nullable=True)  # Did not feel judged
 
     # OPENNESS/HONESTY (1-7 scale): "How openly did you respond?"
     openness_1: Mapped[int] = mapped_column(Integer, nullable=True)  # Answered honestly
-    openness_2: Mapped[int] = mapped_column(Integer, nullable=True)  # Shared real thoughts
-    openness_3: Mapped[int] = mapped_column(Integer, nullable=True)  # Gave concrete details
-    openness_4: Mapped[int] = mapped_column(Integer, nullable=True)  # Held back some things (reverse-coded)
+    openness_2: Mapped[int] = mapped_column(Integer, nullable=True)  # Held back some things (reverse-coded)
+
+    # ENGAGEMENT (1-7 scale)
+    engagement_self_report: Mapped[int] = mapped_column(Integer, nullable=True)  # I felt engaged during the conversation
 
     # COMPUTED SCORES
     perceived_warmth_mean: Mapped[float | None] = mapped_column(Float, nullable=True)

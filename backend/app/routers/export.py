@@ -133,35 +133,26 @@ def export_participants(db: Session = Depends(get_db), _: None = Depends(verify_
 
 @router.get("/questionnaires.csv")
 def export_questionnaires(db: Session = Depends(get_db), _: None = Depends(verify_admin_token)) -> StreamingResponse:
-    """Export all questionnaire responses with perception, safety, and openness items."""
+    """Export all questionnaire responses with manipulation check, safety, openness, and engagement items."""
     buffer = io.StringIO()
     writer = csv.writer(buffer, quoting=csv.QUOTE_ALL)
     writer.writerow([
         "participant_id",
         "condition",
-        # Perception items - Warmth
-        "perc_warm_friendly",
-        "perc_warm_understanding",
-        "perc_warm_comfortable",
-        # Perception items - Structured/Direct
-        "perc_struct_direct",
-        "perc_struct_professional",
-        "perc_struct_task_focused",
-        "perceived_warmth_mean",
-        "perceived_competence_mean",
+        # Manipulation check (bipolar items)
+        "perc_warmth_bipolar",
+        "perc_task_focus_bipolar",
         # Psychological safety items
         "psych_safe_1",
         "psych_safe_2",
         "psych_safe_3",
-        "psych_safe_4",
-        "psych_safe_5",
         "psychological_safety_mean",
         # Openness/honesty items
         "openness_1",
-        "openness_2",
-        "openness_3",
-        "openness_4",
+        "openness_2_reverse_coded",
         "self_reported_honesty_mean",
+        # Engagement item
+        "engagement_self_report",
         # Control variables
         "ai_experience",
         "years_work_experience",
@@ -182,29 +173,20 @@ def export_questionnaires(db: Session = Depends(get_db), _: None = Depends(verif
             writer.writerow([
                 questionnaire.participant_id or "",
                 condition or "",
-                # Perception items - Warmth
-                questionnaire.perc_warm_friendly or "",
-                questionnaire.perc_warm_understanding or "",
-                questionnaire.perc_warm_comfortable or "",
-                # Perception items - Structured/Direct
-                questionnaire.perc_struct_direct or "",
-                questionnaire.perc_struct_professional or "",
-                questionnaire.perc_struct_task_focused or "",
-                questionnaire.perceived_warmth_mean or "",
-                questionnaire.perceived_competence_mean or "",
+                # Manipulation check (bipolar items)
+                questionnaire.perc_warmth_bipolar or "",
+                questionnaire.perc_task_focus_bipolar or "",
                 # Psychological safety items
                 questionnaire.psych_safe_1 or "",
                 questionnaire.psych_safe_2 or "",
                 questionnaire.psych_safe_3 or "",
-                questionnaire.psych_safe_4 or "",
-                questionnaire.psych_safe_5 or "",
                 questionnaire.psychological_safety_mean or "",
                 # Openness/honesty items
                 questionnaire.openness_1 or "",
-                questionnaire.openness_2 or "",
-                questionnaire.openness_3 or "",
-                questionnaire.openness_4 or "",
+                questionnaire.openness_2 or "",  # Raw value; reverse-code during analysis
                 questionnaire.self_reported_honesty_mean or "",
+                # Engagement item
+                questionnaire.engagement_self_report or "",
                 # Control variables
                 questionnaire.ai_experience or "",
                 questionnaire.years_work_experience or "",
@@ -345,29 +327,20 @@ def export_analysis_dataset(db: Session = Depends(get_db), _: None = Depends(ver
         "number_user_turns",
         "total_user_word_count",
         "average_user_message_length",
-        # Perception measures - Warmth
-        "perc_warm_friendly",
-        "perc_warm_understanding",
-        "perc_warm_comfortable",
-        "perceived_warmth_score",
-        # Perception measures - Structured/Direct
-        "perc_struct_direct",
-        "perc_struct_professional",
-        "perc_struct_task_focused",
-        "perceived_competence_score",
+        # Manipulation check (bipolar items)
+        "perc_warmth_bipolar",
+        "perc_task_focus_bipolar",
         # Psychological safety measures
         "psych_safe_1",
         "psych_safe_2",
         "psych_safe_3",
-        "psych_safe_4",
-        "psych_safe_5",
         "psychological_safety_score",
         # Openness/honesty measures
         "openness_1",
-        "openness_2",
-        "openness_3",
-        "openness_4",
+        "openness_2_raw",
         "self_reported_honesty_score",
+        # Engagement measure
+        "engagement_self_report",
         # Control variables
         "prior_ai_experience",
         "years_work_experience",
@@ -394,29 +367,20 @@ def export_analysis_dataset(db: Session = Depends(get_db), _: None = Depends(ver
                 participant.total_turns or "",
                 participant.total_user_words or "",
                 participant.average_user_message_length or "",
-                # Perception measures - Warmth
-                questionnaire.perc_warm_friendly if questionnaire else "",
-                questionnaire.perc_warm_understanding if questionnaire else "",
-                questionnaire.perc_warm_comfortable if questionnaire else "",
-                questionnaire.perceived_warmth_mean if questionnaire else "",
-                # Perception measures - Structured/Direct
-                questionnaire.perc_struct_direct if questionnaire else "",
-                questionnaire.perc_struct_professional if questionnaire else "",
-                questionnaire.perc_struct_task_focused if questionnaire else "",
-                questionnaire.perceived_competence_mean if questionnaire else "",
+                # Manipulation check (bipolar items)
+                questionnaire.perc_warmth_bipolar if questionnaire else "",
+                questionnaire.perc_task_focus_bipolar if questionnaire else "",
                 # Psychological safety measures
                 questionnaire.psych_safe_1 if questionnaire else "",
                 questionnaire.psych_safe_2 if questionnaire else "",
                 questionnaire.psych_safe_3 if questionnaire else "",
-                questionnaire.psych_safe_4 if questionnaire else "",
-                questionnaire.psych_safe_5 if questionnaire else "",
                 questionnaire.psychological_safety_mean if questionnaire else "",
                 # Openness/honesty measures
                 questionnaire.openness_1 if questionnaire else "",
-                questionnaire.openness_2 if questionnaire else "",
-                questionnaire.openness_3 if questionnaire else "",
-                questionnaire.openness_4 if questionnaire else "",
+                questionnaire.openness_2 if questionnaire else "",  # Raw value; reverse-code during analysis
                 questionnaire.self_reported_honesty_mean if questionnaire else "",
+                # Engagement measure
+                questionnaire.engagement_self_report if questionnaire else "",
                 # Control variables
                 questionnaire.ai_experience if questionnaire else "",
                 questionnaire.years_work_experience if questionnaire else "",
