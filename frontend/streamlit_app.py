@@ -15,6 +15,11 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
+# Mobile viewport settings
+st.markdown("""
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+""", unsafe_allow_html=True)
+
 # Modern purple color palette with better mobile contrast
 COLORS = {
     "bg": "#FFFFFF",
@@ -811,33 +816,32 @@ elif st.session_state.stage == "questionnaire":
 
             # All required items answered, proceed with submission
             with st.spinner("Submitting your responses..."):
-                data = api_post(
-                    "/questionnaire",
-                    {
-                        "participant_id": st.session_state.participant_id,
-                        "perc_warm_friendly": st.session_state.perc_warm_friendly,
-                        "perc_warm_understanding": st.session_state.perc_warm_understanding,
-                        "perc_warm_comfortable": st.session_state.perc_warm_comfortable,
-                        "perc_struct_direct": st.session_state.perc_struct_direct,
-                        "perc_struct_professional": st.session_state.perc_struct_professional,
-                        "perc_struct_task_focused": st.session_state.perc_struct_task_focused,
-                        "psych_safe_1": st.session_state.psych_safe_1,
-                        "psych_safe_2": st.session_state.psych_safe_2,
-                        "psych_safe_3": st.session_state.psych_safe_3,
-                        "psych_safe_4": st.session_state.psych_safe_4,
-                        "psych_safe_5": st.session_state.psych_safe_5,
-                        "openness_1": st.session_state.openness_1,
-                        "openness_2": st.session_state.openness_2,
-                        "openness_3": st.session_state.openness_3,
-                        "openness_4": st.session_state.openness_4,
-                        "ai_experience": st.session_state.get("ai_experience"),
-                        "years_work_experience": years_work_experience,
-                        "age": age if age else None,
-                        "gender": gender if gender else None,
-                        "industry": industry if industry else None,
-                        "job_role": job_role if job_role else None,
-                    },
-                )
+                # Ensure all required fields are integers
+                payload = {
+                    "participant_id": st.session_state.participant_id,
+                    "perc_warm_friendly": int(st.session_state.perc_warm_friendly),
+                    "perc_warm_understanding": int(st.session_state.perc_warm_understanding),
+                    "perc_warm_comfortable": int(st.session_state.perc_warm_comfortable),
+                    "perc_struct_direct": int(st.session_state.perc_struct_direct),
+                    "perc_struct_professional": int(st.session_state.perc_struct_professional),
+                    "perc_struct_task_focused": int(st.session_state.perc_struct_task_focused),
+                    "psych_safe_1": int(st.session_state.psych_safe_1),
+                    "psych_safe_2": int(st.session_state.psych_safe_2),
+                    "psych_safe_3": int(st.session_state.psych_safe_3),
+                    "psych_safe_4": int(st.session_state.psych_safe_4),
+                    "psych_safe_5": int(st.session_state.psych_safe_5),
+                    "openness_1": int(st.session_state.openness_1),
+                    "openness_2": int(st.session_state.openness_2),
+                    "openness_3": int(st.session_state.openness_3),
+                    "openness_4": int(st.session_state.openness_4),
+                    "ai_experience": int(st.session_state.ai_experience),
+                    "years_work_experience": float(years_work_experience) if years_work_experience else None,
+                    "age": int(age) if age else None,
+                    "gender": gender if gender else None,
+                    "industry": industry if industry else None,
+                    "job_role": job_role if job_role else None,
+                }
+                data = api_post("/questionnaire", payload)
                 st.session_state.stage = "done"
                 st.session_state.psychological_safety_mean = data["psychological_safety_mean"]
                 st.rerun()
