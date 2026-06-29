@@ -820,10 +820,10 @@ elif st.session_state.stage == "questionnaire":
 
         st.markdown('<div class="demographics-grid">', unsafe_allow_html=True)
 
-        # Column 1: AI Experience
+        # Column 1: AI Experience (Required)
         st.markdown(f"""
         <div>
-            <span class="demo-label">Experience with conversational AI</span>
+            <span class="demo-label">Experience with conversational AI <span style="color: #EF4444;">*</span></span>
         </div>
         """, unsafe_allow_html=True)
         ai_exp_selection = st.selectbox(
@@ -837,20 +837,34 @@ elif st.session_state.stage == "questionnaire":
         else:
             st.session_state.ai_experience = None
 
-        # Column 2: Years of work experience
+        # Column 2: Years of work experience (Required)
         st.markdown(f"""
         <div>
-            <span class="demo-label">Years of work experience</span>
+            <span class="demo-label">Years of work experience <span style="color: #EF4444;">*</span></span>
         </div>
         """, unsafe_allow_html=True)
-        years_work_experience = st.number_input(
-            "Years of work experience",
-            min_value=0.0,
-            max_value=70.0,
-            step=0.5,
-            value=None,
+        years_options = ["", "0 - Less than 1 year", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11-15", "16-20", "20+"]
+        years_selection = st.selectbox(
+            label="Years of work experience",
+            options=years_options,
+            index=0,
             label_visibility="collapsed"
         )
+        if years_selection and years_selection != "":
+            # Parse the selection and convert to float
+            first_part = years_selection.split()[0]
+            if first_part == "0":
+                years_work_experience = 0.5
+            elif first_part == "11-15":
+                years_work_experience = 13.0
+            elif first_part == "16-20":
+                years_work_experience = 18.0
+            elif first_part == "20+":
+                years_work_experience = 25.0
+            else:
+                years_work_experience = float(first_part)
+        else:
+            years_work_experience = None
 
         # Column 3: Age
         st.markdown(f"""
