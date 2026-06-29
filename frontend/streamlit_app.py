@@ -608,6 +608,47 @@ def api_post(path: str, payload: dict[str, Any]) -> dict[str, Any]:
     return response.json()
 
 
+def api_get(path: str) -> dict[str, Any]:
+    """Make GET request to backend API"""
+    response = requests.get(f"{BACKEND_URL}{path}", timeout=120)
+    response.raise_for_status()
+    return response.json()
+
+
+def restore_session_from_backend() -> None:
+    """Restore ongoing session from backend if participant exists in URL or session"""
+    # Check if participant_id exists in session state
+    if st.session_state.get("participant_id"):
+        try:
+            # Fetch session data from backend
+            data = api_get(f"/session/{st.session_state.participant_id}")
+
+            # Restore session state from backend
+            st.session_state.condition = data.get("condition")
+            st.session_state.vignette_title = data.get("vignette_title")
+            st.session_state.vignette_text = data.get("vignette_text")
+            st.session_state.opening_message = data.get("opening_message")
+            st.session_state.chat_completed = data.get("chat_completed", False)
+            st.session_state.turns_used = data.get("turns_used", 0)
+            st.session_state.min_turns = data.get("min_turns", 3)
+            st.session_state.max_turns = data.get("max_turns", 5)
+
+            # Restore chat history
+            if data.get("messages"):
+                st.session_state.chat_history = data["messages"]
+
+            # Determine current stage based on completion status
+            if st.session_state.chat_completed:
+                st.session_state.stage = "questionnaire"
+            elif st.session_state.chat_history:
+                st.session_state.stage = "chat"
+            else:
+                st.session_state.stage = "vignette"
+        except Exception as e:
+            # If restoration fails, just continue with current state
+            pass
+
+
 def init_state() -> None:
     defaults = {
         "stage": "consent",
@@ -666,6 +707,7 @@ def render_chat_messages():
 
 
 init_state()
+restore_session_from_backend()
 
 if "loading" not in st.session_state:
     st.session_state.loading = False
@@ -798,6 +840,14 @@ elif st.session_state.stage == "vignette":
         {st.session_state.vignette_text}
     </div>
     """, unsafe_allow_html=True)
+
+    # Add spacing and continue button
+    st.markdown("")
+    col1, col2, col3 = st.columns([1, 1.5, 1])
+    with col2:
+        if st.button("Continue to Chat →", use_container_width=True, type="primary"):
+            st.session_state.stage = "chat"
+            st.rerun()
 
 # CHAT PAGE
 elif st.session_state.stage == "chat":
