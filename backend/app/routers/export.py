@@ -70,7 +70,7 @@ def export_transcripts(db: Session = Depends(get_db), _: None = Depends(verify_a
                 (message.content or "").replace('\n', ' ').replace('\r', ''),  # Clean newlines
                 message.turn_index or 0,
                 message.word_count or 0,
-                message.created_at.isoformat() if message.created_at else "",
+                message.timestamp_created.isoformat() if message.timestamp_created else "",
             ])
 
         buffer.seek(0)
