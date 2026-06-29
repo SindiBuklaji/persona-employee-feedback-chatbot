@@ -707,7 +707,6 @@ def render_chat_messages():
 
 
 init_state()
-restore_session_from_backend()
 
 if "loading" not in st.session_state:
     st.session_state.loading = False
