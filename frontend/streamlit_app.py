@@ -20,8 +20,8 @@ st.markdown("""
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 """, unsafe_allow_html=True)
 
-# Modern purple color palette with better mobile contrast
-COLORS = {
+# Color palette - will adapt to system dark/light mode preference
+COLORS_LIGHT = {
     "bg": "#FFFFFF",
     "card": "#F8F6FF",
     "text": "#111827",
@@ -33,20 +33,36 @@ COLORS = {
     "user_bubble": "#7C3AED",
 }
 
-# Custom CSS for modern design
+COLORS_DARK = {
+    "bg": "#0F172A",
+    "card": "#1E293B",
+    "text": "#F1F5F9",
+    "muted": "#94A3B8",
+    "border": "#475569",
+    "primary": "#A78BFA",
+    "teal": "#A78BFA",
+    "assistant_bubble": "#334155",
+    "user_bubble": "#A78BFA",
+}
+
+# Use light mode colors as default
+COLORS = COLORS_LIGHT
+
+# Custom CSS with dark mode support
 st.markdown(f"""
 <style>
     * {{
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
     }}
 
+    /* Light Mode (Default) */
     body {{
-        background-color: {COLORS['bg']};
-        color: {COLORS['text']};
+        background-color: {COLORS_LIGHT['bg']};
+        color: {COLORS_LIGHT['text']};
     }}
 
     .main {{
-        background-color: {COLORS['bg']};
+        background-color: {COLORS_LIGHT['bg']};
         padding: 1.5rem;
     }}
 
@@ -57,17 +73,17 @@ st.markdown(f"""
 
     /* Card styling */
     .card {{
-        background-color: {COLORS['card']};
+        background-color: {COLORS_LIGHT['card']};
         border-radius: 12px;
         padding: 2rem;
         box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-        border: 1px solid {COLORS['border']};
+        border: 1px solid {COLORS_LIGHT['border']};
         margin-bottom: 1.5rem;
     }}
 
     /* Button styling */
     .stButton > button {{
-        background-color: {COLORS['primary']};
+        background-color: {COLORS_LIGHT['primary']};
         color: white;
         border: none;
         border-radius: 8px;
@@ -78,32 +94,131 @@ st.markdown(f"""
     }}
 
     .stButton > button:hover {{
-        background-color: #2563EB;
-        box-shadow: 0 4px 12px rgba(59,130,246,0.15);
+        background-color: #6D28D9;
+        box-shadow: 0 4px 12px rgba(124,58,237,0.15);
     }}
 
     .stButton > button:disabled {{
-        background-color: {COLORS['muted']};
+        background-color: {COLORS_LIGHT['muted']};
         opacity: 0.6;
     }}
 
     /* Title styling */
     h1 {{
-        color: {COLORS['text']};
+        color: {COLORS_LIGHT['text']};
         font-size: 2rem;
         font-weight: 700;
         margin-bottom: 0.5rem;
     }}
 
+    /* Dark Mode - Auto-detect user preference */
+    @media (prefers-color-scheme: dark) {{
+        body {{
+            background-color: {COLORS_DARK['bg']};
+            color: {COLORS_DARK['text']};
+        }}
+
+        .main {{
+            background-color: {COLORS_DARK['bg']};
+        }}
+
+        .card {{
+            background-color: {COLORS_DARK['card']};
+            border: 1px solid {COLORS_DARK['border']};
+            box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }}
+
+        .stButton > button {{
+            background-color: {COLORS_DARK['primary']};
+        }}
+
+        .stButton > button:hover {{
+            background-color: #C4B5FD;
+            color: #0F172A;
+        }}
+
+        .stButton > button:disabled {{
+            background-color: {COLORS_DARK['muted']};
+        }}
+
+        h1 {{
+            color: {COLORS_DARK['text']};
+        }}
+
+        h2 {{
+            color: {COLORS_DARK['text']};
+        }}
+
+        h3 {{
+            color: {COLORS_DARK['text']};
+        }}
+
+        .stInfo {{
+            background-color: {COLORS_DARK['assistant_bubble']};
+            border-left: 4px solid {COLORS_DARK['primary']};
+        }}
+
+        .stCaption {{
+            color: {COLORS_DARK['muted']};
+        }}
+
+        hr {{
+            border-top: 1px solid {COLORS_DARK['border']};
+        }}
+
+        .stMetric {{
+            background-color: {COLORS_DARK['card']};
+        }}
+
+        .chat-container {{
+            background-color: {COLORS_DARK['card']};
+            border: 1px solid {COLORS_DARK['border']};
+        }}
+
+        .avatar.user {{
+            color: {COLORS_DARK['text']};
+        }}
+
+        .avatar.assistant {{
+            background-color: {COLORS_DARK['assistant_bubble']};
+        }}
+
+        .chat-bubble.assistant {{
+            background-color: {COLORS_DARK['assistant_bubble']};
+            color: {COLORS_DARK['text']};
+            border: 1px solid {COLORS_DARK['border']};
+        }}
+
+        .input-container {{
+            background-color: {COLORS_DARK['card']};
+            border: 1px solid {COLORS_DARK['border']};
+        }}
+
+        .input-container input {{
+            border: 1px solid {COLORS_DARK['border']};
+            background-color: {COLORS_DARK['bg']};
+            color: {COLORS_DARK['text']};
+        }}
+
+        .loading-indicator {{
+            color: {COLORS_DARK['muted']};
+        }}
+
+        .turn-counter {{
+            color: {COLORS_DARK['muted']};
+        }}
+    }}
+
+    /* Light Mode - Shared styles */
     h2 {{
-        color: {COLORS['text']};
+        color: {COLORS_LIGHT['text']};
         font-size: 1.5rem;
         font-weight: 600;
         margin-top: 1.5rem;
     }}
 
     h3 {{
-        color: {COLORS['text']};
+        color: {COLORS_LIGHT['text']};
         font-weight: 600;
     }}
 
@@ -121,14 +236,14 @@ st.markdown(f"""
 
     /* Info styling */
     .stInfo {{
-        background-color: {COLORS['assistant_bubble']};
+        background-color: {COLORS_LIGHT['assistant_bubble']};
         border-radius: 8px;
-        border-left: 4px solid {COLORS['primary']};
+        border-left: 4px solid {COLORS_LIGHT['primary']};
     }}
 
     /* Caption styling */
     .stCaption {{
-        color: {COLORS['muted']};
+        color: {COLORS_LIGHT['muted']};
         font-size: 0.875rem;
     }}
 
@@ -145,13 +260,13 @@ st.markdown(f"""
     /* Divider */
     hr {{
         border: none;
-        border-top: 1px solid {COLORS['border']};
+        border-top: 1px solid {COLORS_LIGHT['border']};
         margin: 2rem 0;
     }}
 
     /* Metric styling */
     .stMetric {{
-        background-color: {COLORS['card']};
+        background-color: {COLORS_LIGHT['card']};
         border-radius: 8px;
         padding: 1rem;
         box-shadow: 0 1px 3px rgba(0,0,0,0.08);
@@ -163,10 +278,10 @@ st.markdown(f"""
         flex-direction: column;
         gap: 0.75rem;
         padding: 1.5rem;
-        background-color: {COLORS['card']};
+        background-color: {COLORS_LIGHT['card']};
         border-radius: 12px;
         min-height: 400px;
-        border: 1px solid {COLORS['border']};
+        border: 1px solid {COLORS_LIGHT['border']};
         margin-bottom: 1rem;
     }}
 
@@ -198,12 +313,12 @@ st.markdown(f"""
     }}
 
     .avatar.assistant {{
-        background-color: {COLORS['assistant_bubble']};
+        background-color: {COLORS_LIGHT['assistant_bubble']};
     }}
 
     .avatar.user {{
         background-color: transparent;
-        color: {COLORS['text']};
+        color: {COLORS_LIGHT['text']};
     }}
 
     /* Chat bubble styling */
@@ -218,13 +333,13 @@ st.markdown(f"""
     }}
 
     .chat-bubble.assistant {{
-        background-color: {COLORS['assistant_bubble']};
-        color: {COLORS['text']};
-        border: 1px solid {COLORS['border']};
+        background-color: {COLORS_LIGHT['assistant_bubble']};
+        color: {COLORS_LIGHT['text']};
+        border: 1px solid {COLORS_LIGHT['border']};
     }}
 
     .chat-bubble.user {{
-        background-color: {COLORS['user_bubble']};
+        background-color: {COLORS_LIGHT['user_bubble']};
         color: #FFFFFF;
         font-weight: 500;
     }}
@@ -234,15 +349,15 @@ st.markdown(f"""
         display: flex;
         gap: 0.75rem;
         padding: 1rem;
-        background-color: {COLORS['card']};
+        background-color: {COLORS_LIGHT['card']};
         border-radius: 12px;
-        border: 1px solid {COLORS['border']};
+        border: 1px solid {COLORS_LIGHT['border']};
     }}
 
     .input-container input {{
         flex: 1;
         padding: 0.75rem;
-        border: 1px solid {COLORS['border']};
+        border: 1px solid {COLORS_LIGHT['border']};
         border-radius: 8px;
         font-size: 1rem;
     }}
@@ -253,7 +368,7 @@ st.markdown(f"""
         align-items: center;
         justify-content: flex-start;
         gap: 0.5rem;
-        color: {COLORS['muted']};
+        color: {COLORS_LIGHT['muted']};
         font-size: 0.875rem;
         margin-top: 0.5rem;
     }}
@@ -261,7 +376,7 @@ st.markdown(f"""
     /* Turn counter */
     .turn-counter {{
         text-align: center;
-        color: {COLORS['muted']};
+        color: {COLORS_LIGHT['muted']};
         font-size: 0.875rem;
         margin: 1rem 0 0 0;
     }}
