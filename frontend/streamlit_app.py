@@ -34,15 +34,18 @@ COLORS_LIGHT = {
 }
 
 COLORS_DARK = {
-    "bg": "#0F172A",
-    "card": "#1E293B",
-    "text": "#F1F5F9",
-    "muted": "#94A3B8",
-    "border": "#475569",
-    "primary": "#A78BFA",
-    "teal": "#A78BFA",
-    "assistant_bubble": "#334155",
-    "user_bubble": "#A78BFA",
+    "bg": "#0F1117",
+    "card": "#1F2937",
+    "card_secondary": "#27233A",
+    "text": "#F9FAFB",
+    "muted": "#D1D5DB",
+    "border": "#4C3F73",
+    "primary": "#8B5CF6",
+    "teal": "#8B5CF6",
+    "accent": "#C4B5FD",
+    "assistant_bubble": "#252A3A",
+    "user_bubble": "#8B5CF6",
+    "input_bg": "#2A2D36",
 }
 
 # Use light mode colors as default
@@ -120,36 +123,53 @@ st.markdown(f"""
 
         .main {{
             background-color: {COLORS_DARK['bg']};
+            padding: 1.5rem;
+        }}
+
+        .stForm {{
+            background-color: transparent;
         }}
 
         .card {{
             background-color: {COLORS_DARK['card']};
             border: 1px solid {COLORS_DARK['border']};
-            box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }}
+
+        /* Welcome page card styling in dark mode */
+        [data-testid="column"]:has(> div > div > div > div > div > div > div > h3) div:nth-child(2) {{
+            background-color: {COLORS_DARK['card']} !important;
+            border: 1px solid {COLORS_DARK['border']} !important;
         }}
 
         .stButton > button {{
             background-color: {COLORS_DARK['primary']};
+            color: white;
+            border: 1px solid {COLORS_DARK['primary']};
         }}
 
         .stButton > button:hover {{
-            background-color: #C4B5FD;
-            color: #0F172A;
+            background-color: {COLORS_DARK['accent']};
+            color: {COLORS_DARK['bg']};
+            border-color: {COLORS_DARK['accent']};
         }}
 
         .stButton > button:disabled {{
             background-color: {COLORS_DARK['muted']};
+            opacity: 0.5;
         }}
 
-        h1 {{
+        /* Text styling */
+        h1, h2, h3 {{
             color: {COLORS_DARK['text']};
         }}
 
-        h2 {{
+        p {{
             color: {COLORS_DARK['text']};
         }}
 
-        h3 {{
+        /* Strong/bold text */
+        strong {{
             color: {COLORS_DARK['text']};
         }}
 
@@ -162,6 +182,15 @@ st.markdown(f"""
             color: {COLORS_DARK['muted']};
         }}
 
+        .stCheckbox {{
+            color: {COLORS_DARK['text']};
+        }}
+
+        /* Checkbox label styling */
+        .stCheckbox label {{
+            color: {COLORS_DARK['text']} !important;
+        }}
+
         hr {{
             border-top: 1px solid {COLORS_DARK['border']};
         }}
@@ -170,42 +199,118 @@ st.markdown(f"""
             background-color: {COLORS_DARK['card']};
         }}
 
+        /* Chat container - dark background like scenario page */
         .chat-container {{
+            display: flex !important;
+            flex-direction: column;
+            gap: 0.75rem;
+            padding: 1.5rem;
             background-color: {COLORS_DARK['card']};
+            border-radius: 12px;
+            min-height: 400px;
             border: 1px solid {COLORS_DARK['border']};
-        }}
-
-        .avatar.user {{
-            color: {COLORS_DARK['text']};
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
         }}
 
         .avatar.assistant {{
             background-color: {COLORS_DARK['assistant_bubble']};
+            color: white;
+        }}
+
+        .avatar.user {{
+            background-color: transparent;
+            color: {COLORS_DARK['text']};
         }}
 
         .chat-bubble.assistant {{
             background-color: {COLORS_DARK['assistant_bubble']};
             color: {COLORS_DARK['text']};
             border: 1px solid {COLORS_DARK['border']};
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
         }}
 
+        .chat-bubble.user {{
+            background-color: {COLORS_DARK['user_bubble']};
+            color: white;
+            font-weight: 500;
+        }}
+
+        /* Input area */
         .input-container {{
+            display: flex;
+            gap: 0.75rem;
+            padding: 1rem;
             background-color: {COLORS_DARK['card']};
+            border-radius: 12px;
             border: 1px solid {COLORS_DARK['border']};
         }}
 
         .input-container input {{
+            flex: 1;
+            padding: 0.75rem;
             border: 1px solid {COLORS_DARK['border']};
-            background-color: {COLORS_DARK['bg']};
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: {COLORS_DARK['input_bg']};
             color: {COLORS_DARK['text']};
         }}
 
-        .loading-indicator {{
+        .input-container input::placeholder {{
             color: {COLORS_DARK['muted']};
         }}
 
-        .turn-counter {{
+        /* Loading and indicators */
+        .loading-indicator {{
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 0.5rem;
             color: {COLORS_DARK['muted']};
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }}
+
+        .turn-counter {{
+            text-align: center;
+            color: {COLORS_DARK['muted']};
+            font-size: 0.875rem;
+            margin: 1rem 0 0 0;
+        }}
+
+        /* Navigation buttons */
+        [data-testid="column"] button {{
+            border: 1px solid {COLORS_DARK['border']};
+            background-color: {COLORS_DARK['card']};
+            color: {COLORS_DARK['text']};
+        }}
+
+        [data-testid="column"] button:hover {{
+            background-color: {COLORS_DARK['primary']};
+            color: white;
+            border-color: {COLORS_DARK['primary']};
+        }}
+
+        /* Demo label styling */
+        .demo-label {{
+            color: {COLORS_DARK['text']} !important;
+        }}
+
+        /* Select/dropdown styling */
+        .stSelectbox {{
+            color: {COLORS_DARK['text']};
+        }}
+
+        /* Slider styling */
+        .stSlider {{
+            color: {COLORS_DARK['text']};
+        }}
+
+        /* Form text inputs */
+        .stTextInput input {{
+            background-color: {COLORS_DARK['input_bg']};
+            color: {COLORS_DARK['text']};
+            border: 1px solid {COLORS_DARK['border']};
         }}
     }}
 
@@ -461,6 +566,38 @@ st.markdown(f"""
         display: block;
         white-space: normal;
     }}
+
+    /* Welcome page styling - ensure proper contrast in all modes */
+    .what-to-expect-item {{
+        display: flex;
+        gap: 0.75rem;
+        align-items: flex-start;
+        padding: 0.75rem 0;
+    }}
+
+    .what-to-expect-item strong {{
+        font-weight: 600;
+    }}
+
+    .what-to-expect-item p {{
+        margin: 0.25rem 0 0 0;
+        font-size: 0.9rem;
+    }}
+
+    /* Ensure proper text contrast in dark mode for welcome page */
+    @media (prefers-color-scheme: dark) {{
+        .what-to-expect-item strong {{
+            color: {COLORS_DARK['text']};
+        }}
+
+        .what-to-expect-item span:last-of-type {{
+            color: {COLORS_DARK['muted']};
+        }}
+
+        .what-to-expect-item p {{
+            color: {COLORS_DARK['muted']};
+        }}
+    }}
 </style>
 """, unsafe_allow_html=True)
 
@@ -490,13 +627,14 @@ def init_state() -> None:
 
 def progress_indicator(current: int, total: int = 3):
     """Display modern progress indicator"""
+    # Detect dark mode - use prefers-color-scheme media query
     st.markdown(f"""
     <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; height: 2.5rem;">
-        <span style="font-size: 0.875rem; color: {COLORS['muted']}; white-space: nowrap;">
+        <span style="font-size: 0.875rem; color: {COLORS_LIGHT['muted']}; white-space: nowrap;">
             Step {current} of {total}
         </span>
-        <div style="flex-grow: 1; height: 4px; background-color: {COLORS['border']}; border-radius: 2px; overflow: hidden;">
-            <div style="width: {(current/total)*100}%; height: 100%; background-color: {COLORS['primary']}; transition: width 0.3s ease;"></div>
+        <div style="flex-grow: 1; height: 4px; background-color: {COLORS_LIGHT['border']}; border-radius: 2px; overflow: hidden;">
+            <div style="width: {(current/total)*100}%; height: 100%; background-color: {COLORS_LIGHT['primary']}; transition: width 0.3s ease;"></div>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -545,29 +683,29 @@ if st.session_state.stage == "consent":
         """)
 
         st.markdown(f"""
-        <div style="display: grid; gap: 0.75rem; margin: 1rem 0;">
-            <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
-                <span style="font-size: 1.25rem; min-width: 24px;">📋</span>
-                <div>
-                    <strong style="color: {COLORS['text']};">Scenario</strong>
-                    <span style="color: {COLORS['muted']}; font-size: 0.9rem;"> — 1 minute</span>
-                    <p style="margin: 0.25rem 0 0 0; color: {COLORS['muted']}; font-size: 0.9rem;">Read a short workplace situation</p>
+        <div style="display: grid; gap: 1rem; margin: 1.5rem 0;">
+            <div class="what-to-expect-item">
+                <span style="font-size: 1.25rem; min-width: 28px; flex-shrink: 0;">📋</span>
+                <div style="flex-grow: 1;">
+                    <strong>Scenario</strong>
+                    <span style="font-size: 0.9rem;"> — 1 minute</span>
+                    <p>Read a short workplace situation</p>
                 </div>
             </div>
-            <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
-                <span style="font-size: 1.25rem; min-width: 24px;">💬</span>
-                <div>
-                    <strong style="color: {COLORS['text']};">Chat</strong>
-                    <span style="color: {COLORS['muted']}; font-size: 0.9rem;"> — 5 minutes</span>
-                    <p style="margin: 0.25rem 0 0 0; color: {COLORS['muted']}; font-size: 0.9rem;">Have a 3–5 turn conversation with an AI assistant</p>
+            <div class="what-to-expect-item">
+                <span style="font-size: 1.25rem; min-width: 28px; flex-shrink: 0;">💬</span>
+                <div style="flex-grow: 1;">
+                    <strong>Chat</strong>
+                    <span style="font-size: 0.9rem;"> — 5 minutes</span>
+                    <p>Have a 3–5 turn conversation with an AI assistant</p>
                 </div>
             </div>
-            <div style="display: flex; gap: 0.75rem; align-items: flex-start;">
-                <span style="font-size: 1.25rem; min-width: 24px;">📝</span>
-                <div>
-                    <strong style="color: {COLORS['text']};">Questionnaire</strong>
-                    <span style="color: {COLORS['muted']}; font-size: 0.9rem;"> — 3 minutes</span>
-                    <p style="margin: 0.25rem 0 0 0; color: {COLORS['muted']}; font-size: 0.9rem;">Share your thoughts and background</p>
+            <div class="what-to-expect-item">
+                <span style="font-size: 1.25rem; min-width: 28px; flex-shrink: 0;">📝</span>
+                <div style="flex-grow: 1;">
+                    <strong>Questionnaire</strong>
+                    <span style="font-size: 0.9rem;"> — 3 minutes</span>
+                    <p>Share your thoughts and background</p>
                 </div>
             </div>
         </div>
@@ -576,17 +714,22 @@ if st.session_state.stage == "consent":
         st.markdown("### Requirements")
         st.markdown(f"""
         <div style="margin: 1.5rem 0;">
-            <span style="color: {COLORS['primary']}; font-weight: 600;">✓</span> You must be at least 18 years old
-            <br/>
-            <span style="color: {COLORS['primary']}; font-weight: 600;">✓</span> You should have some workplace experience
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem; align-items: flex-start;">
+                <span style="color: {COLORS_LIGHT['primary']}; font-weight: 600; flex-shrink: 0; margin-top: 2px;">✓</span>
+                <span>You must be at least 18 years old</span>
+            </div>
+            <div style="display: flex; gap: 0.5rem; align-items: flex-start;">
+                <span style="color: {COLORS_LIGHT['primary']}; font-weight: 600; flex-shrink: 0; margin-top: 2px;">✓</span>
+                <span>You should have some workplace experience</span>
+            </div>
         </div>
         """, unsafe_allow_html=True)
 
     with col2:
         st.markdown(f"""
-        <div style="padding: 1.5rem; background-color: {COLORS['card']}; border-radius: 12px; border: 1px solid {COLORS['border']};
+        <div style="padding: 1.5rem; background-color: {COLORS_LIGHT['card']}; border-radius: 12px; border: 1px solid {COLORS_LIGHT['border']};
                     box-shadow: 0 1px 3px rgba(0,0,0,0.08); height: fit-content; position: sticky; top: 100px;">
-            <h3 style="margin: 0 0 1rem 0; color: {COLORS['text']};">Ready to participate?</h3>
+            <h3 style="margin: 0 0 1.25rem 0; color: {COLORS_LIGHT['text']}; font-size: 1.1rem;">Ready to participate?</h3>
         </div>
         """, unsafe_allow_html=True)
 
