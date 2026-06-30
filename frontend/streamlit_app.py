@@ -202,96 +202,96 @@ st.markdown(f"""
         /* Chat container - dark background matching app theme */
         .chat-container {{
             display: flex !important;
-            flex-direction: column;
-            gap: 0.75rem;
-            padding: 1.25rem;
-            background-color: {COLORS_DARK['card']};
-            border-radius: 12px;
-            min-height: 350px;
-            max-height: 65vh;
-            overflow-y: auto;
-            border: 1px solid {COLORS_DARK['border']};
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            flex-direction: column !important;
+            gap: 0.75rem !important;
+            padding: 1.25rem !important;
+            background-color: {COLORS_DARK['card']} !important;
+            border-radius: 12px !important;
+            min-height: 350px !important;
+            max-height: 65vh !important;
+            overflow-y: auto !important;
+            border: 1px solid {COLORS_DARK['border']} !important;
+            margin-bottom: 1rem !important;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
         }}
 
         /* Message row - reduce spacing */
         .message-row {{
             display: flex !important;
-            align-items: flex-end;
-            gap: 0.5rem;
-            margin-bottom: 0.5rem;
-            width: 100%;
+            align-items: flex-end !important;
+            gap: 0.5rem !important;
+            margin-bottom: 0.5rem !important;
+            width: 100% !important;
         }}
 
         .message-row.user {{
-            justify-content: flex-end;
+            justify-content: flex-end !important;
         }}
 
         /* Avatar styling */
         .avatar {{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 24px;
-            width: 24px;
-            height: 24px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-            flex-shrink: 0;
-            margin-top: 0.25rem;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            min-width: 24px !important;
+            width: 24px !important;
+            height: 24px !important;
+            border-radius: 4px !important;
+            font-size: 0.9rem !important;
+            flex-shrink: 0 !important;
+            margin-top: 0.25rem !important;
         }}
 
         .avatar.assistant {{
-            background-color: #2D2742;
-            color: #F9FAFB;
+            background-color: #2D2742 !important;
+            color: #F9FAFB !important;
         }}
 
         .avatar.user {{
-            background-color: transparent;
-            color: {COLORS_DARK['text']};
+            background-color: transparent !important;
+            color: {COLORS_DARK['text']} !important;
         }}
 
         /* Chat bubble styling */
         .chat-bubble {{
-            padding: 0.75rem 1rem;
-            border-radius: 12px;
-            line-height: 1.5;
-            word-wrap: break-word;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-            max-width: 75%;
-            flex-wrap: wrap;
+            padding: 0.75rem 1rem !important;
+            border-radius: 12px !important;
+            line-height: 1.5 !important;
+            word-wrap: break-word !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2) !important;
+            max-width: 75% !important;
+            flex-wrap: wrap !important;
         }}
 
         .chat-bubble.assistant {{
-            background-color: #2D2742;
-            color: #F9FAFB;
-            border: 1px solid #4C3F73;
+            background-color: #2D2742 !important;
+            color: #F9FAFB !important;
+            border: 1px solid #4C3F73 !important;
         }}
 
         .chat-bubble.user {{
-            background-color: #8B5CF6;
-            color: #FFFFFF;
-            font-weight: 500;
-            border: none;
+            background-color: #8B5CF6 !important;
+            color: #FFFFFF !important;
+            font-weight: 500 !important;
+            border: none !important;
         }}
 
         /* Input area styling */
         .input-container {{
-            display: flex;
-            gap: 0.75rem;
-            padding: 1rem;
-            background-color: {COLORS_DARK['card']};
-            border-radius: 12px;
-            border: 1px solid {COLORS_DARK['border']};
+            display: flex !important;
+            gap: 0.75rem !important;
+            padding: 1rem !important;
+            background-color: {COLORS_DARK['card']} !important;
+            border-radius: 12px !important;
+            border: 1px solid {COLORS_DARK['border']} !important;
         }}
 
         .input-container input {{
-            flex: 1;
-            padding: 0.75rem;
+            flex: 1 !important;
+            padding: 0.75rem !important;
             border: 1px solid {COLORS_DARK['border']} !important;
-            border-radius: 8px;
-            font-size: 1rem;
+            border-radius: 8px !important;
+            font-size: 1rem !important;
             background-color: {COLORS_DARK['input_bg']} !important;
             color: {COLORS_DARK['text']} !important;
         }}
@@ -301,18 +301,18 @@ st.markdown(f"""
         }}
 
         .input-container input:focus {{
-            outline: none;
+            outline: none !important;
             border-color: {COLORS_DARK['primary']} !important;
-            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1);
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1) !important;
         }}
 
         /* Streamlit chat input styling */
         .stChatInput {{
-            background-color: transparent;
+            background-color: transparent !important;
         }}
 
         .stChatInputContainer {{
-            background-color: transparent;
+            background-color: transparent !important;
         }}
 
         /* Override Streamlit input styling */
@@ -325,6 +325,11 @@ st.markdown(f"""
 
         [data-testid="stChatInput"] input::placeholder {{
             color: #A1A1AA !important;
+        }}
+
+        [data-testid="stChatInput"] input:focus {{
+            border-color: {COLORS_DARK['primary']} !important;
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1) !important;
         }}
 
         /* Button styling in chat area */
@@ -341,33 +346,33 @@ st.markdown(f"""
 
         /* Loading and indicators */
         .loading-indicator {{
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 0.5rem;
-            color: {COLORS_DARK['muted']};
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-start !important;
+            gap: 0.5rem !important;
+            color: {COLORS_DARK['muted']} !important;
+            font-size: 0.875rem !important;
+            margin-top: 0.5rem !important;
         }}
 
         .turn-counter {{
-            text-align: center;
-            color: {COLORS_DARK['muted']};
-            font-size: 0.875rem;
-            margin: 1rem 0 0 0;
+            text-align: center !important;
+            color: {COLORS_DARK['muted']} !important;
+            font-size: 0.875rem !important;
+            margin: 1rem 0 0 0 !important;
         }}
 
         /* Navigation buttons */
         [data-testid="column"] button {{
-            border: 1px solid {COLORS_DARK['border']};
-            background-color: {COLORS_DARK['card']};
-            color: {COLORS_DARK['text']};
+            border: 1px solid {COLORS_DARK['border']} !important;
+            background-color: {COLORS_DARK['card']} !important;
+            color: {COLORS_DARK['text']} !important;
         }}
 
         [data-testid="column"] button:hover {{
-            background-color: {COLORS_DARK['primary']};
-            color: white;
-            border-color: {COLORS_DARK['primary']};
+            background-color: {COLORS_DARK['primary']} !important;
+            color: white !important;
+            border-color: {COLORS_DARK['primary']} !important;
         }}
 
         /* Demo label styling */
