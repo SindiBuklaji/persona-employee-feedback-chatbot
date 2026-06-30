@@ -25,7 +25,9 @@ def start_session(payload: StartSessionRequest, db: Session = Depends(get_db)) -
         condition = payload.forced_condition
         forced_condition = True
     else:
-        condition = assign_condition()
+        warm_count = db.query(Participant).filter_by(condition="warm").count()
+        competent_count = db.query(Participant).filter_by(condition="competent").count()
+        condition = assign_condition(warm_count, competent_count)
         forced_condition = False
 
     now = datetime.utcnow()
