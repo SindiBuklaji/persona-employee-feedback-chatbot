@@ -998,11 +998,10 @@ elif st.session_state.stage == "chat":
         if user_text and not st.session_state.loading:
             st.session_state.chat_history.append({"role": "user", "content": user_text})
             st.session_state.loading = True
-            st.rerun()
 
-        # Handle API call
-        if st.session_state.loading:
-            if len(st.session_state.chat_history) > 0 and st.session_state.chat_history[-1]["role"] == "user":
+        # Handle API call (only process if we have a pending user message)
+        if st.session_state.loading and len(st.session_state.chat_history) > 0 and st.session_state.chat_history[-1]["role"] == "user":
+            with st.spinner("Getting response..."):
                 try:
                     data = api_post(
                         "/chat",
@@ -1016,13 +1015,11 @@ elif st.session_state.stage == "chat":
                         {"role": "assistant", "content": data["assistant_message"]["content"]}
                     )
                     st.session_state.chat_completed = data["chat_completed"]
-                except Exception as e:
-                    st.session_state.chat_history.append(
-                        {"role": "assistant", "content": f"Error: {str(e)}"}
-                    )
-                finally:
                     st.session_state.loading = False
-                    st.rerun()
+                except Exception as e:
+                    st.error(f"Failed to get response: {str(e)}")
+                    st.session_state.chat_history.pop()
+                    st.session_state.loading = False
 
         # Show Finish Chat button only after min turns are completed
         if st.session_state.turns_used >= st.session_state.min_turns and not st.session_state.chat_completed:
@@ -1037,9 +1034,9 @@ elif st.session_state.stage == "chat":
                         )
                         st.session_state.chat_completed = True
                         st.session_state.stage = "questionnaire"
-                        st.rerun()
                     except Exception as e:
                         st.error(f"Cannot finish yet: {str(e)}")
+                        st.stop()
 
 # QUESTIONNAIRE PAGE
 elif st.session_state.stage == "questionnaire":
