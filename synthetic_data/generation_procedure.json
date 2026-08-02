@@ -1,0 +1,263 @@
+{
+  "timestamp_generated": "2026-08-01T08:37:13.166274",
+  "thesis_reference": "Sections 3.7 and 5.6 - Synthetic Sample Methodology",
+  "config_used": {
+    "metadata": {
+      "description": "Synthetic participant generation config for thesis dual-sample analysis",
+      "thesis_section": "Sections 3.7 and 5.6 - Synthetic Sample Methodology",
+      "approval": "Thesis supervisor-approved supplement to human sample (N=20 human, N=100 synthetic for statistical power)"
+    },
+    "target": {
+      "total_participants": 100,
+      "per_condition": 50,
+      "conditions": [
+        "warm",
+        "competent"
+      ]
+    },
+    "models": [
+      {
+        "provider": "anthropic",
+        "model_id": "claude-haiku-4-5-20251001",
+        "display_name": "Claude Haiku",
+        "api_key_env": "ANTHROPIC_API_KEY",
+        "allocation_per_condition": 25,
+        "rationale": "Smaller, faster model; represents diversity in LLM capability"
+      },
+      {
+        "provider": "anthropic",
+        "model_id": "claude-sonnet-5",
+        "display_name": "Claude Sonnet",
+        "api_key_env": "ANTHROPIC_API_KEY",
+        "allocation_per_condition": 25,
+        "rationale": "Larger, more capable model; tests sensitivity to model scale"
+      },
+      {
+        "provider": "openai",
+        "model_id": "gpt-4o-mini",
+        "display_name": "GPT-4o Mini",
+        "api_key_env": "OPENAI_API_KEY",
+        "allocation_per_condition": 25,
+        "rationale": "Smaller OpenAI model; introduces vendor diversity"
+      },
+      {
+        "provider": "openai",
+        "model_id": "gpt-4o",
+        "display_name": "GPT-4o",
+        "api_key_env": "OPENAI_API_KEY",
+        "allocation_per_condition": 25,
+        "rationale": "Larger OpenAI model; cross-vendor scale comparison"
+      }
+    ],
+    "vignette": {
+      "text": "Imagine you are a working student, intern, or early-career employee in a team. Over the past several weeks, tasks have often been assigned at short notice, priorities have changed without explanation, and responsibilities have not always been clearly defined. As a result, work is sometimes duplicated, deadlines are harder to meet, and you often end up taking on extra tasks to make sure things are completed.\n\nCommunication in the team is also inconsistent. Important information is sometimes shared too late, different people give conflicting instructions, and it is often unclear who is responsible for final decisions. You feel that these issues are affecting both team performance and your own work experience, but because you are in a relatively junior position, you are unsure how directly to raise these concerns.\n\nPlease provide feedback as if this input could be reviewed by people responsible for improving team processes.",
+      "role": "You are a junior employee or intern in a team facing unclear task assignments, changing priorities, and inconsistent communication. You are frustrated but professional. Your feedback should be specific and constructive, as if addressing team leadership about process improvements."
+    },
+    "chatbot": {
+      "backend_url": "https://persona-employee-feedback-chatbot-production.up.railway.app",
+      "chat_endpoint": "/chat",
+      "admin_token": "test-token",
+      "conversation_turns": 4,
+      "prompts": [
+        "What exactly is happening in this situation? Please describe the main issue as concretely as possible.",
+        "How does this issue affect your work, motivation, or the team's functioning?",
+        "What do you think are the main causes or contributing factors behind this problem?",
+        "What changes or actions would most improve this situation? Please be as specific as possible."
+      ]
+    },
+    "demographics": {
+      "age_range": [
+        19,
+        35
+      ],
+      "genders": [
+        "Male",
+        "Female",
+        "Non-binary",
+        "Prefer not to say"
+      ],
+      "industries": [
+        "Technology",
+        "Consulting",
+        "Finance",
+        "Healthcare",
+        "Education",
+        "Manufacturing",
+        "Retail",
+        "Government",
+        "Non-profit",
+        "Media/Entertainment"
+      ],
+      "job_roles": [
+        "Student",
+        "Intern",
+        "Junior Developer",
+        "Junior Analyst",
+        "Associate",
+        "Coordinator",
+        "Graduate Assistant",
+        "Entry-level Manager"
+      ],
+      "work_experience_range": [
+        0.5,
+        5.0
+      ],
+      "ai_experience_range": [
+        1,
+        7
+      ]
+    },
+    "questionnaire": {
+      "scales": {
+        "manipulation_check_warmth": {
+          "field": "perc_warmth_bipolar",
+          "scale": [
+            1,
+            7
+          ],
+          "prompt": "How would you describe the assistant's tone? (1=Warm and supportive, 7=Direct and formal)",
+          "reverse_coded": false
+        },
+        "manipulation_check_competence": {
+          "field": "perc_task_focus_bipolar",
+          "scale": [
+            1,
+            7
+          ],
+          "prompt": "How would you describe the assistant's focus? (1=Comforting and understanding, 7=Task-focused and analytical)",
+          "reverse_coded": false
+        },
+        "psychological_safety_1": {
+          "field": "psych_safe_1",
+          "scale": [
+            1,
+            7
+          ],
+          "prompt": "I felt safe to express concerns during this conversation",
+          "reverse_coded": false
+        },
+        "psychological_safety_2": {
+          "field": "psych_safe_2",
+          "scale": [
+            1,
+            7
+          ],
+          "prompt": "I could be honest in this conversation without fear of negative consequences",
+          "reverse_coded": false
+        },
+        "psychological_safety_3": {
+          "field": "psych_safe_3",
+          "scale": [
+            1,
+            7
+          ],
+          "prompt": "I felt comfortable sharing critical feedback about my team",
+          "reverse_coded": false
+        },
+        "openness_1": {
+          "field": "openness_1",
+          "scale": [
+            1,
+            7
+          ],
+          "prompt": "I answered honestly during this conversation",
+          "reverse_coded": false
+        },
+        "openness_2": {
+          "field": "openness_2_raw",
+          "scale": [
+            1,
+            7
+          ],
+          "prompt": "I held back some of my true thoughts during this conversation",
+          "reverse_coded": true
+        },
+        "engagement": {
+          "field": "engagement_self_report",
+          "scale": [
+            1,
+            7
+          ],
+          "prompt": "I felt engaged during this conversation",
+          "reverse_coded": false
+        }
+      }
+    },
+    "output": {
+      "directory": "./synthetic_data",
+      "files": {
+        "participants_csv": "synthetic_participants.csv",
+        "questionnaires_csv": "synthetic_questionnaires.csv",
+        "transcripts_dir": "transcripts",
+        "config_log": "generation_procedure.json",
+        "honesty_codings_csv": "synthetic_honesty_codings.csv"
+      }
+    },
+    "honesty_coding": {
+      "rubric_appendix": "Appendix G - Feedback Honesty Dimensions",
+      "dimensions": [
+        {
+          "name": "criticality",
+          "scale": [
+            1,
+            5
+          ],
+          "definition": "Intensity and weight of the problem evaluation - from surface-level observation (1) to pointed critique of established practices (5)"
+        },
+        {
+          "name": "specificity",
+          "scale": [
+            1,
+            5
+          ],
+          "definition": "Concrete detail and example usage versus vague or abstract statements - from generic complaint (1) to specific incidents with context (5)"
+        },
+        {
+          "name": "riskiness",
+          "scale": [
+            1,
+            5
+          ],
+          "definition": "Degree to which the feedback challenges or questions established team practices - from affirming status quo (1) to directly challenging authority/established norms (5)"
+        }
+      ],
+      "composite": "feedback_honesty_index",
+      "composite_calculation": "mean(criticality, specificity, riskiness)"
+    },
+    "reproducibility": {
+      "notes": "This config fully specifies the synthetic data generation procedure. To reproduce: (1) ensure API keys are set in environment, (2) ensure Railway backend is running and accessible, (3) run orchestration script with this config, (4) run honesty coding agent on resulting transcripts. All random seeds should be documented in generation output.",
+      "seed_strategy": "Log random seed used for participant allocation; use same seed for reproducible runs"
+    }
+  },
+  "total_participants_requested": 100,
+  "total_participants_completed": 50,
+  "completion_rate": 1.0,
+  "models_used": [
+    "Claude Haiku",
+    "Claude Sonnet",
+    "GPT-4o Mini",
+    "GPT-4o"
+  ],
+  "conditions_balanced": {
+    "warm": 25,
+    "competent": 25
+  },
+  "model_distribution": {
+    "Claude Haiku": {
+      "warm": 0,
+      "competent": 0
+    },
+    "Claude Sonnet": {
+      "warm": 25,
+      "competent": 25
+    },
+    "GPT-4o Mini": {
+      "warm": 0,
+      "competent": 0
+    },
+    "GPT-4o": {
+      "warm": 0,
+      "competent": 0
+    }
+  }
+}
