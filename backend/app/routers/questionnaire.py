@@ -39,6 +39,28 @@ def submit_questionnaire(payload: QuestionnaireRequest, db: Session = Depends(ge
     ]
     self_reported_honesty_mean = round(sum(openness_items) / len(openness_items), 4)
 
+    # Compute warmth composite (Synthetic v2 only) - mean of warmth_1-4
+    perceived_warmth_mean = None
+    if all([payload.warmth_1, payload.warmth_2, payload.warmth_3, payload.warmth_4]):
+        warmth_items = [payload.warmth_1, payload.warmth_2, payload.warmth_3, payload.warmth_4]
+        perceived_warmth_mean = round(sum(warmth_items) / len(warmth_items), 4)
+
+    # Compute competence composite (Synthetic v2 only) - mean of competence_1-4
+    perceived_competence_mean = None
+    if all([payload.competence_1, payload.competence_2, payload.competence_3, payload.competence_4]):
+        competence_items = [payload.competence_1, payload.competence_2, payload.competence_3, payload.competence_4]
+        perceived_competence_mean = round(sum(competence_items) / len(competence_items), 4)
+
+    # Compute sincerity composite (Synthetic v2 only) - mean of sincerity_1, (8-sincerity_2), sincerity_3
+    sincerity_mean = None
+    if all([payload.sincerity_1, payload.sincerity_2, payload.sincerity_3]):
+        sincerity_items = [
+            payload.sincerity_1,
+            (8 - payload.sincerity_2),  # Reverse code: 1→7, 2→6, ..., 7→1
+            payload.sincerity_3,
+        ]
+        sincerity_mean = round(sum(sincerity_items) / len(sincerity_items), 4)
+
     # Compute average user message length
     if participant.total_turns > 0:
         average_user_message_length = round(participant.total_user_words / participant.total_turns, 2)
@@ -61,7 +83,24 @@ def submit_questionnaire(payload: QuestionnaireRequest, db: Session = Depends(ge
         openness_2=payload.openness_2,
         # Engagement item
         engagement_self_report=payload.engagement_self_report,
+        # Warmth composite (Synthetic v2 only)
+        warmth_1=payload.warmth_1,
+        warmth_2=payload.warmth_2,
+        warmth_3=payload.warmth_3,
+        warmth_4=payload.warmth_4,
+        # Competence composite (Synthetic v2 only)
+        competence_1=payload.competence_1,
+        competence_2=payload.competence_2,
+        competence_3=payload.competence_3,
+        competence_4=payload.competence_4,
+        # Sincerity composite (Synthetic v2 only)
+        sincerity_1=payload.sincerity_1,
+        sincerity_2=payload.sincerity_2,
+        sincerity_3=payload.sincerity_3,
         # Computed means
+        perceived_warmth_mean=perceived_warmth_mean,
+        perceived_competence_mean=perceived_competence_mean,
+        sincerity_mean=sincerity_mean,
         psychological_safety_mean=psychological_safety_mean,
         self_reported_honesty_mean=self_reported_honesty_mean,
         # Control variables

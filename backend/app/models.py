@@ -121,9 +121,27 @@ class QuestionnaireResponse(Base):
     # ENGAGEMENT (1-7 scale)
     engagement_self_report: Mapped[int] = mapped_column(Integer, nullable=True)  # I felt engaged during the conversation
 
+    # WARMTH COMPOSITE (Synthetic v2 only, 1-7 scale)
+    warmth_1: Mapped[int | None] = mapped_column(Integer, nullable=True)  # seemed friendly
+    warmth_2: Mapped[int | None] = mapped_column(Integer, nullable=True)  # seemed warm
+    warmth_3: Mapped[int | None] = mapped_column(Integer, nullable=True)  # seemed caring
+    warmth_4: Mapped[int | None] = mapped_column(Integer, nullable=True)  # seemed good-natured
+
+    # COMPETENCE COMPOSITE (Synthetic v2 only, 1-7 scale)
+    competence_1: Mapped[int | None] = mapped_column(Integer, nullable=True)  # seemed competent
+    competence_2: Mapped[int | None] = mapped_column(Integer, nullable=True)  # seemed capable
+    competence_3: Mapped[int | None] = mapped_column(Integer, nullable=True)  # seemed skillful
+    competence_4: Mapped[int | None] = mapped_column(Integer, nullable=True)  # seemed efficient
+
+    # SINCERITY/AUTHENTICITY COMPOSITE (Synthetic v2 only, 1-7 scale)
+    sincerity_1: Mapped[int | None] = mapped_column(Integer, nullable=True)  # supportive responses felt genuine
+    sincerity_2: Mapped[int | None] = mapped_column(Integer, nullable=True)  # responses felt generic or scripted (reverse-coded)
+    sincerity_3: Mapped[int | None] = mapped_column(Integer, nullable=True)  # tone matched understanding of situation
+
     # COMPUTED SCORES
-    perceived_warmth_mean: Mapped[float | None] = mapped_column(Float, nullable=True)
-    perceived_competence_mean: Mapped[float | None] = mapped_column(Float, nullable=True)
+    perceived_warmth_mean: Mapped[float | None] = mapped_column(Float, nullable=True)  # Mean of warmth_1-4 for Synthetic v2
+    perceived_competence_mean: Mapped[float | None] = mapped_column(Float, nullable=True)  # Mean of competence_1-4 for Synthetic v2
+    sincerity_mean: Mapped[float | None] = mapped_column(Float, nullable=True)  # Mean of sincerity_1, (8-sincerity_2), sincerity_3
     psychological_safety_mean: Mapped[float | None] = mapped_column(Float, nullable=True)
     self_reported_honesty_mean: Mapped[float | None] = mapped_column(Float, nullable=True)
 

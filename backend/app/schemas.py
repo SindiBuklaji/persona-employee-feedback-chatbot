@@ -60,6 +60,23 @@ class QuestionnaireRequest(BaseModel):
     # ENGAGEMENT (optional)
     engagement_self_report: int = Field(ge=1, le=7)
 
+    # WARMTH COMPOSITE (Synthetic v2 only, optional)
+    warmth_1: Optional[int] = Field(None, ge=1, le=7, description="seemed friendly")
+    warmth_2: Optional[int] = Field(None, ge=1, le=7, description="seemed warm")
+    warmth_3: Optional[int] = Field(None, ge=1, le=7, description="seemed caring")
+    warmth_4: Optional[int] = Field(None, ge=1, le=7, description="seemed good-natured")
+
+    # COMPETENCE COMPOSITE (Synthetic v2 only, optional)
+    competence_1: Optional[int] = Field(None, ge=1, le=7, description="seemed competent")
+    competence_2: Optional[int] = Field(None, ge=1, le=7, description="seemed capable")
+    competence_3: Optional[int] = Field(None, ge=1, le=7, description="seemed skillful")
+    competence_4: Optional[int] = Field(None, ge=1, le=7, description="seemed efficient")
+
+    # SINCERITY/AUTHENTICITY COMPOSITE (Synthetic v2 only, optional)
+    sincerity_1: Optional[int] = Field(None, ge=1, le=7, description="supportive responses felt genuine")
+    sincerity_2: Optional[int] = Field(None, ge=1, le=7, description="responses felt generic or scripted")
+    sincerity_3: Optional[int] = Field(None, ge=1, le=7, description="tone matched understanding")
+
     # CONTROL VARIABLES
     ai_experience: int = Field(ge=1, le=7, description="Prior conversational AI experience")
     years_work_experience: Optional[float] = Field(None, ge=0, description="Total years of work experience")
