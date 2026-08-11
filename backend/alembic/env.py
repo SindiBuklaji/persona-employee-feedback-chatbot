@@ -9,6 +9,7 @@ from alembic import context
 # Import app config and models
 from app.config import settings
 from app.db import Base
+from app import models  # noqa: F401 - ensures models are registered on Base.metadata
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

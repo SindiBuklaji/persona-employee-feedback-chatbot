@@ -1,12 +1,13 @@
 {
   "metadata": {
-    "description": "Synthetic participant generation config for thesis dual-sample analysis",
+    "description": "Synthetic Sample v2: rebalanced model allocation, independent of Synthetic v1 (N=123)",
     "thesis_section": "Sections 3.7 and 5.6 - Synthetic Sample Methodology",
-    "approval": "Thesis supervisor-approved supplement to human sample (N=20 human, N=100 synthetic for statistical power)"
+    "approval": "Thesis supervisor-approved supplement to human sample",
+    "sample_version": "v2"
   },
   "target": {
-    "total_participants": 100,
-    "per_condition": 50,
+    "total_participants": 200,
+    "per_condition": 100,
     "conditions": ["warm", "competent"]
   },
   "models": [
@@ -140,7 +141,7 @@
     }
   },
   "output": {
-    "directory": "./synthetic_data",
+    "directory": "./synthetic_data_v2",
     "files": {
       "participants_csv": "synthetic_participants.csv",
       "questionnaires_csv": "synthetic_questionnaires.csv",

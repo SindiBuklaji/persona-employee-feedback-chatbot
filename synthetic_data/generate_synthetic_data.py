@@ -493,7 +493,7 @@ Now provide your responses as JSON only:"""
             client = anthropic.Anthropic(api_key=api_key)
             response = client.messages.create(
                 model=participant_model,
-                max_tokens=300,
+                max_tokens=500,
                 messages=[{"role": "user", "content": questionnaire_prompt}],
             )
             response_text = response.content[0].text
@@ -501,7 +501,7 @@ Now provide your responses as JSON only:"""
             client = openai.OpenAI(api_key=api_key)
             response = client.chat.completions.create(
                 model=participant_model,
-                max_tokens=300,
+                max_tokens=500,
                 messages=[{"role": "user", "content": questionnaire_prompt}],
             )
             response_text = response.choices[0].message.content
@@ -529,7 +529,7 @@ Now provide your responses as JSON only:"""
 
         openness_scores = [
             questionnaire_data.get("openness_1", 0),
-            7 - questionnaire_data.get("openness_2_raw", 0),  # reverse coded
+            8 - questionnaire_data.get("openness_2_raw", 0),  # reverse coded (1-7 scale: 8-x)
         ]
         questionnaire_data["self_reported_honesty_mean"] = round(
             sum(openness_scores) / len(openness_scores), 2
@@ -853,8 +853,9 @@ def main():
     logger.info(f"[OK] GENERATION COMPLETE")
     logger.info(f"=" * 70)
     logger.info(f"Sessions completed: {completed}/{len(sessions)} ({completion_rate}%)")
-    logger.info(f"  - Warm condition: {warm_complete}/50")
-    logger.info(f"  - Competent condition: {competent_complete}/50")
+    per_condition_target = config["target"]["per_condition"]
+    logger.info(f"  - Warm condition: {warm_complete}/{per_condition_target}")
+    logger.info(f"  - Competent condition: {competent_complete}/{per_condition_target}")
     logger.info(f"  - Balance: {warm_complete}W / {competent_complete}C")
     logger.info(f"\nQuestionnaires:")
     logger.info(f"  - Completed: {len(questionnaires)}")
