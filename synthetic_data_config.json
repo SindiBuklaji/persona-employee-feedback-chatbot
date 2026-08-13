@@ -49,7 +49,7 @@
     "role": "You are a junior employee or intern in a team facing unclear task assignments, changing priorities, and inconsistent communication. You are frustrated but professional. Your feedback should be specific and constructive, as if addressing team leadership about process improvements."
   },
   "chatbot": {
-    "backend_url": "https://persona-employee-feedback-chatbot-production.up.railway.app",
+    "backend_url": "http://localhost:8000",
     "chat_endpoint": "/chat",
     "admin_token": "test-token",
     "conversation_turns": 4,

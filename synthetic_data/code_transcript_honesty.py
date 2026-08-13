@@ -57,36 +57,33 @@ def setup_logging(output_dir: str) -> logging.Logger:
 
 HONESTY_RUBRIC = {
     "criticality": {
-        "scale": [1, 5],
+        "scale": [0, 3],
         "definition": "Intensity and weight of the problem evaluation",
         "anchors": [
-            "1 = Surface-level observation, minimal problem severity",
-            "2 = Mild acknowledgment of issues",
-            "3 = Moderate critique of practices",
-            "4 = Pointed critique challenging established norms",
-            "5 = Intense, direct critique of fundamental team failures",
+            "0 = Surface-level observation, minimal problem severity",
+            "1 = Mild acknowledgment of issues",
+            "2 = Moderate critique of practices",
+            "3 = Intense, direct critique of fundamental team failures",
         ]
     },
     "specificity": {
-        "scale": [1, 5],
+        "scale": [0, 3],
         "definition": "Concrete detail and contextual grounding vs. vague statements",
         "anchors": [
-            "1 = Generic complaint, no specific examples",
-            "2 = Vague reference to issues",
-            "3 = Some concrete examples but abstract reasoning",
-            "4 = Multiple specific incidents with context",
-            "5 = Detailed, concrete examples with clear context and impact",
+            "0 = Generic complaint, no specific examples",
+            "1 = Vague reference to issues",
+            "2 = Some concrete examples but abstract reasoning",
+            "3 = Detailed, concrete examples with clear context and impact",
         ]
     },
     "riskiness": {
-        "scale": [1, 5],
+        "scale": [0, 3],
         "definition": "Degree to which feedback challenges established authority/practices",
         "anchors": [
-            "1 = Affirms status quo, no challenge",
-            "2 = Minor critique of processes",
-            "3 = Moderate challenge to practices",
-            "4 = Direct challenge to management approach",
-            "5 = Directly challenges authority and fundamental team structure",
+            "0 = Affirms status quo, no challenge",
+            "1 = Minor critique of processes",
+            "2 = Moderate challenge to practices",
+            "3 = Directly challenges authority and fundamental team structure",
         ]
     },
 }
@@ -187,7 +184,7 @@ Consider:
 CRITICAL INSTRUCTION: Respond ONLY with valid JSON, nothing else. No markdown, no preamble.
 Keep each reasoning field to ONE short sentence (max 15 words) — brevity is required so the JSON is never cut off.
 
-{{"criticality_score": 3, "criticality_reasoning": "brief one-sentence reason", "specificity_score": 4, "specificity_reasoning": "brief one-sentence reason", "riskiness_score": 2, "riskiness_reasoning": "brief one-sentence reason"}}
+{{"criticality_score": 2, "criticality_reasoning": "brief one-sentence reason", "specificity_score": 3, "specificity_reasoning": "brief one-sentence reason", "riskiness_score": 1, "riskiness_reasoning": "brief one-sentence reason"}}
 """
 
     try:
@@ -252,7 +249,7 @@ Keep each reasoning field to ONE short sentence (max 15 words) — brevity is re
                 return None
             try:
                 score = int(round(float(val)))
-                if not (1 <= score <= 5):
+                if not (0 <= score <= 3):
                     logger.warning(f"  [FAIL] Score out of range for {key}: {score}")
                     return None
                 scores.append(score)
@@ -297,7 +294,7 @@ def write_honesty_codings_csv(
     output_dir: str,
 ):
     """Write honesty_codings.csv file."""
-    csv_path = f"{output_dir}/synthetic_honesty_codings.csv"
+    csv_path = f"{output_dir}/synthetic_honesty_codings_4pt_n200.csv"
 
     with open(csv_path, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=[
@@ -419,7 +416,7 @@ def main():
         if failed_codings:
             logger.warning(f"Failed: {len(failed_codings)}")
 
-        logger.info(f"\nFeedback Honesty Index (composite, 1-5 scale):")
+        logger.info(f"\nFeedback Honesty Index (composite, 0-3 scale):")
         logger.info(f"  - Overall mean: {sum(honesty_scores)/len(honesty_scores):.2f}")
         logger.info(f"  - Range: {min(honesty_scores):.2f} - {max(honesty_scores):.2f}")
 
