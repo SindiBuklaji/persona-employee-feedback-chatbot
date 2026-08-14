@@ -1,14 +1,14 @@
 {
-  "timestamp_generated": "2026-08-01T08:37:13.166274",
+  "timestamp_generated": "2026-08-13T17:08:50.310132",
   "thesis_reference": "Sections 3.7 and 5.6 - Synthetic Sample Methodology",
   "config_used": {
     "metadata": {
       "description": "Synthetic participant generation config for thesis dual-sample analysis",
-      "thesis_section": "Sections 3.7 and 5.6 - Synthetic Sample Methodology"
+      "thesis_section": "Sections 3.7 and 5.6 - Synthetic Sample Methodology",
     },
     "target": {
-      "total_participants": 100,
-      "per_condition": 50,
+      "total_participants": 200,
+      "per_condition": 100,
       "conditions": [
         "warm",
         "competent"
@@ -53,7 +53,7 @@
       "role": "You are a junior employee or intern in a team facing unclear task assignments, changing priorities, and inconsistent communication. You are frustrated but professional. Your feedback should be specific and constructive, as if addressing team leadership about process improvements."
     },
     "chatbot": {
-      "backend_url": "https://persona-employee-feedback-chatbot-production.up.railway.app",
+      "backend_url": "http://localhost:8000",
       "chat_endpoint": "/chat",
       "admin_token": "test-token",
       "conversation_turns": 4,
@@ -228,8 +228,8 @@
       "seed_strategy": "Log random seed used for participant allocation; use same seed for reproducible runs"
     }
   },
-  "total_participants_requested": 100,
-  "total_participants_completed": 50,
+  "total_participants_requested": 200,
+  "total_participants_completed": 200,
   "completion_rate": 1.0,
   "models_used": [
     "Claude Haiku",
@@ -238,25 +238,25 @@
     "GPT-4o"
   ],
   "conditions_balanced": {
-    "warm": 25,
-    "competent": 25
+    "warm": 100,
+    "competent": 100
   },
   "model_distribution": {
     "Claude Haiku": {
-      "warm": 0,
-      "competent": 0
+      "warm": 25,
+      "competent": 25
     },
     "Claude Sonnet": {
       "warm": 25,
       "competent": 25
     },
     "GPT-4o Mini": {
-      "warm": 0,
-      "competent": 0
+      "warm": 25,
+      "competent": 25
     },
     "GPT-4o": {
-      "warm": 0,
-      "competent": 0
+      "warm": 25,
+      "competent": 25
     }
   }
 }

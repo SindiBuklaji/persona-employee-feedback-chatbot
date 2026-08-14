@@ -80,7 +80,6 @@ class Message(Base):
     model_used: Mapped[str | None] = mapped_column(String, nullable=True)
     temperature: Mapped[float | None] = mapped_column(Float, nullable=True)
 
-    # Off-topic handling (legacy fields, kept for backwards compatibility)
     is_off_topic_redirect: Mapped[bool] = mapped_column(Boolean, default=False)
     off_topic_reason: Mapped[str | None] = mapped_column(String, nullable=True)
 
